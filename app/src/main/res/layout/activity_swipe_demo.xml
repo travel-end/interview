@@ -10,9 +10,9 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context=".customizeview.demo.SwipeCaptchaActivity">
+    tools:context=".customizeview.swipecaptcha.demo.SwipeCaptchaActivity">
 
-    <com.journey.interview.customizeview.core.SwipeCaptchaView2
+    <com.journey.interview.customizeview.swipecaptcha.core.SwipeCaptchaView2
         android:id="@+id/swipeCaptchaView"
         android:layout_width="300dp"
         android:layout_height="200dp"

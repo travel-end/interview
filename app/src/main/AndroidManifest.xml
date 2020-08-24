@@ -18,7 +18,12 @@
         </activity>
         <activity android:name=".recyclerview.demo.EfficientAdapterActivity" />
         <activity android:name=".recyclerview.demo.ListActivity" />
-        <activity android:name=".customizeview.demo.SwipeCaptchaActivity" />
+        <activity android:name=".customizeview.swipecaptcha.demo.SwipeCaptchaActivity" />
+        <activity android:name=".customizeview.spiderweb.demo.SpiderWebViewActivity"
+            android:theme="@style/SpiderTheme"/>
+        <activity android:name=".customizeview.spiderweb.demo.MeiSpiderWebActivity2"
+            android:theme="@style/SpiderTheme"/>
+        <activity android:name=".customizeview.CustomizeViewActivity" />
     </application>
 
 </manifest>

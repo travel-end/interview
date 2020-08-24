@@ -6,6 +6,7 @@ import android.os.Handler
 import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.DefaultItemAnimator
 import com.journey.interview.R
 import com.journey.interview.recyclerview.bean.NumberInfo
 import com.journey.interview.recyclerview.core.*
@@ -21,6 +22,7 @@ class EfficientAdapterActivity:AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_efficient_adapter)
+//        recycle_view.itemAnimator = DefaultItemAnimator()
         recycle_view.setup<NumberInfo> {
             dataSource(initData())
             adapter {

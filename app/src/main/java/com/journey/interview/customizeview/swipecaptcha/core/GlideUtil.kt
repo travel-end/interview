@@ -1,4 +1,4 @@
-package com.journey.interview.customizeview.core
+package com.journey.interview.customizeview.swipecaptcha.core
 
 import android.content.Context
 import android.graphics.drawable.Drawable
