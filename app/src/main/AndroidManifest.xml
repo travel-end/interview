@@ -3,6 +3,7 @@
     package="com.journey.interview">
     <uses-permission android:name="android.permission.INTERNET"/>
     <application
+        android:name=".InterviewApp"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -24,6 +25,10 @@
         <activity android:name=".customizeview.spiderweb.demo.MeiSpiderWebActivity2"
             android:theme="@style/SpiderTheme"/>
         <activity android:name=".customizeview.CustomizeViewActivity" />
+        <activity android:name=".customizeview.cornergif.CornersGifActivity"
+            android:theme="@style/SpiderTheme"/>
+        <activity android:name=".customizeview.rounddragtag.demo.RandomDragTagActivity"
+            android:theme="@style/SpiderTheme"/>
     </application>
 
 </manifest>

@@ -4,6 +4,8 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.journey.interview.R
+import com.journey.interview.customizeview.cornergif.CornersGifActivity
+import com.journey.interview.customizeview.rounddragtag.demo.RandomDragTagActivity
 import com.journey.interview.customizeview.swipecaptcha.demo.SwipeCaptchaActivity
 import com.journey.interview.customizeview.spiderweb.demo.MeiSpiderWebActivity2
 import kotlinx.android.synthetic.main.activity_customize_view.*
@@ -22,6 +24,12 @@ class CustomizeViewActivity:AppCompatActivity() {
         }
         testSwipeCaptchaView.setOnClickListener {
             startActivity(Intent(this, SwipeCaptchaActivity::class.java))
+        }
+        testCornersGifView.setOnClickListener {
+            startActivity(Intent(this, CornersGifActivity::class.java))
+        }
+        testRandomDragView.setOnClickListener {
+            startActivity(Intent(this, RandomDragTagActivity::class.java))
         }
     }
 }

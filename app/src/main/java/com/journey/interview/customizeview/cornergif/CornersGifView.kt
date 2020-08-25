@@ -141,4 +141,65 @@ class CornersGifView:AppCompatImageView {
         }
         return Color.TRANSPARENT
     }
+
+    private fun setCornerSize(
+        leftTop: Int,
+        leftBottom: Int,
+        rightTop: Int,
+        rightBottom: Int
+    ) {
+        mCorners = floatArrayOf(
+            leftTop.toFloat(), leftTop.toFloat(),
+            rightTop.toFloat(), rightTop.toFloat(),
+            rightBottom.toFloat(), rightBottom.toFloat(),
+            leftBottom.toFloat(), leftBottom.toFloat()
+        )
+        addRoundRectPath(width, height)
+        invalidate()
+    }
+
+    fun getCornerSize(): Int {
+        return mCornerSize
+    }
+
+    fun setCornerSize(cornerSize: Int) {
+        mCornerSize = cornerSize
+        setCornerSize(cornerSize, cornerSize, cornerSize, cornerSize)
+    }
+
+    fun getLeftBottomCorner(): Int {
+        return mLeftBottomCorner
+    }
+
+    fun setLeftBottomCorner(leftBottomCorner: Int) {
+        mLeftBottomCorner = leftBottomCorner
+        setCornerSize(mLeftTopCorner, mLeftBottomCorner, mRightTopCorner, mRightBottomCorner)
+    }
+
+    fun getLeftTopCorner(): Int {
+        return mLeftTopCorner
+    }
+
+    fun setLeftTopCorner(leftTopCorner: Int) {
+        mLeftTopCorner = leftTopCorner
+        setCornerSize(mLeftTopCorner, mLeftBottomCorner, mRightTopCorner, mRightBottomCorner)
+    }
+
+    fun getRightBottomCorner(): Int {
+        return mRightBottomCorner
+    }
+
+    fun setRightBottomCorner(rightBottomCorner: Int) {
+        mRightBottomCorner = rightBottomCorner
+        setCornerSize(mLeftTopCorner, mLeftBottomCorner, mRightTopCorner, mRightBottomCorner)
+    }
+
+    fun getRightTopCorner(): Int {
+        return mRightTopCorner
+    }
+
+    fun setRightTopCorner(rightTopCorner: Int) {
+        mRightTopCorner = rightTopCorner
+        setCornerSize(mLeftTopCorner, mLeftBottomCorner, mRightTopCorner, mRightBottomCorner)
+    }
 }
