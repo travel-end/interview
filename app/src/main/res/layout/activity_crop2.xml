@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimary"
+        app:navigationIcon="@drawable/ic_arrow_back_white"
+        app:title="小红书图片裁剪"
+        app:titleTextColor="#FFF" />
+
+
+    <com.journey.interview.customizeview.cropimageview.core2.CoordinatorLinearLayout2
+        android:id="@+id/coordinator_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <com.journey.interview.customizeview.cropimageview.core2.MCropImageView2
+            android:id="@+id/crop_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/ic_gril" />
+
+        <com.journey.interview.customizeview.cropimageview.core2.CoordinatorRecyclerView2
+            android:id="@+id/recycler"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        </com.journey.interview.customizeview.cropimageview.core2.CoordinatorRecyclerView2>
+
+
+    </com.journey.interview.customizeview.cropimageview.core2.CoordinatorLinearLayout2>
+
+
+</LinearLayout>

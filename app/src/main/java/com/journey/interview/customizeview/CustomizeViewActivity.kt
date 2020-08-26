@@ -5,9 +5,12 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.journey.interview.R
 import com.journey.interview.customizeview.cornergif.CornersGifActivity
+import com.journey.interview.customizeview.cropimageview.demo.CropImageViewActivity2
+import com.journey.interview.customizeview.datetimer.demo.DateTimerPickerActivity
 import com.journey.interview.customizeview.rounddragtag.demo.RandomDragTagActivity
 import com.journey.interview.customizeview.swipecaptcha.demo.SwipeCaptchaActivity
 import com.journey.interview.customizeview.spiderweb.demo.MeiSpiderWebActivity2
+import com.journey.interview.customizeview.zpwdeditext.ZEditTextActivity
 import kotlinx.android.synthetic.main.activity_customize_view.*
 
 /**
@@ -30,6 +33,15 @@ class CustomizeViewActivity:AppCompatActivity() {
         }
         testRandomDragView.setOnClickListener {
             startActivity(Intent(this, RandomDragTagActivity::class.java))
+        }
+        testPwdEditText.setOnClickListener {
+            startActivity(Intent(this, ZEditTextActivity::class.java))
+        }
+        testDateTimerPicker.setOnClickListener {
+            startActivity(Intent(this, DateTimerPickerActivity::class.java))
+        }
+        testCropImageView.setOnClickListener {
+            startActivity(Intent(this, CropImageViewActivity2::class.java))
         }
     }
 }

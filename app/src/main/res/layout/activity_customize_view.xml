@@ -25,4 +25,23 @@
         android:layout_width="wrap_content"
         android:layout_height="30dp"
         android:text="自定义view-拖拽标签view" />
+
+    <TextView
+        android:id="@+id/testPwdEditText"
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:text="自定义view-密码输入框" />
+
+    <TextView
+        android:id="@+id/testDateTimerPicker"
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:text="自定义view-日期选择控件" />
+
+    <TextView
+        android:id="@+id/testCropImageView"
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:text="自定义view-图片裁剪控件" />
+
 </LinearLayout>

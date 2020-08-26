@@ -13,3 +13,5 @@ private fun dpToPx(context: Context, dp: Float): Float {
 }
 
 fun Float.toIntPx() = dpToPx(InterviewApp.instance, this).toInt()
+
+fun Float.toFloatPx() = dpToPx(InterviewApp.instance,this)

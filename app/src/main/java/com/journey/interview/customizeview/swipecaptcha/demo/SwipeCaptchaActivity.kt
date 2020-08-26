@@ -15,7 +15,8 @@ import kotlinx.android.synthetic.main.activity_swipe_demo.*
  * @Description 仿斗鱼滑动验证码
  */
 class SwipeCaptchaActivity:AppCompatActivity() {
-    private val url = "https://frogx-ieasyloan-person-profile.oss-ap-south-1.aliyuncs.com/AADHAAR_CARD/20200817/121518eb9a9f22-bca2-4d23-9ed9-26d1d0ecb7ce.jpg"
+//    private val url = "https://frogx-ieasyloan-person-profile.oss-ap-south-1.aliyuncs.com/AADHAAR_CARD/20200817/121518eb9a9f22-bca2-4d23-9ed9-26d1d0ecb7ce.jpg"
+    private val url = "https://icashnow-resource-open.oss-ap-south-1.aliyuncs.com/third-app-logos/iEasyLoan.png"
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_swipe_demo)

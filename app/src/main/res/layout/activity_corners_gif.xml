@@ -29,7 +29,7 @@
             android:layout_marginTop="36dp"
             android:scaleType="centerCrop"
             android:src="@drawable/gif_01"
-            app:cornerSize="8dp"
+            app:rectCornerSize="8dp"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/toolbar" />

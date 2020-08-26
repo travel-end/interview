@@ -27,16 +27,13 @@ class RandomDragTagActivity:AppCompatActivity() {
             finish()
         }
         mTagLayout = tag_layout
+
         val random = Random.Default
         tv_add.setOnClickListener {
-            val tagText = mTagText.substring(0, random.nextInt(mTagText.length))
-            val tranX = random.nextFloat()
-            val tranY = random.nextFloat()
-            Log.d("JG","tagText=$tagText , tranX=$tranX ,tranY=$tranY")
             mTagLayout.addTagView(
-                tagText,
-                tranX,
-                tranY,
+                mTagText.substring(0, random.nextInt(mTagText.length)),
+                random.nextFloat(),
+                random.nextFloat(),
                 random.nextBoolean()
             )
         }

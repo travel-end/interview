@@ -10,6 +10,56 @@
         <attr name="leftTopCorner" format="dimension" />
         <attr name="rightBottomCorner" format="dimension" />
         <attr name="rightTopCorner" format="dimension" />
-        <attr name="cornerSize" format="dimension" />
+        <attr name="rectCornerSize" format="dimension" />
+    </declare-styleable>
+    <declare-styleable name="ZEditText">
+        <attr name="android:textSize" />
+        <attr name="android:textColor" />
+        <!-- 输入的文字的个数 -->
+        <attr name="inputCount" format="integer" />
+        <!-- 文字之间的间距 -->
+        <attr name="space" format="dimension" />
+        <!-- 是否保持文字正方形 -->
+        <attr name="isSquare" format="boolean" />
+        <!-- 文字的背景 -->
+        <attr name="textBackground" format="reference" />
+        <!-- 是否是密码 -->
+        <attr name="isPassword" format="boolean" />
+        <attr name="cursorDrawable" format="reference" />
+        <attr name="cursorDrawableWidth" format="dimension" />
+        <attr name="cursorDrawableHeight" format="dimension" />
+    </declare-styleable>
+    <!-- Don't touch this -->
+    <attr name="numberPickerStyle" format="reference" />
+
+    <declare-styleable name="NumberPicker">
+        <!-- @hide Color for the solid color background if such for optimized rendering. -->
+        <attr name="solidColor" format="color|reference" />
+        <!-- @hide The divider for making the selection area. -->
+        <attr name="selectionDivider" format="color|reference" />
+        <!-- @hide The height of the selection divider. -->
+        <attr name="selectionDividerHeight" format="dimension" />
+        <!-- @hide The distance between the two selection dividers. -->
+        <attr name="selectionDividersDistance" format="dimension" />
+        <!-- @hide The min height of the NumberPicker. -->
+        <attr name="internalMinHeight" format="dimension" />
+        <!-- @hide The max height of the NumberPicker. -->
+        <attr name="internalMaxHeight" format="dimension" />
+        <!-- @hide The min width of the NumberPicker. -->
+        <attr name="internalMinWidth" format="dimension" />
+        <!-- @hide The max width of the NumberPicker. -->
+        <attr name="internalMaxWidth" format="dimension" />
+        <!-- @hide The layout of the number picker. -->
+        <attr name="internalLayout" format="reference" />
+        <!-- @hide The drawable for pressed virtual (increment/decrement) buttons. -->
+        <attr name="virtualButtonPressedDrawable" format="color|reference"/>
+
+        <attr name="divider" format="reference"/>
+    </declare-styleable>
+
+    <declare-styleable name="DateTimePicker">
+        <attr name="showLabel" format="boolean" />
+        <attr name="themeColor" format="color" />
+        <attr name="textSize" format="dimension" />
     </declare-styleable>
 </resources>

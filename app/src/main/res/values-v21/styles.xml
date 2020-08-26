@@ -18,5 +18,8 @@
     <style name="SpiderTheme" parent="Theme.AppCompat.Light.NoActionBar">
 <!--        <item name="android:windowFullscreen">true</item>-->
     </style>
-
+    <style name="CheckBoxWhite" parent="@android:style/Widget.Material.CompoundButton.CheckBox">
+        <item name="android:colorControlActivated">@color/colorWhite</item>
+        <item name="android:colorControlNormal">@color/colorWhite</item>
+    </style>
 </resources>

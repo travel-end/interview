@@ -44,7 +44,7 @@ class CornersGifView:AppCompatImageView {
         mPaint = Paint()
         mPaint.isAntiAlias = true
         val ta = context.obtainStyledAttributes(attrs, R.styleable.CornersGifView)
-        mCornerSize = ta.getDimension(R.styleable.CornersGifView_cornerSize, 0f).toInt()
+        mCornerSize = ta.getDimension(R.styleable.CornersGifView_rectCornerSize, 0f).toInt()
         mLeftBottomCorner = ta.getDimension(R.styleable.CornersGifView_leftBottomCorner, 0f).toInt()
         mLeftTopCorner = ta.getDimension(R.styleable.CornersGifView_leftTopCorner, 0f).toInt()
         mRightBottomCorner = ta.getDimension(R.styleable.CornersGifView_rightBottomCorner, 0f).toInt()

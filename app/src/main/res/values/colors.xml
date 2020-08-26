@@ -7,4 +7,7 @@
     <color name="colorBlack">#333333</color>
     <color name="colorGray">#ACABAB</color>
     <color name="colorWhite">#FFFFFF</color>
+    <color name="colorTextPink">#ff6daf</color>
+    <color name="colorGrayDark">#666666</color>
+    <color name="colorGray2">#999999</color>
 </resources>

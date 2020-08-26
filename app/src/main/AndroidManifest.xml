@@ -29,6 +29,10 @@
             android:theme="@style/SpiderTheme"/>
         <activity android:name=".customizeview.rounddragtag.demo.RandomDragTagActivity"
             android:theme="@style/SpiderTheme"/>
+        <activity android:name=".customizeview.zpwdeditext.ZEditTextActivity" />
+        <activity android:name=".customizeview.datetimer.demo.DateTimerPickerActivity" />
+        <activity android:name=".customizeview.cropimageview.demo.CropImageViewActivity2"
+            android:theme="@style/SpiderTheme"/>
     </application>
 
 </manifest>

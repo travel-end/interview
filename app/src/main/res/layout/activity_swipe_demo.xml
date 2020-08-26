@@ -19,8 +19,8 @@
         android:layout_centerHorizontal="true"
         android:scaleType="centerCrop"
         tools:src="@drawable/pic11"
-        app:captchaHeight="30dp"
-        app:captchaWidth="30dp"/>
+        app:captchaHeight="32dp"
+        app:captchaWidth="32dp"/>
 
     <SeekBar
         android:id="@+id/dragBar"

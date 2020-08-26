@@ -143,6 +143,7 @@ class SwipeCaptchaView2 @JvmOverloads constructor(
         super.onSizeChanged(w, h, oldw, oldh)
         mWidth = w
         mHeight = h
+        Log.i("JG","Captcha width:$mWidth, Captcha height:$mHeight")
         //动画区域 会用到宽高
         createMatchAnim()
         post { createCaptcha() }

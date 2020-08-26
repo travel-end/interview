@@ -1,0 +1,381 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:descendantFocusability="blocksDescendants"
+    android:layout_height="match_parent"
+    android:background="@color/colorPrimary"
+    tools:context=".MainActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="20dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="CardDatePickerDialog Examples"
+            android:textColor="#FFFFFF"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp"
+            android:text="Display Type"
+            android:textColor="#FFFFFF"
+            android:textSize="14sp" />
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:layout_marginLeft="10dp"
+            android:orientation="horizontal">
+
+            <CheckBox
+                android:id="@+id/checkYear"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="true"
+                android:text="年"
+                android:textColor="@color/colorWhite"
+                android:textSize="15sp"
+                android:theme="@style/CheckBoxWhite" />
+
+            <CheckBox
+                android:id="@+id/checkMonth"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:checked="true"
+                android:text="月"
+                android:textColor="@color/colorWhite"
+                android:textSize="15sp"
+                android:theme="@style/CheckBoxWhite" />
+
+            <CheckBox
+                android:id="@+id/checkDay"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:checked="true"
+                android:text="日"
+                android:textColor="@color/colorWhite"
+                android:textSize="15sp"
+                android:theme="@style/CheckBoxWhite" />
+
+            <CheckBox
+                android:id="@+id/checkHour"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:checked="true"
+                android:text="时"
+                android:textColor="@color/colorWhite"
+                android:textSize="15sp"
+                android:theme="@style/CheckBoxWhite" />
+
+            <CheckBox
+                android:id="@+id/checkMin"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:checked="true"
+                android:text="分"
+                android:textColor="@color/colorWhite"
+                android:textSize="15sp"
+                android:theme="@style/CheckBoxWhite" />
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp"
+            android:text="Dialog Config"
+            android:textColor="#FFFFFF"
+            android:textSize="14sp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="6dp"
+            android:orientation="horizontal">
+
+            <CheckBox
+                android:id="@+id/checkDateInfo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="true"
+                android:text="日期信息"
+                android:textColor="@color/colorWhite"
+                android:textSize="15sp"
+                android:theme="@style/CheckBoxWhite" />
+
+            <CheckBox
+                android:id="@+id/checkBackNow"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:checked="true"
+                android:text="回到当前"
+                android:textColor="@color/colorWhite"
+                android:textSize="15sp"
+                android:theme="@style/CheckBoxWhite" />
+
+            <CheckBox
+                android:id="@+id/checkUnitLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:checked="true"
+                android:text="单位标签"
+                android:textColor="@color/colorWhite"
+                android:textSize="15sp"
+                android:theme="@style/CheckBoxWhite" />
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp"
+            android:text="Show Model"
+            android:textColor="#FFFFFF"
+            android:textSize="14sp" />
+
+        <RadioGroup
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:layout_marginLeft="10dp"
+            android:orientation="horizontal">
+
+            <RadioButton
+                android:id="@+id/radioModelCard"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="true"
+                android:text="Card"
+                android:textColor="@color/colorWhite"
+                android:textSize="15sp"
+                android:theme="@style/CheckBoxWhite" />
+
+            <RadioButton
+                android:id="@+id/radioModelCube"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:text="Cube"
+                android:textColor="@color/colorWhite"
+                android:textSize="15sp"
+                android:theme="@style/CheckBoxWhite" />
+
+            <RadioButton
+                android:id="@+id/radioModelStack"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:text="Stack"
+                android:textColor="@color/colorWhite"
+                android:textSize="15sp"
+                android:theme="@style/CheckBoxWhite" />
+
+            <RadioButton
+                android:id="@+id/radioModelCustom"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:text="Custom"
+                android:textColor="@color/colorWhite"
+                android:textSize="15sp"
+                android:theme="@style/CheckBoxWhite" />
+
+
+        </RadioGroup>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp"
+            android:text="Constraint"
+            android:textColor="#FFFFFF"
+            android:textSize="14sp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:layout_marginLeft="20dp"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="范围最大值："
+                    android:textColor="#FFFFFF"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:id="@+id/tvMaxDate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:drawableEnd="@drawable/ic_action_set"
+                    android:drawablePadding="10dp"
+                    android:textColor="#AAFFFFFF"
+                    android:textSize="15sp" />
+
+                <TextView
+                    android:id="@+id/btnClearMax"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:text="Clear"
+                    android:textColor="@color/colorWhite" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="范围最小值："
+                    android:textColor="#FFFFFF"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:id="@+id/tvMinDate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:drawableEnd="@drawable/ic_action_set"
+                    android:drawablePadding="10dp"
+                    android:textColor="#AAFFFFFF"
+                    android:textSize="15sp" />
+
+                <TextView
+                    android:id="@+id/btnClearMin"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:text="Clear"
+                    android:textColor="@color/colorWhite" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="选中默认值："
+                    android:textColor="#FFFFFF"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:id="@+id/tvDefaultDate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:drawableEnd="@drawable/ic_action_set"
+                    android:drawablePadding="10dp"
+                    android:textColor="#AAFFFFFF"
+                    android:textSize="15sp" />
+
+                <TextView
+                    android:id="@+id/btnClearDefault"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:text="Clear"
+                    android:textColor="@color/colorWhite" />
+            </LinearLayout>
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/btnCardDialogShow"
+                android:layout_width="100dp"
+                android:layout_height="38dp"
+                android:background="@drawable/shape_button_bg"
+                android:drawableLeft="@drawable/ic_action_smile"
+                android:gravity="center"
+                android:paddingLeft="16dp"
+                android:paddingRight="10dp"
+                android:text="show"
+                android:textColor="#333333"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/tvChooseDate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:text=""
+                android:textColor="#AAFFFFFF"
+                android:textSize="15sp" />
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="40dp"
+            android:text="DateTimePicker Examples"
+            android:textColor="#FFFFFF"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <com.journey.interview.customizeview.datetimer.core.DateTimePicker
+            android:id="@+id/dateTimePicker"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:background="@color/colorWhite"
+            app:showLabel="true"
+            app:textSize="16sp"
+            app:themeColor="#FF8080" />
+
+        <TextView
+            android:id="@+id/tvDateTimePickerValue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text=""
+            android:textColor="#AAFFFFFF"
+            android:textSize="15sp" />
+    </LinearLayout>
+
+</androidx.core.widget.NestedScrollView>

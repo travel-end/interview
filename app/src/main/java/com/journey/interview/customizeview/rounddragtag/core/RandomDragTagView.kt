@@ -51,7 +51,7 @@ class RandomDragTagView:LinearLayout {
     private var mLastMotionRawY:Float = 0f
     private var mLastMotionRawX:Float = 0f
 
-    private var mDragListener:OnRandomDragListener?=null
+//    private var mDragListener:OnRandomDragListener?=null
 
 
     constructor(context: Context) : super(context) {
@@ -504,5 +504,10 @@ class RandomDragTagView:LinearLayout {
         fun onStartDrag()
         // 停止拖拽
         fun onStopDrag()
+    }
+
+    var mDragListener:OnRandomDragListener?=null
+    set(value) {
+        field = value
     }
 }
