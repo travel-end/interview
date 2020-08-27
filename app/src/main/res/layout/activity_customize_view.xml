@@ -44,4 +44,16 @@
         android:layout_height="30dp"
         android:text="自定义view-图片裁剪控件" />
 
+    <TextView
+        android:id="@+id/testScrollParallax"
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:text="自定义view-滚动视差" />
+
+    <TextView
+        android:id="@+id/testHeartView"
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:text="自定义view-直播间送爱心" />
+
 </LinearLayout>

@@ -3,24 +3,26 @@ package com.journey.interview.customizeview.cornergif
 import android.content.Context
 import android.graphics.*
 import android.util.AttributeSet
+import android.util.Log
 import android.view.View
 import android.view.ViewParent
 import androidx.appcompat.widget.AppCompatImageView
 import com.journey.interview.R
+import kotlin.math.min
 
 /**
  * @By Journey 2020/8/24
  * @Description 自定义圆角gifView
  */
-class CornersGifView:AppCompatImageView {
-    private lateinit var mPath :Path
-    private lateinit var mPaint:Paint
-    private var mCornerSize:Int = 0
-    private var mLeftBottomCorner:Int = 0
-    private var mLeftTopCorner:Int = 0
-    private var mRightBottomCorner:Int = 0
-    private var mRightTopCorner:Int = 0
-    private var mCorners:FloatArray?=null
+class CornersGifView : AppCompatImageView {
+    private lateinit var mPath: Path
+    private lateinit var mPaint: Paint
+    private var mCornerSize: Int = 0
+    private var mLeftBottomCorner: Int = 0
+    private var mLeftTopCorner: Int = 0
+    private var mRightBottomCorner: Int = 0
+    private var mRightTopCorner: Int = 0
+    private var mCorners: FloatArray? = null
 
     constructor(context: Context) : super(context) {
         init(context, null)
@@ -47,7 +49,8 @@ class CornersGifView:AppCompatImageView {
         mCornerSize = ta.getDimension(R.styleable.CornersGifView_rectCornerSize, 0f).toInt()
         mLeftBottomCorner = ta.getDimension(R.styleable.CornersGifView_leftBottomCorner, 0f).toInt()
         mLeftTopCorner = ta.getDimension(R.styleable.CornersGifView_leftTopCorner, 0f).toInt()
-        mRightBottomCorner = ta.getDimension(R.styleable.CornersGifView_rightBottomCorner, 0f).toInt()
+        mRightBottomCorner =
+            ta.getDimension(R.styleable.CornersGifView_rightBottomCorner, 0f).toInt()
         mRightTopCorner = ta.getDimension(R.styleable.CornersGifView_rightTopCorner, 0f).toInt()
         ta.recycle()
         mCorners = if (mCornerSize == 0) {
@@ -69,21 +72,25 @@ class CornersGifView:AppCompatImageView {
 
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
         super.onSizeChanged(w, h, oldw, oldh)
+        Log.i("JG","w=$w h=$h")
+        Log.i("JG","oldw=$oldw oldh=$oldh")
         initPaintColor()
-        addRoundRectPath(w,h)
+        addRoundRectPath(w, h) // 圆角矩形
+//        addCirclePath(w.toFloat(),h.toFloat()) // 圆形
     }
 
     override fun onDraw(canvas: Canvas?) {
         super.onDraw(canvas)
-        canvas?.let {cvs->
+        canvas?.let { cvs ->
             cvs.save()
-            cvs.drawPath(mPath,mPaint)
+            cvs.drawPath(mPath, mPaint)
             cvs.restore()
         }
     }
 
     private fun initPaintColor() {
         var paintColor = getPaintColor(parent)
+        Log.i("JG","paintColor=$paintColor")
         if (Color.TRANSPARENT == paintColor) {
             // get theme background color
             val array = context.theme.obtainStyledAttributes(
@@ -97,12 +104,32 @@ class CornersGifView:AppCompatImageView {
         mPaint.color = paintColor
     }
 
-    private fun addRoundRectPath(width:Int,height:Int) {
+    /**
+     * 参数：
+    left 长方形左侧的x坐标
+    top 长方形顶的Y坐标
+    right 长方形右侧的X坐标
+    bottom 长方形底的Y坐标
+     */
+    private fun addRoundRectPath(width: Int, height: Int) {
         mPath.reset()
-        mPath.addRoundRect(RectF(0f,0f,width.toFloat(),height.toFloat()),mCorners!!,Path.Direction.CCW)
+        mPath.addRoundRect(
+            RectF(0f, 0f, width.toFloat(), height.toFloat()),
+            mCorners!!,
+            Path.Direction.CCW//逆时针
+        )
     }
 
-    private fun getPaintColor(vp:ViewParent?):Int {
+    private fun addCirclePath(width: Float,height: Float) {
+        val addPath = Path()
+        addPath.addRect(RectF(0f,0f,width,height),Path.Direction.CCW)
+        addPath.addCircle(width/2,height/2, min(width,height) /2,Path.Direction.CW)
+        mPath.reset()
+        mPath.fillType = Path.FillType.WINDING
+        mPath.addPath(addPath)
+    }
+
+    private fun getPaintColor(vp: ViewParent?): Int {
         if (vp == null) {
             return Color.TRANSPARENT
         }
@@ -118,7 +145,7 @@ class CornersGifView:AppCompatImageView {
         return Color.TRANSPARENT
     }
 
-    private fun getViewBackgroundColor(view:View):Int {
+    private fun getViewBackgroundColor(view: View): Int {
         val drawable = view.background
         if (drawable != null) {
             val drawableClass = drawable.javaClass
@@ -133,9 +160,9 @@ class CornersGifView:AppCompatImageView {
                 if (Color.TRANSPARENT != viewColor) {
                     return viewColor
                 }
-            } catch (e:NoSuchFieldException) {
+            } catch (e: NoSuchFieldException) {
 
-            } catch (e:IllegalAccessException) {
+            } catch (e: IllegalAccessException) {
 
             }
         }

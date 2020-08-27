@@ -46,7 +46,7 @@ public class CoordinatorLinearLayout2 extends LinearLayout {
         super(context, attrs, defStyleAttr);
 
         mOverScroller = new OverScroller(context);
-        mMinFlingVelocity = ViewConfiguration.get(context).getScaledMinimumFlingVelocity();
+        mMinFlingVelocity = ViewConfiguration.get(context).getScaledMinimumFlingVelocity();// 获取惯性滑动的最小速度
         // 设置默认值 =  图片裁剪控件的宽度
         mScrollRange = context.getResources().getDisplayMetrics().widthPixels;
     }

@@ -33,6 +33,10 @@
         <activity android:name=".customizeview.datetimer.demo.DateTimerPickerActivity" />
         <activity android:name=".customizeview.cropimageview.demo.CropImageViewActivity2"
             android:theme="@style/SpiderTheme"/>
+        <activity android:name=".customizeview.scrollparallax.ScrollParallaxActivity"
+            android:theme="@style/SpiderTheme"/>
+        <activity android:name=".customizeview.heartview.HeartActivity"
+            android:theme="@style/SpiderTheme"/>
     </application>
 
 </manifest>

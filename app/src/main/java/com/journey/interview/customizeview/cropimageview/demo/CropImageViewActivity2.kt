@@ -29,7 +29,7 @@ class CropImageViewActivity2:AppCompatActivity() {
         }
         val mRecyclerView = recycler
         mRecyclerView.layoutManager = GridLayoutManager(this,4)
-        mRecyclerView.setup<Int> {
+        val l = mRecyclerView.setup<Int> {
             dataSource(initData())
             adapter {
                 addItem(R.layout.item_coordinator_layout) {

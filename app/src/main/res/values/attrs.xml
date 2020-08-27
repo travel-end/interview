@@ -5,6 +5,9 @@
         <attr name="captchaHeight" format="dimension"/>
         <attr name="matchDeviation" format="dimension"/>
     </declare-styleable>
+    <!--
+    自定义的名称不能喝系统的冲突
+    -->
     <declare-styleable name="CornersGifView">
         <attr name="leftBottomCorner" format="dimension" />
         <attr name="leftTopCorner" format="dimension" />
@@ -61,5 +64,25 @@
         <attr name="showLabel" format="boolean" />
         <attr name="themeColor" format="color" />
         <attr name="textSize" format="dimension" />
+    </declare-styleable>
+    <declare-styleable name="ScrollParallaxView2">
+        <!-- 滚动速率 （0~1） 值越大滚动视差越明显 -->
+        <attr name="parallaxRate" format="float" />
+        <!-- 滑动是否显示视差 默认 true -->
+        <attr name="enableParallax" format="boolean" />
+        <!-- 圆角宽度 默认 0  若通过修改父类来实现 则不需要设置此值-->
+        <attr name="roundWidth" format="dimension" />
+        <!-- 是否显示圆形 默认 0  若通过修改父类来实现 则不需要设置此值-->
+        <attr name="enableCircle" format="boolean" />
+        <!--圆角外的颜色 默认白色  若通过修改父类来实现 则不需要设置此值-->
+        <attr name="outRoundColor" format="color" />
+    </declare-styleable>
+    <declare-styleable name="HeartView2">
+        <!--爱心动画时长-->
+        <attr name="heartDuration" format="integer" />
+        <!--是否显示透明度动画-->
+        <attr name="heartEnableAlpha" format="boolean" />
+        <!--是否显示缩放动画-->
+        <attr name="heartEnableScale" format="boolean" />
     </declare-styleable>
 </resources>

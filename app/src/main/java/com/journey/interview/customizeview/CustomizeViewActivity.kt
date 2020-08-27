@@ -7,7 +7,9 @@ import com.journey.interview.R
 import com.journey.interview.customizeview.cornergif.CornersGifActivity
 import com.journey.interview.customizeview.cropimageview.demo.CropImageViewActivity2
 import com.journey.interview.customizeview.datetimer.demo.DateTimerPickerActivity
+import com.journey.interview.customizeview.heartview.HeartActivity
 import com.journey.interview.customizeview.rounddragtag.demo.RandomDragTagActivity
+import com.journey.interview.customizeview.scrollparallax.ScrollParallaxActivity
 import com.journey.interview.customizeview.swipecaptcha.demo.SwipeCaptchaActivity
 import com.journey.interview.customizeview.spiderweb.demo.MeiSpiderWebActivity2
 import com.journey.interview.customizeview.zpwdeditext.ZEditTextActivity
@@ -42,6 +44,12 @@ class CustomizeViewActivity:AppCompatActivity() {
         }
         testCropImageView.setOnClickListener {
             startActivity(Intent(this, CropImageViewActivity2::class.java))
+        }
+        testScrollParallax.setOnClickListener {
+            startActivity(Intent(this, ScrollParallaxActivity::class.java))
+        }
+        testHeartView.setOnClickListener {
+            startActivity(Intent(this, HeartActivity::class.java))
         }
     }
 }
