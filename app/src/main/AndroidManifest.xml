@@ -37,6 +37,8 @@
             android:theme="@style/SpiderTheme"/>
         <activity android:name=".customizeview.heartview.HeartActivity"
             android:theme="@style/SpiderTheme"/>
+        <activity android:name=".customizeview.levelselectview.LevelSelectActivity"
+            android:theme="@style/SpiderTheme"/>
     </application>
 
 </manifest>

@@ -85,4 +85,13 @@
         <!--是否显示缩放动画-->
         <attr name="heartEnableScale" format="boolean" />
     </declare-styleable>
+
+<!--    <resources>-->
+<!--        <declare-styleable name="RectCoverView">-->
+<!--            <attr name="roundCorner" format="dimension" />-->
+<!--            <attr name="roundPadding" format="dimension" />-->
+<!--            <attr name="roundCoverColor" format="color" />-->
+<!--        </declare-styleable>-->
+<!--    </resources>-->
+
 </resources>

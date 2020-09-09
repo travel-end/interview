@@ -8,6 +8,7 @@ import com.journey.interview.customizeview.cornergif.CornersGifActivity
 import com.journey.interview.customizeview.cropimageview.demo.CropImageViewActivity2
 import com.journey.interview.customizeview.datetimer.demo.DateTimerPickerActivity
 import com.journey.interview.customizeview.heartview.HeartActivity
+import com.journey.interview.customizeview.levelselectview.LevelSelectActivity
 import com.journey.interview.customizeview.rounddragtag.demo.RandomDragTagActivity
 import com.journey.interview.customizeview.scrollparallax.ScrollParallaxActivity
 import com.journey.interview.customizeview.swipecaptcha.demo.SwipeCaptchaActivity
@@ -50,6 +51,9 @@ class CustomizeViewActivity:AppCompatActivity() {
         }
         testHeartView.setOnClickListener {
             startActivity(Intent(this, HeartActivity::class.java))
+        }
+        testLevelSelect.setOnClickListener {
+            startActivity(Intent(this, LevelSelectActivity::class.java))
         }
     }
 }
