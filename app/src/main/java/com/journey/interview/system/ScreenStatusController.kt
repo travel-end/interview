@@ -13,7 +13,13 @@ class ScreenStatusController(context: Context) {
     private var mContext: Context? = context
     private var mScreenStatusFilter: IntentFilter? = null
     private var mScreenStatusListener: ScreenStatusListener? = null
-
+    init {
+        mScreenStatusFilter = IntentFilter().apply {
+            addAction(Intent.ACTION_SCREEN_ON)
+            addAction(Intent.ACTION_SCREEN_OFF)
+            addAction(Intent.ACTION_USER_PRESENT)
+        }
+    }
     private val mScreenStatusReceiver = object : BroadcastReceiver() {
         override fun onReceive(p0: Context?, p1: Intent?) {
             val action = p1?.action
@@ -35,26 +41,17 @@ class ScreenStatusController(context: Context) {
         }
 
     }
-
     // 设置监听
     fun setScreenStatusListener(l: ScreenStatusListener) {
         this.mScreenStatusListener = l
     }
-
     // 开始监听
     fun startListen() {
         mContext?.registerReceiver(mScreenStatusReceiver, mScreenStatusFilter)
     }
-
     fun stopListen() {
         mContext?.unregisterReceiver(mScreenStatusReceiver)
     }
 
-    init {
-        mScreenStatusFilter = IntentFilter().apply {
-            addAction(Intent.ACTION_SCREEN_ON)
-            addAction(Intent.ACTION_SCREEN_OFF)
-            addAction(Intent.ACTION_USER_PRESENT)
-        }
-    }
+
 }

@@ -10,4 +10,5 @@
     <color name="colorTextPink">#ff6daf</color>
     <color name="colorGrayDark">#666666</color>
     <color name="colorGray2">#999999</color>
+    <color name="translate">#00000000</color>
 </resources>

@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Interview</string>
+    <string name="app_name">Android Review</string>
     <string name="drawer_open">开</string>
     <string name="drawer_close">关</string>
 </resources>

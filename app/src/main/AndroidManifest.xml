@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.journey.interview">
-    <uses-permission android:name="android.permission.INTERNET"/>
+
+    <uses-permission android:name="android.permission.DISABLE_KEYGUARD" />
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:name=".InterviewApp"
         android:allowBackup="true"
@@ -10,6 +13,13 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <service
+            android:name=".system.LockScreenService"
+            android:enabled="true"
+            android:exported="true">
+
+        </service>
+
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -20,25 +30,39 @@
         <activity android:name=".recyclerview.demo.EfficientAdapterActivity" />
         <activity android:name=".recyclerview.demo.ListActivity" />
         <activity android:name=".customizeview.swipecaptcha.demo.SwipeCaptchaActivity" />
-        <activity android:name=".customizeview.spiderweb.demo.SpiderWebViewActivity"
-            android:theme="@style/SpiderTheme"/>
-        <activity android:name=".customizeview.spiderweb.demo.MeiSpiderWebActivity2"
-            android:theme="@style/SpiderTheme"/>
+        <activity
+            android:name=".customizeview.spiderweb.demo.SpiderWebViewActivity"
+            android:theme="@style/SpiderTheme" />
+        <activity
+            android:name=".customizeview.spiderweb.demo.MeiSpiderWebActivity2"
+            android:theme="@style/SpiderTheme" />
         <activity android:name=".customizeview.CustomizeViewActivity" />
-        <activity android:name=".customizeview.cornergif.CornersGifActivity"
-            android:theme="@style/SpiderTheme"/>
-        <activity android:name=".customizeview.rounddragtag.demo.RandomDragTagActivity"
-            android:theme="@style/SpiderTheme"/>
+        <activity
+            android:name=".customizeview.cornergif.CornersGifActivity"
+            android:theme="@style/SpiderTheme" />
+        <activity
+            android:name=".customizeview.rounddragtag.demo.RandomDragTagActivity"
+            android:theme="@style/SpiderTheme" />
         <activity android:name=".customizeview.zpwdeditext.ZEditTextActivity" />
         <activity android:name=".customizeview.datetimer.demo.DateTimerPickerActivity" />
-        <activity android:name=".customizeview.cropimageview.demo.CropImageViewActivity2"
-            android:theme="@style/SpiderTheme"/>
-        <activity android:name=".customizeview.scrollparallax.ScrollParallaxActivity"
-            android:theme="@style/SpiderTheme"/>
-        <activity android:name=".customizeview.heartview.HeartActivity"
-            android:theme="@style/SpiderTheme"/>
-        <activity android:name=".customizeview.levelselectview.LevelSelectActivity"
-            android:theme="@style/SpiderTheme"/>
+        <activity
+            android:name=".customizeview.cropimageview.demo.CropImageViewActivity2"
+            android:theme="@style/SpiderTheme" />
+        <activity
+            android:name=".customizeview.scrollparallax.ScrollParallaxActivity"
+            android:theme="@style/SpiderTheme" />
+        <activity
+            android:name=".customizeview.heartview.HeartActivity"
+            android:theme="@style/SpiderTheme" />
+        <activity
+            android:name=".customizeview.levelselectview.LevelSelectActivity"
+            android:theme="@style/SpiderTheme" />
+        <activity android:name=".system.ScreenActivity" />
+        <activity
+            android:name=".system.LockScreenActivity"
+            android:theme="@style/LockScreenViewStyle"
+            android:screenOrientation="portrait"
+            android:taskAffinity="com.journey.interview.system"/>
     </application>
 
 </manifest>
