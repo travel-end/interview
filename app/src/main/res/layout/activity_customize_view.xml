@@ -61,5 +61,10 @@
         android:layout_width="wrap_content"
         android:layout_height="30dp"
         android:text="自定义view-等级选择" />
+    <TextView
+        android:id="@+id/testBgLib"
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:text="替代drawable的自定义background" />
 
 </LinearLayout>

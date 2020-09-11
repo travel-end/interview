@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.journey.interview.R
+import com.journey.interview.customizeview.backgroundlib.BackgroundLibActivity
 import com.journey.interview.customizeview.cornergif.CornersGifActivity
 import com.journey.interview.customizeview.cropimageview.demo.CropImageViewActivity2
 import com.journey.interview.customizeview.datetimer.demo.DateTimerPickerActivity
@@ -54,6 +55,9 @@ class CustomizeViewActivity:AppCompatActivity() {
         }
         testLevelSelect.setOnClickListener {
             startActivity(Intent(this, LevelSelectActivity::class.java))
+        }
+        testBgLib.setOnClickListener {
+            startActivity(Intent(this, BackgroundLibActivity::class.java))
         }
     }
 }

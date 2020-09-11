@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+        <TextView
+            android:id="@+id/tv1"
+            android:layout_width="130dp"
+            android:layout_height="36dp"
+            android:layout_marginTop="5dp"
+            android:gravity="center"
+            android:text="TextView"
+            android:textColor="#8c6822"
+            android:textSize="20sp"
+            app:bl_corners_radius="4dp"
+            app:bl_solid_color="#E3B666"
+            app:bl_stroke_color="#8c6822"
+            app:bl_stroke_dashGap="5dp"
+            app:bl_stroke_dashWidth="10dp"
+            app:bl_stroke_width="2dp" />
+
+        <!--边框+背景+圆角   等同于
+    <shape xmlns:android="http://schemas.android.com/apk/res/android">
+        <corners android:radius="2dp"/>
+        <solid android:color="#E3B666"/>
+        <stroke android:color="#E3B666" android:width="2dp"/>
+    </shape>
+        -->
+        <TextView
+            android:layout_width="130dp"
+            android:layout_height="36dp"
+            android:gravity="center"
+            android:text="TextView"
+            android:textColor="#8c6822"
+            android:textSize="20sp"
+            app:bl_corners_radius="4dp"
+            app:bl_solid_color="#E3B666"
+            app:bl_stroke_color="#8c6822"
+            app:bl_stroke_width="2dp" />
+
+
+        <!--渐变   等同于
+
+        <shape xmlns:android="http://schemas.android.com/apk/res/android">
+            <corners android:radius="2dp"/>
+            <gradient android:angle="0"
+                      android:startColor="#63B8FF"
+                      android:endColor="#4F94CD"/>
+        </shape>
+        -->
+        <Button
+            android:id="@+id/btn"
+            android:layout_width="130dp"
+            android:layout_height="36dp"
+            android:layout_marginTop="5dp"
+            android:gravity="center"
+            android:padding="0dp"
+            android:text="跳转到列表"
+            android:textColor="#4F94CD"
+            android:textSize="20sp"
+            app:bl_corners_radius="2dp"
+            app:bl_gradient_angle="0"
+            app:bl_gradient_endColor="#4F94CD"
+            app:bl_gradient_startColor="#63B8FF" />
+
+
+
+        <Button
+            android:layout_width="300dp"
+            android:layout_height="50dp"
+            android:layout_marginTop="5dp"
+            android:gravity="center"
+            android:padding="0dp"
+            android:text="有波纹触摸反馈的按钮"
+            android:textColor="@android:color/white"
+            android:textSize="20sp"
+            app:bl_corners_radius="20dp"
+            app:bl_pressed_drawable="#71C671"
+            app:bl_ripple_color="#71C671"
+            app:bl_ripple_enable="true"
+            app:bl_stroke_color="#8c6822"
+            app:bl_stroke_width="2dp"
+            app:bl_unPressed_drawable="#7CFC00" />
+
+        <!--可以在代码中做到上面的效果-->
+        <Button
+            android:id="@+id/btn_jump"
+            android:layout_width="300dp"
+            android:layout_height="50dp"
+            android:layout_marginTop="5dp"
+            android:gravity="center"
+            android:padding="0dp"
+            android:text="有波纹触摸反馈的按钮"
+            android:textColor="@android:color/white"
+            android:textSize="20sp" />
+
+        <!--点击文字变色-->
+        <Button
+            android:layout_width="300dp"
+            android:layout_height="50dp"
+            android:layout_marginTop="5dp"
+            android:gravity="center"
+            android:padding="0dp"
+            android:text="点击文字变色"
+            app:bl_pressed_textColor="#919DAF"
+            app:bl_unPressed_textColor="@android:color/holo_red_dark"/>
+
+
+        <!--点击填充边框变色属性-->
+        <TextView
+            android:layout_width="180dp"
+            android:layout_height="36dp"
+            android:layout_marginTop="15dp"
+            android:gravity="center"
+            android:text="点击边框变色"
+            android:textColor="@android:color/black"
+            android:textSize="18dp"
+            android:textStyle="bold"
+            android:clickable="true"
+            app:bl_pressed_solid_color="#FFDEAD"
+            app:bl_unPressed_solid_color="#E9967A"
+            app:bl_stroke_width="1dp"
+            app:bl_pressed_stroke_color="#C6E2FF"
+            app:bl_unPressed_stroke_color="#98FB98"/>
+
+        <!--style类似的使用方式
+        style中不要加入'app'，直接写属性名即可
+        -->
+        <TextView
+            android:layout_width="130dp"
+            android:layout_height="36dp"
+            android:gravity="center"
+            android:text="TextView"
+            android:textColor="#8c6822"
+            android:textSize="20sp"
+            style="@style/bg"/>
+
+        <!--设置drawableLeft-->
+        <Button
+            android:id="@+id/btn_like"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:layout_marginStart="10dp"
+            app:bl_position="left"
+            android:background="@null"
+            android:text="点赞+1"
+            app:bl_pressed_drawable="@drawable/circle_like_pressed"
+            app:bl_unPressed_drawable="@drawable/circle_like_normal" />
+
+        <Button
+            android:id="@+id/btn_like2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:background="@null"
+            android:text="未点赞"
+            app:bl_position="left"
+            app:bl_selected_textColor="#fbdc4a"
+            app:bl_unSelected_textColor="@android:color/black"
+            app:bl_selected_drawable="@drawable/circle_like_pressed"
+            app:bl_unSelected_drawable="@drawable/circle_like_normal" />
+
+
+        <!--设置帧动画-->
+        <View
+            android:id="@+id/v_anim"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:bl_oneshot="false"
+            app:bl_duration="50"
+            app:bl_anim_auto_start="true"
+            app:bl_frame_drawable_item0="@drawable/img00"
+            app:bl_frame_drawable_item1="@drawable/img01"
+            app:bl_frame_drawable_item2="@drawable/img02"
+            app:bl_frame_drawable_item3="@drawable/img03"
+            app:bl_frame_drawable_item4="@drawable/img04"
+            app:bl_frame_drawable_item5="@drawable/img05"
+            app:bl_frame_drawable_item6="@drawable/img06"
+            app:bl_frame_drawable_item7="@drawable/img07"
+            app:bl_frame_drawable_item8="@drawable/img08"
+            app:bl_frame_drawable_item9="@drawable/img09"
+            app:bl_frame_drawable_item10="@drawable/img10"
+            app:bl_frame_drawable_item11="@drawable/img11"
+            app:bl_frame_drawable_item12="@drawable/img12"
+            app:bl_frame_drawable_item13="@drawable/img13"
+            app:bl_frame_drawable_item14="@drawable/img14"/>
+
+    </LinearLayout>
+
+</ScrollView>
