@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="12dp">
+
+        <!--
+        ## MaterialButton:AppCompatButton的继承类，在原来的Button基础上做了一些扩展
+        如圆角、描边、前置和后置icon（icon支持设置Size、 Tint、Padding、Gravity等）
+        还支持按压水波纹并且设置color。基本能满足日常的需求
+        MaterialButton公开的属性：（image/MaterialButton属性）
+        -->
+        <com.google.android.material.button.MaterialButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="20dp圆角"
+            android:backgroundTint="@color/colorPrimary"
+            app:cornerRadius="20dp"/>
+
+        <!--添加描边-->
+        <com.google.android.material.button.MaterialButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="20dp圆角，3dp描边"
+            android:backgroundTint="@color/colorPrimary"
+            app:cornerRadius="20dp"
+            app:strokeColor="@color/colorAccent"
+            app:strokeWidth="3dp" />
+
+        <!--添加前置icon-->
+        <com.google.android.material.button.MaterialButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:icon="@drawable/circle_like_pressed"
+            android:textAllCaps="false"
+            android:text="前置MaterialButton icon"
+            app:cornerRadius="20dp"
+            app:iconPadding="5dp"
+            android:backgroundTint="@color/colorPrimary" />
+
+        <!--关于insetTop insetBottom：默认指定了insetTop和insetBottom为6dp，
+         使得height看起来并没有Button实际设置一样高，可以在xml将MaterialButton
+         的insetTop和insetBottom都设置为0dp，这样MaterialButton的高度就和实际高度一致了
+         -->
+        <com.google.android.material.button.MaterialButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAllCaps="false"
+            android:text="消除insetTop/insetBottom"
+            app:cornerRadius="20dp"
+            android:backgroundTint="@color/colorPrimary"
+            android:insetTop="0dp"
+            android:insetBottom="0dp"/>
+
+
+        <com.google.android.material.button.MaterialButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAllCaps="false"
+            android:text="MaterialButton"
+            android:textColor="@color/colorPrimaryDark"
+            android:backgroundTint="@color/colorWhite"
+            app:cornerRadius="20dp"
+            app:strokeColor="@color/colorPrimary"
+            app:strokeWidth="3dp" />
+
+        <!--后置icon-->
+        <com.google.android.material.button.MaterialButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAllCaps="false"
+            android:text="后置MaterialButton icon"
+            android:backgroundTint="@color/colorPrimary"
+            app:cornerRadius="20dp"
+            app:icon="@drawable/circle_like_pressed"
+            app:iconGravity="textEnd"
+            app:iconPadding="4dp" />
+
+        <!--支持按压水波纹颜色设置-->
+        <com.google.android.material.button.MaterialButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAllCaps="false"
+            android:text="粉色按压水波纹"
+            android:textColor="@color/colorWhite"
+            android:backgroundTint="@android:color/holo_green_light"
+            app:rippleColor="@color/colorTextPink"/>
+
+
+        <!--可预览模式-->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_send"
+            style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:layout_marginStart="12dp"
+            android:insetTop="0dp"
+            android:insetBottom="0dp"
+            android:padding="0dp"
+            android:text="MaterialButton支持xml预览"
+            android:textColor="@color/colorWhite"
+            android:textSize="12sp"
+            app:backgroundTint="#6D56FF"
+            app:cornerRadius="15dp" />
+
+        <!--
+        ## ShapeableImageView：继承自imageView，可以为image添加描边大小、颜色，
+        以及圆角、裁切等，这得益于它新增了一个属性shapeAppearance，可以通过style
+        来配置，也可以通过代码实现
+        -->
+
+        <!--
+        app:shapeAppearance="@style/shape_appearance_image"
+      -->
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/iv1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:src="@drawable/icon2"
+            app:strokeWidth="4dp"
+            app:strokeColor="@color/colorPrimary"
+            android:padding="4dp" />
+
+
+        <!--
+        ## Slider（加强版的SeekBar）
+        Slider可以实现滑块头部数字变化效果，还可以实现类似刻度尺效果，比原生的SeekBar加强不少
+        常用属性（见image/Slider常用属性）
+        -->
+        <com.google.android.material.slider.Slider
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/colorPrimary"
+            android:valueFrom="0.0"
+            android:valueTo="100.0"
+            app:labelBehavior="withinBounds"
+            app:haloColor="@color/colorAccent"/>
+
+        <!--两头滑动的seekbar-->
+        <com.google.android.material.slider.RangeSlider
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:backgroundTint="@color/colorPrimary"
+            android:valueFrom="0.0"
+            android:valueTo="100.0"
+            android:stepSize="10.0"
+            app:values="@array/initial_slider_value"/>
+
+
+        <!--BottomNavigationView新增 ：可以添加红点和未读消息数功能-->
+        <com.google.android.material.bottomnavigation.BottomNavigationView
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:layout_marginTop="20dp"
+            app:labelVisibilityMode="labeled"
+            android:background="@color/colorGray"
+            app:itemIconTint="@color/selector_bottom_navigation_item"
+            app:itemTextColor="@color/selector_bottom_navigation_item"
+            app:menu="@menu/menu_bottom_navigation"
+            />
+
+    </LinearLayout>
+</ScrollView>

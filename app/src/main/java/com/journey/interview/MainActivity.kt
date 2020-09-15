@@ -5,7 +5,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.journey.interview.customizeview.CustomizeViewActivity
 import com.journey.interview.recyclerview.demo.EfficientAdapterActivity
-import com.journey.interview.system.ScreenActivity
+import com.journey.interview.weatherapp.ui.WeatherActivity
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
@@ -14,11 +14,14 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         testEfficientAdapter.setOnClickListener {
-            startActivity(Intent(this,EfficientAdapterActivity::class.java))
+            startActivity(Intent(this, EfficientAdapterActivity::class.java))
         }
 
         testCustomizeView.setOnClickListener {
-            startActivity(Intent(this,CustomizeViewActivity::class.java))
+            startActivity(Intent(this, CustomizeViewActivity::class.java))
+        }
+        weatherApp.setOnClickListener {
+            startActivity(Intent(this, WeatherActivity::class.java))
         }
 //        testSystemFunction.setOnClickListener {
 //            startActivity(Intent(this,ScreenActivity::class.java))

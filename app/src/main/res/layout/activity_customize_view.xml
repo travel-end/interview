@@ -66,5 +66,10 @@
         android:layout_width="wrap_content"
         android:layout_height="30dp"
         android:text="替代drawable的自定义background" />
+    <TextView
+        android:id="@+id/testMaterialDesign"
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:text="Material Design 1.2组件新功能" />
 
 </LinearLayout>

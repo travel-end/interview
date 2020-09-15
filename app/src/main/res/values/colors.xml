@@ -11,4 +11,19 @@
     <color name="colorGrayDark">#666666</color>
     <color name="colorGray2">#999999</color>
     <color name="translate">#00000000</color>
+
+
+    <color name="overlay_dark_50">#40000000</color>
+    <color name="always_white_text">#FFFFFF</color>
+    <color name="material_blue">#6452f0</color>
+    <color name="material_blue_dark">#806452f0</color>
+    <color name="grey_10">#e6e6e6</color>
+    <color name="grey_80">#333232</color>
+    <color name="green_success">#155724</color>
+    <color name="light_green">#FF08B32F</color>
+    <color name="colorPrimaryNight">#263238</color>
+    <color name="colorPrimaryDarkNight">#141d26</color>
+    <color name="scrim">#99323232</color>
+    <color name="dark">#000000</color>
+    <color name="bluebackground">#0091EA</color>
 </resources>

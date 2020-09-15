@@ -34,4 +34,23 @@
         <item name="bl_stroke_color">#8c6822</item>
         <item name="bl_stroke_width">2dp</item>
     </style>
+
+    <style name="material_style" parent="Theme.MaterialComponents.Light.NoActionBar">
+
+    </style>
+    <style name="material_style2" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <item name="android:insetTop">0dp</item>
+        <item name="android:insetBottom">0dp</item>
+    </style>
+
+
+    <!--rounded: 表示圆角 还有个cut表示将圆角部分裁切掉
+    setAllCornerSizes(ShapeAppearanceModel.PILL)可以直接实现圆形效果。
+    -->
+    <style name="shape_appearance_image" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">16dp</item>
+        <item name="cornerSizeTopRight">10dp</item>
+        <item name="cornerSizeBottomRight">0dp</item>
+    </style>
 </resources>

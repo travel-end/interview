@@ -19,6 +19,12 @@
         android:layout_height="30dp"
         android:text="testCustomizeView（自定义view）" />
 
+    <TextView
+        android:id="@+id/weatherApp"
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:text="简单天气App" />
+
 <!--    <TextView-->
 <!--        android:id="@+id/testSystemFunction"-->
 <!--        android:layout_width="wrap_content"-->
