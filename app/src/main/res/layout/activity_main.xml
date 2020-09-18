@@ -24,7 +24,17 @@
         android:layout_width="wrap_content"
         android:layout_height="30dp"
         android:text="简单天气App" />
+    <TextView
+        android:id="@+id/testKotlinExtension"
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:text="测试kotlin的语法糖（扩展函数）" />
 
+    <TextView
+        android:id="@+id/testAnimDsl"
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:text="动画DSL语言定义" />
 <!--    <TextView-->
 <!--        android:id="@+id/testSystemFunction"-->
 <!--        android:layout_width="wrap_content"-->

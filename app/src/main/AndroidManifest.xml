@@ -89,6 +89,8 @@
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
             android:theme="@style/SpiderTheme" />
+        <activity android:name=".test.FastKotlinActivity" />
+        <activity android:name=".anim.AnimDslActivity" />
     </application>
 
 </manifest>

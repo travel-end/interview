@@ -7,9 +7,11 @@ import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.DefaultItemAnimator
+import androidx.recyclerview.widget.RecyclerView
 import com.journey.interview.R
 import com.journey.interview.recyclerview.bean.NumberInfo
 import com.journey.interview.recyclerview.core.*
+import com.journey.interview.utils.setOnRvItemClickListener
 import kotlinx.android.synthetic.main.activity_efficient_adapter.*
 
 /**
@@ -23,6 +25,11 @@ class EfficientAdapterActivity:AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_efficient_adapter)
 //        recycle_view.itemAnimator = DefaultItemAnimator()
+
+        recycle_view.setOnRvItemClickListener { view, i ->
+            Log.d("JG","i=$i")
+        }
+
         recycle_view.setup<NumberInfo> {
             dataSource(initData())
             adapter {
