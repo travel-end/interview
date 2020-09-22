@@ -1,4 +1,4 @@
-package com.journey.interview.weatherapp.home
+package com.journey.interview.weatherapp.ui.home
 
 import com.journey.interview.weatherapp.base.BaseRepository
 

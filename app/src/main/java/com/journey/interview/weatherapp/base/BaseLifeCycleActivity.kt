@@ -10,7 +10,7 @@ import kotlinx.coroutines.GlobalScope
  * @By Journey 2020/9/15
  * @Description
  */
-abstract class BaseLifeCycleActivity<VM:BaseViewModel<*>>:BaseActivity<VM>() {
+abstract class BaseLifeCycleActivity<VM:BaseViewModel>:BaseActivity<VM>() {
     override fun initView() {
         showSuccess()
         mViewModel.loadState.observe(this,stateObserver)

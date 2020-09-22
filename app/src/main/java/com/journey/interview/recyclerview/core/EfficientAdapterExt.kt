@@ -90,6 +90,8 @@ class RecycleSetup<T> internal constructor(private val recyclerView: RecyclerVie
         adapter?.updateData(position, data, payload)
     }
 
+
+
     fun getItem(position: Int): T = items[position]
 }
 
@@ -119,6 +121,12 @@ fun <T> RecyclerView.insertedData(position: Int, data: T) {
 fun RecyclerView.removedData(position: Int) {
     if (adapter != null && adapter is EfficientAdapter<*>) {
         (adapter as EfficientAdapter<*>).removedData(position)
+    }
+}
+
+fun RecyclerView.clearData() {
+    if (adapter != null && adapter is EfficientAdapter<*>) {
+        (adapter as EfficientAdapter<*>).clearData()
     }
 }
 

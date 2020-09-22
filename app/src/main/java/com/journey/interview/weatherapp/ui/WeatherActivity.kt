@@ -21,6 +21,7 @@ import com.journey.interview.InterviewApp
 import com.journey.interview.R
 import com.journey.interview.weatherapp.Constant
 import com.journey.interview.weatherapp.base.BaseLifeCycleActivity
+import com.journey.interview.weatherapp.model.Place
 import com.journey.interview.weatherapp.permission.PermissionResult
 import com.journey.interview.weatherapp.permission.Permissions
 
@@ -33,6 +34,7 @@ class WeatherActivity : BaseLifeCycleActivity<WeatherViewModel>(),
     private lateinit var mGeoCoderSearch: GeocodeSearch
     private var mLocationClient: AMapLocationClient? = null
     private var mLocationOption: AMapLocationClientOption? = null
+    private var mPlace:Place?=null
     override fun layoutResId(): Int = R.layout.wea_act_main
     override fun onRegeocodeSearched(p0: RegeocodeResult?, p1: Int) {
         Log.d("JG","onRegeocodeSearched: ${p0?.regeocodeAddress?.formatAddress} ----  $p1")
@@ -143,6 +145,15 @@ class WeatherActivity : BaseLifeCycleActivity<WeatherViewModel>(),
         val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
         intent.data = Uri.parse("package:$packageName")
         startActivity(intent)
+    }
+
+    override fun dataObserve() {
+        super.dataObserve()
+        mViewModel.mSearchPlacesData.observe(this,Observer{
+            it?.let {
+                mPlace = it.places[0]
+            }
+        })
     }
 
     override fun onDestroy() {

@@ -109,6 +109,11 @@ open class EfficientAdapter<T> : RecyclerView.Adapter<RecyclerView.ViewHolder>()
         notifyItemRemoved(position)
     }
 
+    open fun clearData()=apply {
+        items?.clear()
+        notifyDataSetChanged()
+    }
+
     /**
      * 更新数据
      */

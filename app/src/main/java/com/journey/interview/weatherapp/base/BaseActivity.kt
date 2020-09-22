@@ -11,7 +11,7 @@ import com.kingja.loadsir.core.LoadSir
  * @By Journey 2020/9/15
  * @Description
  */
-abstract class BaseActivity<VM:BaseViewModel<*>>:AppCompatActivity() {
+abstract class BaseActivity<VM:BaseViewModel>:AppCompatActivity() {
     protected lateinit var mViewModel:VM
     open fun initView() {
 
