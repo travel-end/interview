@@ -11,6 +11,7 @@ import com.journey.interview.customizeview.cropimageview.demo.CropImageViewActiv
 import com.journey.interview.customizeview.datetimer.demo.DateTimerPickerActivity
 import com.journey.interview.customizeview.heartview.HeartActivity
 import com.journey.interview.customizeview.levelselectview.LevelSelectActivity
+import com.journey.interview.customizeview.popupwindow.PopupWindowActivity
 import com.journey.interview.customizeview.rounddragtag.demo.RandomDragTagActivity
 import com.journey.interview.customizeview.scrollparallax.ScrollParallaxActivity
 import com.journey.interview.customizeview.swipecaptcha.demo.SwipeCaptchaActivity
@@ -62,6 +63,9 @@ class CustomizeViewActivity:AppCompatActivity() {
         }
         testMaterialDesign.setOnClickListener {
             startActivity(Intent(this, MaterialComponentsActivity::class.java))
+        }
+        testPopupWindow.setOnClickListener {
+            startActivity(Intent(this, PopupWindowActivity::class.java))
         }
     }
 }
