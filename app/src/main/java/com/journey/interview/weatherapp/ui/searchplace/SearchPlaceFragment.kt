@@ -1,12 +1,16 @@
 package com.journey.interview.weatherapp.ui.searchplace
 
+import android.util.Log
 import android.view.View
 import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.Observer
 import androidx.navigation.Navigation
+import com.journey.interview.InterviewApp
 import com.journey.interview.R
 import com.journey.interview.recyclerview.core.*
 import com.journey.interview.weatherapp.base.BaseLifeCycleFragment
+import com.journey.interview.weatherapp.global.AppEventViewModel
+import com.journey.interview.weatherapp.global.EventSender
 import com.journey.interview.weatherapp.model.ChoosePlaceData
 import com.journey.interview.weatherapp.model.Place
 import kotlinx.android.synthetic.main.wea_frg_search_place.*
@@ -76,6 +80,7 @@ class SearchPlaceFragment:BaseLifeCycleFragment<SearchPlaceViewModel>() {
         })
         mViewModel.realtimeWeather.observe(this,Observer{
             it?.let {
+                Log.e("JG","--->储存天气信息")
                 // 将天气信息储存数据库
                 mViewModel.insertChoosePlace(
                     ChoosePlaceData(
@@ -86,13 +91,21 @@ class SearchPlaceFragment:BaseLifeCycleFragment<SearchPlaceViewModel>() {
             }
         })
 
+        // 储存已选城市
         mViewModel.insertPlaceResult.observe(this,Observer{
             it?.let {
-
+                EventSender.sendPlaceAddEvent()
+                hideKeyboards()
             }
         })
 
-        mViewModel.insertChoosePlaceResult
+        // 储存已选城市天气信息
+        mViewModel.insertChoosePlaceResult.observe(this,Observer{
+            it?.let {
+                EventSender.sendPlaceChosenEvent()
+                Navigation.findNavController(search_place).navigateUp()
+            }
+        })
 
     }
 }

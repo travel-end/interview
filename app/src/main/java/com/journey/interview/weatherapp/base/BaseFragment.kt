@@ -1,10 +1,12 @@
 package com.journey.interview.weatherapp.base
 
+import android.content.Context
 import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.ColorUtils
 import androidx.fragment.app.Fragment
@@ -80,5 +82,12 @@ abstract class BaseFragment<VM:BaseViewModel> :Fragment(){
             requireActivity().window.decorView.systemUiVisibility =
                 View.SYSTEM_UI_FLAG_LAYOUT_STABLE
         }
+    }
+
+    open fun hideKeyboards() {
+        // 当前焦点的 View
+        val imm =
+            requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.hideSoftInputFromWindow(requireActivity().currentFocus?.windowToken, 0)
     }
 }

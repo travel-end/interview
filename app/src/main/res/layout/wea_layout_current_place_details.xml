@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?><!--<layout >-->
+
+<!--    <data>-->
+
+<!--        <import type="com.wjx.android.weather.module.home.viewmodel.HomeDetailViewModel" />-->
+
+<!--        <variable-->
+<!--            name="homeDetailViewModel"-->
+<!--            type="HomeDetailViewModel" />-->
+<!--    </data>-->
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:bind="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:paddingTop="@dimen/dp_5">
+    <!--使用databinding-->
+    <!--        <TextView-->
+    <!--            android:id="@+id/temp_text_view"-->
+    <!--            android:layout_width="wrap_content"-->
+    <!--            android:layout_height="wrap_content"-->
+    <!--            android:layout_gravity="center"-->
+    <!--            android:text="@{String.valueOf(homeDetailViewModel.MRealTimeData.result.realtime.temperature) + @string/temp}"-->
+    <!--            android:textColor="@color/always_white_text"-->
+    <!--            android:textSize="50sp" />-->
+    <TextView
+        android:id="@+id/temp_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="@string/humidity_label"
+        android:textColor="@color/always_white_text"
+        android:textSize="50sp" />
+
+    <TextView
+        android:id="@+id/description_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="Rain"
+        android:textColor="@color/always_white_text"
+        android:textSize="30sp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/dp_15"
+        android:layout_marginTop="@dimen/dp_40"
+        android:orientation="horizontal">
+
+        <include
+            layout="@layout/wea_layout_flipper_detail"
+            bind:homeDetailViewModel="@{homeDetailViewModel}" />
+
+        <ImageView
+            android:id="@+id/animation_view"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1" />
+
+    </LinearLayout>
+</LinearLayout><!--</layout>-->

@@ -13,7 +13,7 @@ import com.journey.interview.weatherapp.model.ChoosePlaceData
 interface ChoosePlaceDao {
     @Transaction
     @Insert(entity = ChoosePlaceData::class)
-    suspend fun insertPlace(choosePlaceData: ChoosePlaceData) : Long
+    suspend fun insertChosenPlace(choosePlaceData: ChoosePlaceData) : Long?
 
     @Transaction
     @Query("SELECT * FROM chooseplacedata ORDER BY primaryKey desc")

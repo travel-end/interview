@@ -54,6 +54,15 @@ val Int.dp: Int
         ).toInt()
     }
 
+val Int.f_dp: Float
+    get() {
+        return TypedValue.applyDimension(
+            TypedValue.COMPLEX_UNIT_DIP,
+            this.toFloat(),
+            Resources.getSystem().displayMetrics
+        )
+    }
+
 val Float.dp: Int
     get() {
         return TypedValue.applyDimension(
@@ -246,5 +255,7 @@ fun RecyclerView.setOnRvItemClickListener(listener:(View,Int)->Unit) {
 
     })
 }
+
+
 
 

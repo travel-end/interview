@@ -12,9 +12,7 @@ import com.journey.interview.weatherapp.net.ApiService
 import com.journey.interview.weatherapp.net.RetrofitClient
 import com.journey.interview.weatherapp.state.State
 import com.journey.interview.weatherapp.state.StateType
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.*
 import org.apache.http.conn.ConnectTimeoutException
 import retrofit2.HttpException
 import java.net.ConnectException
@@ -50,6 +48,13 @@ open class BaseViewModel : ViewModel() {
             }
         }
     }
+
+    protected fun <T> requestAsync(block:suspend () -> T):Deferred<T> {
+        return viewModelScope.async {
+            block.invoke()
+        }
+    }
+
 
     protected fun ioRequest(block:suspend () ->Unit) {
         viewModelScope.launch {

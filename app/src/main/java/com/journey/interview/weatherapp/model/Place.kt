@@ -12,8 +12,8 @@ import com.google.gson.annotations.SerializedName
 @Entity
 data class Place (
     @PrimaryKey(autoGenerate = true)
-    val primaryKey:Int,
-    val name:String,
+    var primaryKey:Int,
+    var name:String,
     val location:Location,
     @SerializedName("formatted_address")val address:String = ""
 ) {

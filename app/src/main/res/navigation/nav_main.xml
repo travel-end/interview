@@ -44,7 +44,7 @@
     </fragment>
     <fragment
         android:id="@+id/choosePlaceFragment"
-        android:name="com.journey.interview.weatherapp.ui.chooseplace.ChoosePlaceFragment"
+        android:name="com.journey.interview.weatherapp.ui.chooseplace.ChosenPlaceFragment"
         android:label="choose_place_fragment"
         tools:layout="@layout/wea_choose_place_list">
         <action

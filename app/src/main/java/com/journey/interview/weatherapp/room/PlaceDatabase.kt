@@ -12,13 +12,12 @@ import com.journey.interview.weatherapp.model.Place
  * @Description
  */
 @Database(entities = [Place::class], version = 1, exportSchema = false)
-
 @TypeConverters(LocationTypeConverter::class)
 abstract class PlaceDatabase:RoomDatabase() {
     abstract fun placeDao():PlaceDao
     companion object{
         private var instance:PlaceDatabase?=null
-        fun getInstance(context: Context):PlaceDatabase? {
+        fun getInstance(context: Context):PlaceDatabase {
             synchronized(PlaceDatabase::class.java) {
                 if (instance == null) {
                     instance = Room.databaseBuilder(
@@ -28,7 +27,7 @@ abstract class PlaceDatabase:RoomDatabase() {
                     ).build()
                 }
             }
-            return instance
+            return instance!!
         }
     }
 

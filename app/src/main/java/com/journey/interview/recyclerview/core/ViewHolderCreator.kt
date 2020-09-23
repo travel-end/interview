@@ -46,6 +46,11 @@ abstract class ViewHolderCreator<T> {
     }
 }
 
+fun <T> ViewHolderCreator<T>.setVisible(viewId:Int,isVisible:Boolean) {
+    val view = findViewById<View>(viewId)
+    view.visibility = if (isVisible) View.VISIBLE else View.GONE
+}
+
 fun <T> ViewHolderCreator<T>.setText(viewId: Int, text: String?) = apply {
     val textView: TextView = findViewById(viewId)
     textView.text = text
@@ -74,6 +79,11 @@ fun <T> ViewHolderCreator<T>.setBackground(viewId: Int, drawable: Drawable?) = a
 fun <T> ViewHolderCreator<T>.setBackgroundResource(viewId: Int, resid: Int) = apply {
     val imageView: ImageView = findViewById(viewId)
     imageView.setBackgroundResource(resid)
+}
+
+fun <T> ViewHolderCreator<T>.setBackgroundColor(viewId:Int, color: Int) {
+    val view = findViewById<View>(viewId)
+    view.setBackgroundColor(color)
 }
 
 fun <T> ViewHolderCreator<T>.visible(id: Int) =

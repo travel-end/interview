@@ -20,6 +20,7 @@
     <string name="delete">删除</string>
     <string name="temp">℃</string>
     <string name="percent">%</string>
+    <string name="weather">Weather</string>
 
     <!--setting-->
     <string name="setting_about">关于</string>

@@ -19,7 +19,7 @@ abstract class ChoosePlaceDataBase : RoomDatabase() {
     abstract fun choosePlaceDao(): ChoosePlaceDao
     companion object {
         private var instance: ChoosePlaceDataBase? = null
-        fun getInstance(context: Context): ChoosePlaceDataBase? {
+        fun getInstance(context: Context): ChoosePlaceDataBase {
             if (instance == null) {
                 synchronized(ChoosePlaceDataBase::class.java) {
                     if (instance == null) {
@@ -31,7 +31,7 @@ abstract class ChoosePlaceDataBase : RoomDatabase() {
                     }
                 }
             }
-            return instance
+            return instance!!
         }
     }
 }
