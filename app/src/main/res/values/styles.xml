@@ -1,10 +1,10 @@
 <resources>
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorPrimaryDark">@color/colorPrimary</item>
+        <item name="colorAccent">@color/colorPrimary</item>
     </style>
 
     <style name="textViewStyle">
@@ -16,9 +16,12 @@
         <item name="android:gravity">center</item>
     </style>
 
-    <style name="SpiderTheme" parent="Theme.AppCompat.Light.NoActionBar">
-        <!--        <item name="android:windowFullscreen">true</item>-->
+    <style name="imusic_wel_style" parent="AppTheme">
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowBackground">@drawable/imusic_wel</item>
+        <item name="android:windowDisablePreview">true</item>
     </style>
+
 
     <style name="LockScreenViewStyle" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="android:windowAnimationStyle">@null</item>

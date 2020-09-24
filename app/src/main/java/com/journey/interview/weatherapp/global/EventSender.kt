@@ -6,7 +6,7 @@ import com.journey.interview.InterviewApp
 
 /**
  * @By Journey 2020/9/23
- * @Description
+ * @Description 全局消息总线
  */
 object EventSender {
     private val globalViewModel = InterviewApp.instance.getGlobalViewModel(AppEventViewModel::class.java)

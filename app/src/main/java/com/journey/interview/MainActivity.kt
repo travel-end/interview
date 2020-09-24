@@ -5,6 +5,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.journey.interview.anim.AnimDslActivity
 import com.journey.interview.customizeview.CustomizeViewActivity
+import com.journey.interview.imusic.IWelcomeActivity
 import com.journey.interview.recyclerview.demo.EfficientAdapterActivity
 import com.journey.interview.test.FastKotlinActivity
 import com.journey.interview.weatherapp.ui.WeatherActivity
@@ -31,6 +32,9 @@ class MainActivity : AppCompatActivity() {
         }
         testAnimDsl.setOnClickListener {
             startActivity(Intent(this, AnimDslActivity::class.java))
+        }
+        imusicApp.setOnClickListener {
+            startActivity(Intent(this, IWelcomeActivity::class.java))
         }
 //        testSystemFunction.setOnClickListener {
 //            startActivity(Intent(this,ScreenActivity::class.java))

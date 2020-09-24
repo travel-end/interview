@@ -12,7 +12,7 @@ import kotlinx.coroutines.GlobalScope
  */
 abstract class BaseLifeCycleActivity<VM:BaseViewModel>:BaseActivity<VM>() {
     override fun initView() {
-        showSuccess()
+//        showSuccess()
         mViewModel.loadState.observe(this,stateObserver)
         dataObserve()
     }
@@ -22,20 +22,20 @@ abstract class BaseLifeCycleActivity<VM:BaseViewModel>:BaseActivity<VM>() {
     }
 
     open fun showLoading() {
-        mLoadService.showCallback(LoadingCallback::class.java)
+//        mLoadService.showCallback(LoadingCallback::class.java)
     }
     open fun showSuccess() {
-        mLoadService.showCallback(SuccessCallback::class.java)
+//        mLoadService.showCallback(SuccessCallback::class.java)
     }
 
     open fun showError(msg:String) {
         if (msg.isNotEmpty()) {
             Toast.makeText(this, msg, Toast.LENGTH_SHORT).show()
         }
-        mLoadService.showCallback(ErrorCallback::class.java)
+//        mLoadService.showCallback(ErrorCallback::class.java)
     }
     open fun showEmpty() {
-        mLoadService.showCallback(EmptyCallback::class.java)
+//        mLoadService.showCallback(EmptyCallback::class.java)
     }
     /**
      * 分发应用状态

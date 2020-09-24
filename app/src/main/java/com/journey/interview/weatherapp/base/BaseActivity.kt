@@ -30,11 +30,11 @@ abstract class BaseActivity<VM:BaseViewModel>:AppCompatActivity() {
         initView()
         initData()
     }
-    protected val mLoadService: LoadService<*> by lazy {
-        LoadSir.getDefault().register(this) {
-            reLoad()
-        }
-    }
+//    protected val mLoadService: LoadService<*> by lazy {
+//        LoadSir.getDefault().register(this) {
+//            reLoad()
+//        }
+//    }
     private fun initViewModel() {
         mViewModel = ViewModelProvider(this).get(getClass(this))
     }

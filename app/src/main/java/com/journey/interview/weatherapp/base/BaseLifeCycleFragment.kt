@@ -20,11 +20,11 @@ abstract class BaseLifeCycleFragment<VM:BaseViewModel>:BaseFragment<VM>() {
         mViewModel.loadState.observe(this,observer)
     }
     open fun showLoading() {
-        mLoadService.showCallback(LoadingCallback::class.java)
+//        mLoadService.showCallback(LoadingCallback::class.java)
     }
 
     open fun showSuccess() {
-        mLoadService.showCallback(SuccessCallback::class.java)
+//        mLoadService.showCallback(SuccessCallback::class.java)
     }
 
     open fun showError(msg:String) {
@@ -35,7 +35,7 @@ abstract class BaseLifeCycleFragment<VM:BaseViewModel>:BaseFragment<VM>() {
     }
 
     open fun showEmpty() {
-        mLoadService.showCallback(EmptyCallback::class.java)
+//        mLoadService.showCallback(EmptyCallback::class.java)
     }
 
     override fun reLoad() {

@@ -1,10 +1,10 @@
 <resources>
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorPrimaryDark">@color/colorPrimary</item>
+        <item name="colorAccent">@color/colorPrimary</item>
     </style>
 
     <style name="textViewStyle">
@@ -14,9 +14,6 @@
         <item name="android:textColor">@color/colorWhite</item>
         <item name="android:textSize">16sp</item>
         <item name="android:gravity">center</item>
-    </style>
-    <style name="SpiderTheme" parent="Theme.AppCompat.Light.NoActionBar">
-<!--        <item name="android:windowFullscreen">true</item>-->
     </style>
     <style name="CheckBoxWhite" parent="@android:style/Widget.Material.CompoundButton.CheckBox">
         <item name="android:colorControlActivated">@color/colorWhite</item>

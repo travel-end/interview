@@ -27,9 +27,6 @@ open class BaseViewModel : ViewModel() {
         MutableLiveData<State>()
     }
 
-    //    val mRepository:R by lazy {
-//        getClass<R>(this).getDeclaredConstructor(MutableLiveData::class.java).newInstance(loadState)
-//    }
     protected val apiService: ApiService by lazy {
         RetrofitClient.instance.createApiService(ApiService::class.java)
     }

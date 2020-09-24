@@ -11,6 +11,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.graphics.ColorUtils
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import com.gyf.immersionbar.ImmersionBar
 import com.journey.interview.R
 import com.journey.interview.utils.getClass
 import com.kingja.loadsir.core.LoadService
@@ -21,7 +22,7 @@ import com.kingja.loadsir.core.LoadSir
  * @Description
  */
 abstract class BaseFragment<VM:BaseViewModel> :Fragment(){
-    protected lateinit var mLoadService: LoadService<*>
+//    protected lateinit var mLoadService: LoadService<*>
     protected lateinit var mViewModel:VM
     protected lateinit var mRootView:View
     abstract fun layoutResId():Int
@@ -43,6 +44,7 @@ abstract class BaseFragment<VM:BaseViewModel> :Fragment(){
         initView()
         initData()
         initStatusBarColor()
+//        ImmersionBar.with(requireActivity()).statusBarColor(R.color.colorWhite).init()
     }
 
     open fun reLoad() = initData()

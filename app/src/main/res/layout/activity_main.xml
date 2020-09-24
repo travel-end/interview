@@ -24,6 +24,13 @@
         android:layout_width="wrap_content"
         android:layout_height="30dp"
         android:text="简单天气App" />
+
+    <TextView
+        android:id="@+id/imusicApp"
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:text="IMusic App" />
+
     <TextView
         android:id="@+id/testKotlinExtension"
         android:layout_width="wrap_content"

@@ -44,6 +44,19 @@
         <meta-data
             android:name="com.amap.api.v2.apikey"
             android:value="bf072228a8e9866eae18d59589ad5238" />
+        <!--shipei全面屏-->
+        <meta-data
+            android:name="android.max_aspect"
+            android:value="2.1" />
+        <!--适配华为刘海屏-->
+        <meta-data
+            android:name="android.notch_support"
+            android:value="true" />
+        <!--适配小米刘海屏-->
+        <meta-data
+            android:name="notch.config"
+            android:value="portrait|landscape" />
+
 
         <activity android:name=".MainActivity">
             <intent-filter>
@@ -56,32 +69,24 @@
         <activity android:name=".recyclerview.demo.ListActivity" />
         <activity android:name=".customizeview.swipecaptcha.demo.SwipeCaptchaActivity" />
         <activity
-            android:name=".customizeview.spiderweb.demo.SpiderWebViewActivity"
-            android:theme="@style/SpiderTheme" />
+            android:name=".customizeview.spiderweb.demo.SpiderWebViewActivity" />
         <activity
-            android:name=".customizeview.spiderweb.demo.MeiSpiderWebActivity2"
-            android:theme="@style/SpiderTheme" />
+            android:name=".customizeview.spiderweb.demo.MeiSpiderWebActivity2" />
         <activity android:name=".customizeview.CustomizeViewActivity" />
         <activity
-            android:name=".customizeview.cornergif.CornersGifActivity"
-            android:theme="@style/SpiderTheme" />
+            android:name=".customizeview.cornergif.CornersGifActivity" />
         <activity
-            android:name=".customizeview.rounddragtag.demo.RandomDragTagActivity"
-            android:theme="@style/SpiderTheme" />
+            android:name=".customizeview.rounddragtag.demo.RandomDragTagActivity" />
         <activity android:name=".customizeview.zpwdeditext.ZEditTextActivity" />
         <activity android:name=".customizeview.datetimer.demo.DateTimerPickerActivity" />
         <activity
-            android:name=".customizeview.cropimageview.demo.CropImageViewActivity2"
-            android:theme="@style/SpiderTheme" />
+            android:name=".customizeview.cropimageview.demo.CropImageViewActivity2" />
         <activity
-            android:name=".customizeview.scrollparallax.ScrollParallaxActivity"
-            android:theme="@style/SpiderTheme" />
+            android:name=".customizeview.scrollparallax.ScrollParallaxActivity" />
         <activity
-            android:name=".customizeview.heartview.HeartActivity"
-            android:theme="@style/SpiderTheme" />
+            android:name=".customizeview.heartview.HeartActivity" />
         <activity
-            android:name=".customizeview.levelselectview.LevelSelectActivity"
-            android:theme="@style/SpiderTheme" />
+            android:name=".customizeview.levelselectview.LevelSelectActivity" />
         <activity android:name=".system.ScreenActivity" />
         <activity
             android:name=".system.LockScreenActivity"
@@ -93,11 +98,13 @@
             android:theme="@style/material_style"/>
         <activity android:name=".weatherapp.ui.WeatherActivity"
             android:launchMode="singleTask"
-            android:screenOrientation="portrait"
-            android:theme="@style/SpiderTheme" />
+            android:screenOrientation="portrait" />
         <activity android:name=".test.FastKotlinActivity" />
         <activity android:name=".anim.AnimDslActivity" />
         <activity android:name=".customizeview.popupwindow.PopupWindowActivity" />
+        <activity android:name=".imusic.IWelcomeActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.Transparent"/>
     </application>
 
 </manifest>

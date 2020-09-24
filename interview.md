@@ -47,4 +47,5 @@ class OutClass {
     嵌套类（不储存外部类的引用）      static class A          class A
     内部类（存储外部类的引用）        class A                 inner class A
     
-    
+ 
+ ####简单天气app   

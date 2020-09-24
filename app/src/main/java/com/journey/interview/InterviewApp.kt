@@ -28,7 +28,7 @@ class InterviewApp : MultiDexApplication(), ViewModelStoreOwner {
         mViewModelStore = ViewModelStore()
 //        val intent = Intent(this,LockScreenService::class.java)
 //        startService(intent)
-        initLoadSir()
+//        initLoadSir()
 
     }
 
