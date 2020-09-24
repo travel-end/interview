@@ -29,7 +29,7 @@ interface PlaceDao {
 
     @Transaction
     @Delete(entity = Place::class)
-    suspend fun deletePlace(place: Place):Int
+    suspend fun deletePlace(place: Place):Int?
 
     @Transaction
     @Query("DELETE FROM place")

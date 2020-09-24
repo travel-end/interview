@@ -27,7 +27,6 @@ class SearchPlaceFragment:BaseLifeCycleFragment<SearchPlaceViewModel>() {
         super.initView()
         initHeaderView()
         place_recycle.setup<Place> {
-//            dataSource(null)
             adapter {
                 addItem(R.layout.wea_item_search_result) {
                     bindViewHolder {data, position, holder ->

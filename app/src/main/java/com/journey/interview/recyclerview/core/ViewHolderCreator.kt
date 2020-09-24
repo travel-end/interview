@@ -113,7 +113,10 @@ fun <T> ViewHolderCreator<T>.clicked(id: Int, listener: View.OnClickListener?) =
 fun <T> ViewHolderCreator<T>.itemClicked(listener: View.OnClickListener?) =
     apply { itemView?.setOnClickListener(listener) }
 
-fun <T> ViewHolderCreator<T>.longClicked(id: Int, listener: View.OnLongClickListener?) =
+fun <T> ViewHolderCreator<T>.itemLongClicked(listener: View.OnLongClickListener?) =
+    apply { itemView?.setOnLongClickListener(listener) }
+
+fun <T> ViewHolderCreator<T>.itemLongClicked(id: Int, listener: View.OnLongClickListener?) =
     apply { findViewById<View>(id).setOnLongClickListener(listener) }
 
 fun <T> ViewHolderCreator<T>.isEnabled(id: Int, enable: Boolean = true) =

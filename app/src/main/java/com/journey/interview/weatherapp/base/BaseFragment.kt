@@ -23,17 +23,18 @@ import com.kingja.loadsir.core.LoadSir
 abstract class BaseFragment<VM:BaseViewModel> :Fragment(){
     protected lateinit var mLoadService: LoadService<*>
     protected lateinit var mViewModel:VM
+    protected lateinit var mRootView:View
     abstract fun layoutResId():Int
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view = inflater.inflate(layoutResId(),container,false)
+        mRootView = inflater.inflate(layoutResId(),container,false)
 //        mLoadService = LoadSir.getDefault().register(view) {
 //            reLoad()
 //        }
-        return view
+        return mRootView
 //        return mLoadService.loadLayout
     }
 

@@ -78,4 +78,16 @@ object RoomHelper {
     suspend fun updateChoosePlace(temperature: Int, skycon: String, name: String) {
         choosePlaceDao.updateChoosePlace(temperature, skycon, name)
     }
+
+    suspend fun deletePlace(place: Place?) :Int?{
+        return placeDao.deletePlace(place!!)
+    }
+
+    suspend fun queryPlaceByName(name: String):Place?{
+        return placeDao.queryPlaceByName(name)
+    }
+
+    suspend fun deleteChosenPlace(chosenPlace:ChoosePlaceData):Int? {
+        return choosePlaceDao.deleteChoosePlace(chosenPlace)
+    }
 }

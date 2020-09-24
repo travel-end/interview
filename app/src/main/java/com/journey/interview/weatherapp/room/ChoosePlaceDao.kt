@@ -29,5 +29,5 @@ interface ChoosePlaceDao {
 
     @Transaction
     @Delete(entity = ChoosePlaceData::class)
-    suspend fun deleteChoosePlace(choosePlaceData: ChoosePlaceData) : Int
+    suspend fun deleteChoosePlace(choosePlaceData: ChoosePlaceData) : Int?
 }

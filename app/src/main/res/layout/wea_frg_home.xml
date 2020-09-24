@@ -6,37 +6,59 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tool="http://schemas.android.com/tools"
     android:orientation="vertical">
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/home_bar"
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@android:color/transparent"
-        android:minHeight="?attr/actionBarSize"
-        app:titleTextColor="@color/colorPrimaryDarkNight" >
-
-        <LinearLayout
+        android:layout_height="@dimen/dp_44">
+        <TextView
+            android:id="@+id/home_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            tool:text="天气预报"
+            android:textColor="@color/colorGrayDark"
             android:layout_gravity="center"
-            android:gravity="center"
-            android:orientation="horizontal">
+            android:textSize="18sp" />
+        <ImageView
+            android:id="@+id/home_to_city"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_city"
+            android:layout_marginEnd="@dimen/dp_48"
+            android:layout_gravity="center_vertical|end" />
+        <ImageView
+            android:id="@+id/home_iv_more"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_more"
+            android:layout_marginEnd="10dp"
+            android:layout_gravity="center_vertical|end" />
 
-            <TextView
-                android:id="@+id/home_title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                tool:text="天气预报"
-                android:textColor="@color/colorGray"
-                android:textSize="20sp" />
-        </LinearLayout>
-    </androidx.appcompat.widget.Toolbar>
+    </FrameLayout>
+
+<!--    <androidx.appcompat.widget.Toolbar-->
+<!--        android:id="@+id/home_bar"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:background="@android:color/transparent"-->
+<!--        android:minHeight="?attr/actionBarSize"-->
+<!--        app:titleTextColor="@color/colorPrimaryDarkNight" >-->
+
+<!--        <LinearLayout-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_gravity="center"-->
+<!--            android:gravity="center"-->
+<!--            android:orientation="horizontal">-->
+
+
+<!--        </LinearLayout>-->
+<!--    </androidx.appcompat.widget.Toolbar>-->
 
     <com.journey.interview.customizeview.indicator.IndicatorView
         android:id="@+id/indicator_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:layout_margin="@dimen/dp_10" />
+        android:layout_margin="6dp" />
 
     <androidx.viewpager.widget.ViewPager
         android:id="@+id/home_viewpager"

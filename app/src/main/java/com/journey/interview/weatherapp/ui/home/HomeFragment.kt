@@ -5,6 +5,7 @@ import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
@@ -37,33 +38,19 @@ class HomeFragment:BaseLifeCycleFragment<HomeViewModel>() {
     override fun initView() {
         super.initView()
         indicatorView = indicator_view
-        weatherTitle =  home_bar.home_title
+        weatherTitle =  home_title
         weatherTitle.text = resources.getString(R.string.weather)
-        (requireActivity() as AppCompatActivity).setSupportActionBar(home_bar)
-        setHasOptionsMenu(true)
     }
 
     override fun initData() {
         super.initData()
         mViewModel.queryAllPlace()
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.home_menu,menu)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-
-        when(item.itemId) {
-            R.id.action_city->{
-                // Destination id == 0 can only be used in conjunction with a valid navOptions.popUpTo
-                Navigation.findNavController(home_bar).navigate(R.id.action_homeFragment_to_choosePlaceFragment)
-            }
-            R.id.action_more->{
-
-            }
+        mRootView.findViewById<ImageView>(R.id.home_to_city).setOnClickListener {
+            Navigation.findNavController(weatherTitle).navigate(R.id.action_homeFragment_to_choosePlaceFragment)
         }
-        return super.onOptionsItemSelected(item)
+        mRootView.findViewById<ImageView>(R.id.home_iv_more).setOnClickListener {
+
+        }
     }
 
     override fun dataObserve() {
@@ -82,7 +69,7 @@ class HomeFragment:BaseLifeCycleFragment<HomeViewModel>() {
             it?.let {
                 if (it.size == 0) {
                     Navigation.findNavController(home_root_view).navigate(R.id.choosePlaceFragment)
-                    home_bar.home_title.text = ""
+                    weatherTitle.text = ""
                 }
                 showChosenPlaceWeather(it)
             }
@@ -117,29 +104,27 @@ class HomeFragment:BaseLifeCycleFragment<HomeViewModel>() {
         home_viewpager.addOnPageChangeListener(WeatherTitlePageChangeListener())
         indicatorView
             .setSliderColor(ContextCompat.getColor(requireContext(),R.color.grey_10),ContextCompat.getColor(requireContext(),R.color.material_blue))
-            .setSliderWidth(R.dimen.safe_padding.f_dp)
-            .setSliderHeight(R.dimen.safe_padding.f_dp)
+            .setSliderWidth(8.f_dp)
+            .setSliderHeight(8.f_dp)
             .setSlideMode(IndicatorSlideMode.WORM)
             .setIndicatorStyle(IndicatorStyle.CIRCLE)
             .setupWithViewPager(home_viewpager)
-        indicatorView.visibility = View.INVISIBLE
-
+//        indicatorView.visibility = View.INVISIBLE
     }
 
     private inner class WeatherTitlePageChangeListener:ViewPager.OnPageChangeListener{
         override fun onPageScrollStateChanged(state: Int) {
-            indicatorView.visibility = View.INVISIBLE
+            Log.e("JG","--->onPageScrollStateChanged: $state")
+//            indicatorView.visibility = View.INVISIBLE
         }
 
         override fun onPageScrolled(
             position: Int,
             positionOffset: Float,
             positionOffsetPixels: Int
-        ) {
-        }
+        ) {}
         override fun onPageSelected(position: Int) {
             weatherTitle.text = placeNames[position]
         }
-
     }
 }

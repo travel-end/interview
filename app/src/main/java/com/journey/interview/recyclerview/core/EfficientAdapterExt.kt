@@ -90,8 +90,6 @@ class RecycleSetup<T> internal constructor(private val recyclerView: RecyclerVie
         adapter?.updateData(position, data, payload)
     }
 
-
-
     fun getItem(position: Int): T = items[position]
 }
 
