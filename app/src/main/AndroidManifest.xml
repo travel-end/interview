@@ -102,9 +102,12 @@
         <activity android:name=".test.FastKotlinActivity" />
         <activity android:name=".anim.AnimDslActivity" />
         <activity android:name=".customizeview.popupwindow.PopupWindowActivity" />
-        <activity android:name=".imusic.IWelcomeActivity"
+        <activity android:name=".imusic.act.IWelcomeActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.Transparent"/>
+        <activity android:name=".imusic.IMainActivity"
+            android:launchMode="singleTask"
+            android:theme="@style/material_style"/>
     </application>
 
 </manifest>

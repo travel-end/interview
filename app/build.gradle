@@ -77,7 +77,7 @@ dependencies {
     implementation 'com.afollestad.material-dialogs:core:3.1.1'
 
     // imusic app
-    implementation 'com.permissionx.guolindev:permissionx:1.4.0'
+//    implementation 'com.permissionx.guolindev:permissionx:1.4.0'
     implementation 'com.gyf.immersionbar:immersionbar:3.0.0'
     implementation 'com.gyf.immersionbar:immersionbar-ktx:3.0.0'
 }

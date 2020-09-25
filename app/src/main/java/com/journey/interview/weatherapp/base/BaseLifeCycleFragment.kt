@@ -2,6 +2,8 @@ package com.journey.interview.weatherapp.base
 
 import android.widget.Toast
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
+import com.journey.interview.utils.getClass
 import com.journey.interview.weatherapp.state.*
 import com.kingja.loadsir.callback.SuccessCallback
 
@@ -9,11 +11,15 @@ import com.kingja.loadsir.callback.SuccessCallback
  * @By Journey 2020/9/15
  * @Description
  */
-abstract class BaseLifeCycleFragment<VM:BaseViewModel>:BaseFragment<VM>() {
+abstract class BaseLifeCycleFragment<VM:BaseViewModel>:BaseFragment() {
+    protected lateinit var mViewModel:VM
     override fun initView() {
-//        showLoading()
 
         dataObserve()
+    }
+
+    override fun initData() {
+
     }
 
     open fun dataObserve() {
@@ -43,6 +49,10 @@ abstract class BaseLifeCycleFragment<VM:BaseViewModel>:BaseFragment<VM>() {
         initData()
         dataObserve()
         super.reLoad()
+    }
+
+    override fun initViewModel() {
+        mViewModel = ViewModelProvider(this).get(getClass(this))
     }
 
     private val observer by lazy {

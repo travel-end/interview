@@ -1,7 +1,7 @@
 package com.journey.interview.weatherapp.net
 
 import android.util.Log
-import com.journey.interview.weatherapp.Constant
+import com.journey.interview.Constant
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit

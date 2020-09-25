@@ -21,9 +21,9 @@ import com.kingja.loadsir.core.LoadSir
  * @By Journey 2020/9/15
  * @Description
  */
-abstract class BaseFragment<VM:BaseViewModel> :Fragment(){
+abstract class BaseFragment :Fragment(){
 //    protected lateinit var mLoadService: LoadService<*>
-    protected lateinit var mViewModel:VM
+
     protected lateinit var mRootView:View
     abstract fun layoutResId():Int
     override fun onCreateView(
@@ -56,9 +56,11 @@ abstract class BaseFragment<VM:BaseViewModel> :Fragment(){
 
     }
 
-    private fun initViewModel() {
-        mViewModel = ViewModelProvider(this).get(getClass(this))
+    open fun initViewModel() {
+
     }
+
+
 
     private fun initStatusBarColor() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {

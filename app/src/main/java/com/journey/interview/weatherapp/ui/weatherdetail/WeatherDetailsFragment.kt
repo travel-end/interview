@@ -13,7 +13,7 @@ import com.journey.interview.utils.getAirLevel
 import com.journey.interview.utils.getSky
 import com.journey.interview.utils.getWindOri
 import com.journey.interview.utils.getWindSpeed
-import com.journey.interview.weatherapp.Constant
+import com.journey.interview.Constant
 import com.journey.interview.weatherapp.base.BaseLifeCycleFragment
 import com.journey.interview.weatherapp.model.Daily
 import com.journey.interview.weatherapp.model.HourlyWeather
@@ -22,7 +22,6 @@ import com.journey.interview.weatherapp.widget.HourlyWeatherItem
 import com.journey.interview.weatherapp.widget.WeatherView
 import kotlinx.android.synthetic.main.waa_layout_life_index.*
 import kotlinx.android.synthetic.main.wea_frg_weather_details.*
-import kotlinx.android.synthetic.main.wea_item_search_result.*
 import kotlinx.android.synthetic.main.wea_layout_current_place_details.*
 import kotlinx.android.synthetic.main.wea_layout_flipper_detail.*
 
@@ -60,7 +59,7 @@ class WeatherDetailsFragment:BaseLifeCycleFragment<WeatherDetailsViewModel>() {
                 addItem(R.layout.wea_layout_daily_item) {
                     bindViewHolder { data, position, holder ->
                         data?.let {item->
-                            setText(R.id.date,Constant.getTodayInWeek(item.date))
+                            setText(R.id.date, Constant.getTodayInWeek(item.date))
                             setImageResource(R.id.weather, getSky(item.value).icon)
                             setText(R.id.temperature,"${item.min.toInt()}℃~ ${item.max.toInt()}℃")
                         }

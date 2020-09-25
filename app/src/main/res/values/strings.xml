@@ -2,11 +2,7 @@
     <string name="app_name">Android Review</string>
     <string name="drawer_open">开</string>
     <string name="drawer_close">关</string>
-
-
     <string name="exit_app">再按一次退出程序</string>
-
-    <!--主页-->
     <string name="next_15_days_label">15日天气</string>
     <string name="current_weather">当日天气</string>
     <string name="humidity_label">湿度: </string>
@@ -21,8 +17,6 @@
     <string name="temp">℃</string>
     <string name="percent">%</string>
     <string name="weather">Weather</string>
-
-    <!--setting-->
     <string name="setting_about">关于</string>
     <string name="setting_project">开源项目</string>
     <string name="setting_version">检查更新</string>
@@ -39,11 +33,14 @@
     <string name="project_address">项目源码</string>
     <string name="csdn博客">个人博客</string>
     <string name="github_url">https://github.com/wangjianxiandev/Weather</string>
-
-
-    <!--feed back-->
     <string name="error_message">发生了一些错误</string>
     <string name="empty_message">没有数据哎~</string>
     <string name="appwidget_text">EXAMPLE</string>
     <string name="add_widget">Add widget</string>
+
+    <!--iMusic App-->
+    <string name="imusic_tab_me">我的</string>
+    <string name="imusic_tab_find">发现</string>
+    <string name="imusic_tab_cloud_village">云村</string>
+    <string name="imusic_tab_video">视频</string>
 </resources>

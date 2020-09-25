@@ -5,12 +5,15 @@
     <color name="colorAccent">#03DAC5</color>
     <color name="main_color">#6200EE</color>
     <color name="colorBlack">#333333</color>
+    <color name="colorBlack2">#000000</color>
     <color name="colorGray">#ACABAB</color>
     <color name="colorWhite">#FFFFFF</color>
     <color name="colorTextPink">#ff6daf</color>
     <color name="colorGrayDark">#666666</color>
     <color name="colorGray2">#999999</color>
     <color name="translate">#00000000</color>
+    <color name="grayLight">#33F1F1F1</color>
+    <color name="red">#FD5F5F</color>
 
 
     <color name="overlay_dark_50">#40000000</color>

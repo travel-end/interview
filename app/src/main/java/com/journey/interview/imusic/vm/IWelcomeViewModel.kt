@@ -1,4 +1,4 @@
-package com.journey.interview.imusic
+package com.journey.interview.imusic.vm
 
 import com.journey.interview.weatherapp.base.BaseViewModel
 

@@ -28,7 +28,9 @@ import kotlinx.android.synthetic.main.wea_frg_home.view.*
 
 /**
  * @By Journey 2020/9/15
- * @Description  显示具体城市的具体天气情况
+ * @Description  使用viewPager装载已选城市天气的fragment，
+ * （负责显示天气详情，但不是这个fragment显示，而是它装载的fragment显示）
+ * 可以根据选择的城市动态显示viewPager显示的fragment个数
  */
 class HomeFragment:BaseLifeCycleFragment<HomeViewModel>() {
     private lateinit var indicatorView:IndicatorView

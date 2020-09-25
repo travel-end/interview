@@ -5,12 +5,11 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.journey.interview.anim.AnimDslActivity
 import com.journey.interview.customizeview.CustomizeViewActivity
-import com.journey.interview.imusic.IWelcomeActivity
+import com.journey.interview.imusic.act.IWelcomeActivity
 import com.journey.interview.recyclerview.demo.EfficientAdapterActivity
 import com.journey.interview.test.FastKotlinActivity
 import com.journey.interview.weatherapp.ui.WeatherActivity
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.coroutines.*
 
 class MainActivity : AppCompatActivity() {
 

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="@dimen/dp_80"
+    android:layout_height="wrap_content"
+    android:gravity="center_horizontal"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical">
+
+<!--    <ImageView-->
+<!--        android:id="@+id/find_iv_menu_res"-->
+<!--        android:layout_width="@dimen/dp_44"-->
+<!--        android:layout_height="@dimen/dp_44"-->
+<!--        app:tint="@color/colorWhite"-->
+<!--        android:padding="7dp"-->
+<!--        android:background="@color/red"-->
+<!--        android:src="@drawable/vector_drawable_ic_heavy_snow" />-->
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/find_iv_menu_res"
+        android:layout_width="@dimen/dp_48"
+        android:layout_height="@dimen/dp_48"
+        android:background="@color/red"
+        android:tint="@color/colorWhite"
+        android:src="@drawable/vector_drawable_ic_heavy_snow2" />
+
+    <TextView
+        android:id="@+id/find_tv_menu_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="每日推荐"
+        android:textColor="@color/colorBlack"
+        android:textSize="12sp"
+        android:layout_marginTop="@dimen/dp_10" />
+
+
+</LinearLayout>

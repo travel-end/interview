@@ -19,7 +19,7 @@ import com.amap.api.services.geocoder.RegeocodeQuery
 import com.amap.api.services.geocoder.RegeocodeResult
 import com.journey.interview.InterviewApp
 import com.journey.interview.R
-import com.journey.interview.weatherapp.Constant
+import com.journey.interview.Constant
 import com.journey.interview.weatherapp.base.BaseLifeCycleActivity
 import com.journey.interview.weatherapp.model.Place
 import com.journey.interview.weatherapp.permission.PermissionResult

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/dp_48"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/colorWhite">
+    <ImageView
+        android:id="@+id/iv_title_list"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_marginStart="@dimen/dp_5"
+        android:src="@drawable/list" />
+
+    <com.journey.interview.customizeview.tablayout.CommonTabLayout
+        android:id="@+id/title_tabLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="center_horizontal"
+        app:tl_indicator_bounce_enable="false"
+        app:tl_tab_width="60dp"
+        app:tl_textBold="SELECT"
+        app:tl_textSelectColor="@color/colorBlack"
+        app:tl_textUnselectColor="@color/colorGray2"
+        app:tl_textsize="18sp" />
+
+    <ImageView
+        android:id="@+id/iv_title_search"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_gravity="center_vertical|end"
+        android:layout_marginEnd="@dimen/dp_10"
+        android:src="@drawable/search" />
+
+</FrameLayout>

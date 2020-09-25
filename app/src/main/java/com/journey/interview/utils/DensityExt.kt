@@ -27,4 +27,6 @@ fun String.logE() {
     Log.e("Kotlin",this)
 }
 
+fun Int.getString() = InterviewApp.instance.resources.getString(this)
+
 // 将px值转换成dp值

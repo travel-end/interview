@@ -38,4 +38,8 @@ abstract class BaseActivity<VM:BaseViewModel>:AppCompatActivity() {
     private fun initViewModel() {
         mViewModel = ViewModelProvider(this).get(getClass(this))
     }
+
+    open fun initStatusBar() {
+
+    }
 }

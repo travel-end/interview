@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="68dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <ImageView
+        android:id="@+id/hot_bottom_cover"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/cover9"
+        android:scaleType="centerCrop" />
+    <TextView
+        android:id="@+id/hot_bottom_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="歌手分类"
+        android:textSize="20sp"
+        android:textColor="@color/colorWhite"
+        android:textStyle="bold"
+        android:layout_gravity="center_vertical"
+        android:layout_marginStart="@dimen/dp_10" />
+</FrameLayout>

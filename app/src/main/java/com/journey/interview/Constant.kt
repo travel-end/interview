@@ -1,4 +1,4 @@
-package com.journey.interview.weatherapp
+package com.journey.interview
 
 import android.Manifest
 import java.util.*

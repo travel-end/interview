@@ -1,6 +1,6 @@
 package com.journey.interview.weatherapp.net
 
-import com.journey.interview.weatherapp.Constant
+import com.journey.interview.Constant
 import com.journey.interview.weatherapp.model.Daily
 import com.journey.interview.weatherapp.model.HourlyData
 import com.journey.interview.weatherapp.model.RealTime

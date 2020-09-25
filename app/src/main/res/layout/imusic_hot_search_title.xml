@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="56dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <TextView
+        android:id="@+id/hot_tv_search"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_marginStart="@dimen/dp_10"
+        android:text="热搜榜"
+        android:textColor="@color/colorBlack2"
+        android:textSize="14sp" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/hot_mb_bf_all"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/dp_36"
+        android:layout_gravity="center_vertical|end"
+        android:layout_marginEnd="@dimen/dp_10"
+        android:backgroundTint="@color/translate"
+        android:text="播放全部"
+        android:textColor="@color/colorGrayDark"
+        android:textSize="14sp"
+        app:cornerRadius="20dp" />
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="@color/grey_10"
+        android:layout_gravity="bottom"/>
+</FrameLayout>
