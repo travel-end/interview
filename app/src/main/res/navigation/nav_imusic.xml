@@ -19,7 +19,7 @@
 
     <fragment
         android:id="@+id/iSearchFragment"
-        android:name="com.journey.interview.imusic.frg.ISearchFragment"
+        android:name="com.journey.interview.imusic.frg.search.ISearchFragment"
         tools:layout="@layout/imusic_search">
 
 

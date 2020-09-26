@@ -36,6 +36,10 @@ abstract class BaseVpFragment:BaseFragment() {
         mTitleList = iv_title_list
         mTitleSearch = iv_title_search
         mTabLayout = title_tabLayout
+    }
+
+    override fun initData() {
+        super.initData()
         mViewPager.run {
             offscreenPageLimit = 1
             adapter = vpAdapter
@@ -53,7 +57,6 @@ abstract class BaseVpFragment:BaseFragment() {
         }
         mPageChangeCallback = PageChangeCallback()
         mViewPager.registerOnPageChangeCallback(mPageChangeCallback!!)
-
     }
 
 

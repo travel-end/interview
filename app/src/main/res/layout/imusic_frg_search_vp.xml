@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical">
+<!--    <include layout="@layout/imusic_title_bar" />-->
+    <com.journey.interview.customizeview.tablayout.CommonTabLayout
+        android:id="@+id/search_title_tabLayout"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_44"
+        app:tl_textBold="SELECT"
+        app:tl_tab_space_equal="true"
+        app:tl_textSelectColor="@color/red"
+        app:tl_textUnselectColor="@color/colorBlack2"
+        app:tl_indicator_color="@color/red"
+        app:tl_indicator_width_equal_title="true"
+        app:tl_textsize="16sp" />
+
+    <!--
+
+    app:tl_indicator_bounce_enable="false"
+    app:tl_underline_color="@color/red"
+        app:tl_underline_height="2dp"
+    -->
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/search_imusic_main_pager"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+</LinearLayout>

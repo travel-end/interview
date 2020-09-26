@@ -1,18 +1,16 @@
-package com.journey.interview.imusic.frg
+package com.journey.interview.imusic.frg.search
 
-import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import com.journey.interview.R
 import com.journey.interview.imusic.model.*
-import com.journey.interview.recyclerview.bean.Image
 import com.journey.interview.recyclerview.core.*
 import com.journey.interview.weatherapp.base.BaseLifeCycleFragment
 import kotlinx.android.synthetic.main.imusic_hot_search.*
 
 /**
  * @By Journey 2020/9/25
- * @Description
+ * @Description 默认的显示搜索历史、热门搜索的页面
  */
 class IHotSearchFragment:BaseLifeCycleFragment<IHotSearchViewModel>() {
     private val dataSource = mutableListOf<Any>()

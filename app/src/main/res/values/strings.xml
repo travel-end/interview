@@ -43,4 +43,6 @@
     <string name="imusic_tab_find">发现</string>
     <string name="imusic_tab_cloud_village">云村</string>
     <string name="imusic_tab_video">视频</string>
+    <string name="imusic_tab_song">单曲</string>
+    <string name="imusic_tab_album">专辑</string>
 </resources>

@@ -5,6 +5,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.gson.JsonParseException
+import com.journey.interview.imusic.net.IMusicApiService
+import com.journey.interview.imusic.net.IMusicRetrofitClient
 import com.journey.interview.utils.getClass
 import com.journey.interview.utils.ofMap
 import com.journey.interview.utils.print
@@ -29,6 +31,15 @@ open class BaseViewModel : ViewModel() {
 
     protected val apiService: ApiService by lazy {
         RetrofitClient.instance.createApiService(ApiService::class.java)
+    }
+    protected val iMusicApiService: IMusicApiService by lazy {
+        IMusicRetrofitClient.instance.apiService
+    }
+    protected val singerApiService: IMusicApiService by lazy {
+        IMusicRetrofitClient.instance.singerApiService
+    }
+    protected val songUrlApiService: IMusicApiService by lazy {
+        IMusicRetrofitClient.instance.songUrlApiService
     }
 
     protected fun request(block: suspend () -> Unit) {

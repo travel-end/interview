@@ -28,14 +28,9 @@ class IMainFragment : BaseVpFragment() {
         add(IMusicTab(R.string.imusic_tab_cloud_village.getString()))
         add(IMusicTab(R.string.imusic_tab_video.getString()))
     }
-
-    override fun initView() {
-        super.initView()
-        mViewPager.currentItem = 1
-    }
-
     override fun initData() {
         super.initData()
+        mViewPager.currentItem = 1
         mTitleSearch.setOnClickListener {
             Navigation.findNavController(it).navigate(R.id.action_homeFragment_to_searchFragment)
         }
