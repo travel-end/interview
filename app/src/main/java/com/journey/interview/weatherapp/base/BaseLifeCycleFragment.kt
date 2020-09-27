@@ -35,13 +35,16 @@ abstract class BaseLifeCycleFragment<VM:BaseViewModel>:BaseFragment() {
 
     open fun showError(msg:String) {
         if (msg.isNotEmpty()) {
-            Toast.makeText(context, msg, Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), msg, Toast.LENGTH_SHORT).show()
         }
 //        mLoadService.showCallback(ErrorCallback::class.java)
     }
 
-    open fun showEmpty() {
+    open fun showEmpty(msg:String) {
 //        mLoadService.showCallback(EmptyCallback::class.java)
+        if (msg.isNotEmpty()) {
+            Toast.makeText(requireContext(), msg, Toast.LENGTH_SHORT).show()
+        }
     }
 
     override fun reLoad() {
@@ -63,7 +66,7 @@ abstract class BaseLifeCycleFragment<VM:BaseViewModel>:BaseFragment() {
                     StateType.LOADING -> showLoading()
                     StateType.ERROR -> showError("网络异常")
                     StateType.NETWORK_ERROR -> showError("网络异常")
-                    StateType.EMPTY -> showEmpty()
+                    StateType.EMPTY -> showEmpty(it.message)
                 }
             }
         }

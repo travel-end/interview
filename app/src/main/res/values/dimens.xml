@@ -6,9 +6,13 @@
     <dimen name="card_radius">12dp</dimen>
     <dimen name="card_view_height">300dp</dimen>
     <dimen name="dp_5">5dp</dimen>
+    <dimen name="dp_4">4dp</dimen>
+    <dimen name="dp_2">2dp</dimen>
     <dimen name="dp_8">8dp</dimen>
     <dimen name="dp_10">10dp</dimen>
     <dimen name="dp_15">15dp</dimen>
+    <dimen name="dp_16">16dp</dimen>
+    <dimen name="dp_18">18dp</dimen>
     <dimen name="dp_20">20dp</dimen>
     <dimen name="dp_26">26dp</dimen>
     <dimen name="dp_30">30dp</dimen>
@@ -20,5 +24,6 @@
     <dimen name="dp_48">48dp</dimen>
     <dimen name="dp_52">52dp</dimen>
     <dimen name="dp_58">58dp</dimen>
+    <dimen name="dp_62">62dp</dimen>
     <dimen name="dp_80">80dp</dimen>
 </resources>

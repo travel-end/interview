@@ -4,6 +4,8 @@ import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
 import com.journey.interview.R
 import com.journey.interview.imusic.vm.ISearchViewModel
+import com.journey.interview.utils.hideKeyboards
+import com.journey.interview.utils.showKeyBoard
 import com.journey.interview.weatherapp.base.BaseLifeCycleFragment
 import kotlinx.android.synthetic.main.imusic_search.*
 
@@ -20,11 +22,13 @@ class ISearchFragment : BaseLifeCycleFragment<ISearchViewModel>() {
 
     override fun initData() {
         super.initData()
+        search_et.showKeyBoard(requireContext())
         search_et.doAfterTextChanged {
             val content = it?.toString()
             content?.let {s->
                 if (s.isNotEmpty()) {
                     replaceFragment(ISearchVpFragment.newInstance(s))
+                    requireActivity().hideKeyboards()
                 }
             }
         }

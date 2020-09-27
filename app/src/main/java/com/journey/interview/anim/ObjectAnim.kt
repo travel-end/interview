@@ -28,7 +28,6 @@ class ObjectAnim : Anim() {
     override var animator: Animator = ObjectAnimator()
     private val objectAnimator
         get() = animator as ObjectAnimator
-
     /**
      * predefine properties for [android.view.View]
      * add a set() for each property inorder to change it dynamically

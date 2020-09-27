@@ -19,10 +19,12 @@ object GlideUtil {
         context: Context,
         url: String,
         imageView: ImageView,
-        onGlideLoadReady: OnGlideLoadReady
+        error:Int=0,
+        onGlideLoadReady: OnGlideLoadReady?
     ) {
-        val options = RequestOptions().priority(Priority.HIGH)
-
+        val options = RequestOptions()
+            .error(error)
+            .priority(Priority.HIGH)
         Glide.with(context)
             .load(url)
             .apply(options)
@@ -36,13 +38,13 @@ object GlideUtil {
 
 //                    imageView.setImageBitmap(bd.bitmap)
                     imageView.setImageDrawable(resource)
-                    onGlideLoadReady.ready(true)
+                    onGlideLoadReady?.ready(true)
 
                 }
 
                 override fun onLoadFailed(errorDrawable: Drawable?) {
                     super.onLoadFailed(errorDrawable)
-                    onGlideLoadReady.ready(false)
+                    onGlideLoadReady?.ready(false)
                 }
             })
     }

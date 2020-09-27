@@ -1,6 +1,8 @@
 package com.journey.interview.imusic.net
 
+import com.journey.interview.imusic.model.Album
 import com.journey.interview.imusic.model.SearchSong
+import com.journey.interview.imusic.model.SongUrl
 import retrofit2.http.GET
 import retrofit2.http.Query
 
@@ -22,6 +24,8 @@ interface IMusicApiService {
      * @param offset 页数
      */
     @GET("soso/fcgi-bin/client_search_cp?n=20&format=json&t=8")
-    suspend fun searchAlbum(@Query("albummid") id:String)
+    suspend fun searchAlbum(@Query("w") searchContent:String,@Query("p") offSet:Int):Album
 
+    @GET("cgi-bin/musicu.fcg?format=json")
+    suspend fun getSongUrl(@Query(value = "data",encoded = true) songUrl:String):SongUrl
 }

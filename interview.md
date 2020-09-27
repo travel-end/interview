@@ -49,3 +49,30 @@ class OutClass {
     
  
  ####简单天气app   
+ 
+ 
+ #### Service
+ 
+ 启动方式                   存在方式
+ startService             独立于Activity运行，自行结束或者被叫停
+ bindService              绑定于Activity运行，Activity结束时，会被叫停
+ 
+ 涉及方法
+ onCreate()
+ onDestroy()
+ onStartCommand()         用于计数，服务被调用的次数
+ onBind()                 与Activity组件绑定
+ onUnBind()               与Activity组件解绑
+ 
+ 使用方法（步骤）
+ ### 第一步：在AndroidManifest.xml中进行注册
+ `<service android:name=".LocalService" />`
+ ### 第二步：启动
+ `startService(Intent)`
+ `bindService(Intent, ServiceConnetion,Int)`
+ ### 第三步：解绑
+ `unBindService(ServiceConnetion)`
+ ### 第四步：暂停
+ `stopService(Intent)`
+ 
+ 

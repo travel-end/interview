@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingTop="@dimen/dp_8"
+    android:paddingBottom="@dimen/dp_4"
+    android:paddingStart="@dimen/dp_16"
+    android:paddingEnd="@dimen/dp_15"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <TextView
+        android:id="@+id/tv_song_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="演员"
+        android:textSize="14sp"
+        android:textColor="@color/colorBlack"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <TextView
+        android:id="@+id/tv_song_yuanchang"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/red"
+        android:padding="1dp"
+        android:layout_marginTop="2dp"
+        android:textSize="10sp"
+        android:text="原唱"
+        android:background="@drawable/bg_song_type"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_song_name" />
+    <TextView
+        android:id="@+id/tv_song_sq"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/red"
+        android:padding="1dp"
+        android:layout_marginTop="2dp"
+        android:layout_marginStart="4dp"
+        android:textSize="10sp"
+        android:text="SQ"
+        android:background="@drawable/bg_song_type"
+        app:layout_constraintStart_toEndOf="@id/tv_song_yuanchang"
+        app:layout_constraintTop_toBottomOf="@id/tv_song_name" />
+
+    <TextView
+        android:id="@+id/tv_song_singer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="6dp"
+        android:textColor="@color/bluebackground"
+        android:textSize="12sp"
+        android:padding="1dp"
+        android:text="薛之谦"
+        app:layout_constraintStart_toEndOf="@id/tv_song_sq"
+        app:layout_constraintTop_toBottomOf="@id/tv_song_name" />
+
+
+    <TextView
+        android:id="@+id/tv_song_album_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="6dp"
+        android:textColor="@color/colorGrayDark"
+        android:textSize="12sp"
+        android:padding="1dp"
+        android:text="绅士"
+        app:layout_constraintStart_toEndOf="@id/tv_song_singer"
+        app:layout_constraintTop_toBottomOf="@id/tv_song_name" />
+
+    <TextView
+        android:id="@+id/tv_song_lyric"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/colorGrayDark"
+        android:textSize="12sp"
+        android:layout_marginTop="@dimen/dp_4"
+        android:padding="1dp"
+        android:visibility="gone"
+        android:text="电影《精灵王座》主题曲"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_song_yuanchang" />
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_play_song"
+        android:layout_marginEnd="@dimen/dp_10"
+        app:tint="@color/colorGrayDark"
+        app:layout_constraintEnd_toStartOf="@id/iv_song_more"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        />
+    <ImageView
+        android:id="@+id/iv_song_more"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/dp_5"
+        android:src="@drawable/ic_more"
+        app:tint="@color/colorGrayDark"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -73,7 +73,7 @@ open class BaseViewModel : ViewModel() {
     }
 
 
-    private fun handlerException(e: Throwable, loadState: MutableLiveData<State>?) {
+    protected fun handlerException(e: Throwable, loadState: MutableLiveData<State>?) {
         loadState?.let {
             when (e) {
                 is HttpException -> {

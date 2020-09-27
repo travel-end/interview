@@ -102,6 +102,12 @@ class AnimSet : Anim() {
         animatorSet.cancel()
     }
 
+//    fun pause() {
+//        animatorSet.pause()
+//    }
+
+
+
     /**
      * if you want to play animations one after another, use [before] to link several [Anim],
      * like the following:

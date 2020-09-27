@@ -55,7 +55,7 @@ class SwipeCaptchaActivity:AppCompatActivity() {
 
         })
         //测试从网络加载图片是否ok
-        GlideUtil.loadImg(this,url,swipeCaptchaView,object :
+        GlideUtil.loadImg(this,url,swipeCaptchaView,R.drawable.ic_default,object :
             GlideUtil.OnGlideLoadReady{
             override fun ready(isOk: Boolean) {
                 swipeCaptchaView.createCaptcha()

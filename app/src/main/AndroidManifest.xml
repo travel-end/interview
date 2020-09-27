@@ -12,7 +12,7 @@
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
-<!--    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" /> &lt;!&ndash;// todo&ndash;&gt;-->
+    <!--    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" /> &lt;!&ndash;// todo&ndash;&gt;-->
     <uses-permission
         android:name="android.permission.READ_LOGS"
         tools:ignore="ProtectedPermissions" />
@@ -23,7 +23,7 @@
     <uses-permission android:name="android.permission.ACCESS_LOCATION_EXTRA_COMMANDS" />
 
 
-<!--    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION"/>-->
+    <!--    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION"/>-->
     <application
         android:name=".InterviewApp"
         android:allowBackup="true"
@@ -68,47 +68,48 @@
         <activity android:name=".recyclerview.demo.EfficientAdapterActivity" />
         <activity android:name=".recyclerview.demo.ListActivity" />
         <activity android:name=".customizeview.swipecaptcha.demo.SwipeCaptchaActivity" />
-        <activity
-            android:name=".customizeview.spiderweb.demo.SpiderWebViewActivity" />
-        <activity
-            android:name=".customizeview.spiderweb.demo.MeiSpiderWebActivity2" />
+        <activity android:name=".customizeview.spiderweb.demo.SpiderWebViewActivity" />
+        <activity android:name=".customizeview.spiderweb.demo.MeiSpiderWebActivity2" />
         <activity android:name=".customizeview.CustomizeViewActivity" />
-        <activity
-            android:name=".customizeview.cornergif.CornersGifActivity" />
-        <activity
-            android:name=".customizeview.rounddragtag.demo.RandomDragTagActivity" />
+        <activity android:name=".customizeview.cornergif.CornersGifActivity" />
+        <activity android:name=".customizeview.rounddragtag.demo.RandomDragTagActivity" />
         <activity android:name=".customizeview.zpwdeditext.ZEditTextActivity" />
         <activity android:name=".customizeview.datetimer.demo.DateTimerPickerActivity" />
-        <activity
-            android:name=".customizeview.cropimageview.demo.CropImageViewActivity2" />
-        <activity
-            android:name=".customizeview.scrollparallax.ScrollParallaxActivity" />
-        <activity
-            android:name=".customizeview.heartview.HeartActivity" />
-        <activity
-            android:name=".customizeview.levelselectview.LevelSelectActivity" />
+        <activity android:name=".customizeview.cropimageview.demo.CropImageViewActivity2" />
+        <activity android:name=".customizeview.scrollparallax.ScrollParallaxActivity" />
+        <activity android:name=".customizeview.heartview.HeartActivity" />
+        <activity android:name=".customizeview.levelselectview.LevelSelectActivity" />
         <activity android:name=".system.ScreenActivity" />
         <activity
             android:name=".system.LockScreenActivity"
-            android:theme="@style/LockScreenViewStyle"
             android:screenOrientation="portrait"
-            android:taskAffinity="com.journey.interview.system"/>
+            android:taskAffinity="com.journey.interview.system"
+            android:theme="@style/LockScreenViewStyle" />
         <activity android:name=".customizeview.backgroundlib.BackgroundLibActivity" />
-        <activity android:name=".customizeview.backgroundlib.MaterialComponentsActivity"
-            android:theme="@style/material_style"/>
-        <activity android:name=".weatherapp.ui.WeatherActivity"
+        <activity
+            android:name=".customizeview.backgroundlib.MaterialComponentsActivity"
+            android:theme="@style/material_style" />
+        <activity
+            android:name=".weatherapp.ui.WeatherActivity"
             android:launchMode="singleTask"
             android:screenOrientation="portrait" />
         <activity android:name=".test.FastKotlinActivity" />
         <activity android:name=".anim.AnimDslActivity" />
         <activity android:name=".customizeview.popupwindow.PopupWindowActivity" />
-        <activity android:name=".imusic.act.IWelcomeActivity"
+        <activity
+            android:name=".imusic.act.IWelcomeActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.Transparent"/>
-        <activity android:name=".imusic.IMainActivity"
+            android:theme="@style/AppTheme.Transparent" />
+        <activity
+            android:name=".imusic.IMainActivity"
             android:launchMode="singleTask"
-            android:windowSoftInputMode="adjustPan"
-            android:theme="@style/material_style"/>
+            android:theme="@style/material_style"
+            android:windowSoftInputMode="adjustPan|stateHidden" />
+
+        <service
+            android:name=".imusic.service.IMusicPlayService"
+            android:enabled="true"
+            android:exported="false" />
     </application>
 
 </manifest>

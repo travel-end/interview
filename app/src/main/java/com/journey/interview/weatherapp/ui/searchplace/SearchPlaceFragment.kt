@@ -8,6 +8,7 @@ import androidx.navigation.Navigation
 import com.journey.interview.InterviewApp
 import com.journey.interview.R
 import com.journey.interview.recyclerview.core.*
+import com.journey.interview.utils.hideKeyboards
 import com.journey.interview.weatherapp.base.BaseLifeCycleFragment
 import com.journey.interview.weatherapp.global.AppEventViewModel
 import com.journey.interview.weatherapp.global.EventSender
@@ -94,7 +95,7 @@ class SearchPlaceFragment:BaseLifeCycleFragment<SearchPlaceViewModel>() {
         mViewModel.insertPlaceResult.observe(this,Observer{
             it?.let {
                 EventSender.sendPlaceAddEvent()
-                hideKeyboards()
+                requireActivity().hideKeyboards()
             }
         })
 

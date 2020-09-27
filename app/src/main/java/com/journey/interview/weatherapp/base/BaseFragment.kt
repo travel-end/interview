@@ -1,29 +1,21 @@
 package com.journey.interview.weatherapp.base
 
-import android.content.Context
 import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.inputmethod.InputMethodManager
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.ColorUtils
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
-import com.gyf.immersionbar.ImmersionBar
 import com.journey.interview.R
-import com.journey.interview.utils.getClass
-import com.kingja.loadsir.core.LoadService
-import com.kingja.loadsir.core.LoadSir
 
 /**
  * @By Journey 2020/9/15
  * @Description
  */
 abstract class BaseFragment :Fragment(){
-//    protected lateinit var mLoadService: LoadService<*>
-
+//AVLoadingIndicatorView todo引入自定义加载Dialog
     protected lateinit var mRootView:View
     abstract fun layoutResId():Int
     override fun onCreateView(
@@ -32,11 +24,7 @@ abstract class BaseFragment :Fragment(){
         savedInstanceState: Bundle?
     ): View? {
         mRootView = inflater.inflate(layoutResId(),container,false)
-//        mLoadService = LoadSir.getDefault().register(view) {
-//            reLoad()
-//        }
         return mRootView
-//        return mLoadService.loadLayout
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -87,12 +75,5 @@ abstract class BaseFragment :Fragment(){
             requireActivity().window.decorView.systemUiVisibility =
                 View.SYSTEM_UI_FLAG_LAYOUT_STABLE
         }
-    }
-
-    open fun hideKeyboards() {
-        // 当前焦点的 View
-        val imm =
-            requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-        imm.hideSoftInputFromWindow(requireActivity().currentFocus?.windowToken, 0)
     }
 }
