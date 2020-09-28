@@ -135,6 +135,7 @@ class IMusicPlayService : Service() {
 
         val playService get() = this@IMusicPlayService
 
+        // 播放实时进度
         val currentTime get() = mMediaPlayer.currentPosition.toLong() / 1000
 
     }

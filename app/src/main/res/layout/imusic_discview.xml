@@ -10,7 +10,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        />
+        android:background="@drawable/play_page_cover_border_shape"/>
 
     <!--唱针-->
     <ImageView

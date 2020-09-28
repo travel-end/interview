@@ -1,5 +1,6 @@
 package com.journey.interview.imusic.frg.search
 
+import android.util.Log
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
 import com.journey.interview.R
@@ -36,10 +37,10 @@ class ISearchFragment : BaseLifeCycleFragment<ISearchViewModel>() {
     }
 
     private fun replaceFragment(fragment: Fragment) {
-        childFragmentManager.beginTransaction().replace(
+        val i = childFragmentManager.beginTransaction().replace(
             R.id.search_container,
             fragment
         ).commitAllowingStateLoss()
-
+        Log.e("JG","i=$i")
     }
 }

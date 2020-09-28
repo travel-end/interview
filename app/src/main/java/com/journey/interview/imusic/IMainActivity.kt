@@ -2,6 +2,7 @@ package com.journey.interview.imusic
 
 import android.animation.ObjectAnimator
 import android.animation.ValueAnimator
+import android.app.ActivityOptions
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
@@ -11,13 +12,12 @@ import android.os.Build
 import android.os.IBinder
 import android.util.Log
 import android.view.animation.LinearInterpolator
-import androidx.annotation.RequiresApi
-import androidx.navigation.Navigation
+import androidx.constraintlayout.widget.ConstraintLayout
 import com.google.android.material.shape.ShapeAppearanceModel
 import com.journey.interview.Constant
 import com.journey.interview.R
-import com.journey.interview.anim.animSet
 import com.journey.interview.customizeview.swipecaptcha.core.GlideUtil
+import com.journey.interview.imusic.act.IPlayActivity
 import com.journey.interview.imusic.global.IMusicBus
 import com.journey.interview.imusic.model.Song
 import com.journey.interview.imusic.service.IMusicPlayService
@@ -110,6 +110,30 @@ class IMainActivity : BaseLifeCycleActivity<IMainViewModel>() {
                     mMediaPlayer?.seekTo(currentTime.toInt())
                 }
             }
+        }
+        findViewById<ConstraintLayout>(R.id.bottom_player).setOnClickListener {
+            val song = FileUtil.getSong()
+            if (song != null) {
+                if (song.songName != null) {
+                    val playIntent = Intent(this,IPlayActivity::class.java)
+                    // 正在播放
+                    if (mPlayServiceBinder?.isPlaying == true) {
+                        val song2 = FileUtil.getSong()
+                        song2?.currentTime = mPlayServiceBinder?.currentTime?:0
+                        FileUtil.saveSong(song2)
+                        playIntent.putExtra(Constant.PLAY_STATUS,Constant.SONG_PLAY)
+                    } else {// 暂停
+
+                    }
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                        startActivity(playIntent,ActivityOptions.makeSceneTransitionAnimation(this@IMainActivity).toBundle())
+                    } else {
+                        startActivity(playIntent)
+                    }
+//                    overridePendingTransition(R.anim.slide_in_bottom,0)
+                }
+            }
+
         }
     }
 

@@ -105,6 +105,7 @@
             android:launchMode="singleTask"
             android:theme="@style/material_style"
             android:windowSoftInputMode="adjustPan|stateHidden" />
+        <activity android:name=".imusic.act.IPlayActivity" />
 
         <service
             android:name=".imusic.service.IMusicPlayService"

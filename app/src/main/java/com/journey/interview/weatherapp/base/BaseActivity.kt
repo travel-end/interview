@@ -3,6 +3,7 @@ package com.journey.interview.weatherapp.base
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
+import com.gyf.immersionbar.ImmersionBar
 import com.journey.interview.utils.getClass
 import com.kingja.loadsir.core.LoadService
 import com.kingja.loadsir.core.LoadSir
@@ -26,15 +27,11 @@ abstract class BaseActivity<VM:BaseViewModel>:AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(layoutResId())
+        initStatusBar()
         initViewModel()
         initView()
         initData()
     }
-//    protected val mLoadService: LoadService<*> by lazy {
-//        LoadSir.getDefault().register(this) {
-//            reLoad()
-//        }
-//    }
     private fun initViewModel() {
         mViewModel = ViewModelProvider(this).get(getClass(this))
     }
