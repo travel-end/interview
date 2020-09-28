@@ -96,7 +96,7 @@ class ISearchContentFragment :BaseLifeCycleFragment<ISearchContentViewModel>(){
                                         songId = data.songmid
                                         singer = sinGer
                                         songName = data.songname
-                                        imgUrl = "${Constant.ALBUM_PIC}${data.albumid}${Constant.JPG}"
+                                        imgUrl = "${Constant.ALBUM_PIC}${data.albummid}${Constant.JPG}"
                                         duration = data.interval
                                         isOnline = true
                                         mediaId = data.strMediaMid

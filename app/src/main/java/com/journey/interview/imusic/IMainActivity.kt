@@ -9,6 +9,7 @@ import android.content.ServiceConnection
 import android.media.MediaPlayer
 import android.os.Build
 import android.os.IBinder
+import android.util.Log
 import android.view.animation.LinearInterpolator
 import androidx.annotation.RequiresApi
 import androidx.navigation.Navigation
@@ -98,7 +99,7 @@ class IMainActivity : BaseLifeCycleActivity<IMainViewModel>() {
                     mPlayServiceBinder?.resume()
                     mFlag = false
                 }
-                else -> {
+                else -> {//退出程序重新打开后的情况
                     if (FileUtil.getSong()?.isOnline == true) {
                         mPlayServiceBinder?.playOnline()
                     } else {
@@ -154,6 +155,7 @@ class IMainActivity : BaseLifeCycleActivity<IMainViewModel>() {
                         if (!s.isOnline) {
 
                         } else {// 在线播放
+                            Log.e("JG","封面图片url:${s.imgUrl}")
                             GlideUtil.loadImg(
                                 this@IMainActivity,
                                 s.imgUrl ?: "",

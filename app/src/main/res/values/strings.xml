@@ -45,4 +45,5 @@
     <string name="imusic_tab_video">视频</string>
     <string name="imusic_tab_song">单曲</string>
     <string name="imusic_tab_album">专辑</string>
+    <string name="play_time_start">00:00</string>
 </resources>

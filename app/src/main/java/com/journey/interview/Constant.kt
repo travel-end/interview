@@ -48,6 +48,7 @@ object Constant {
     // 获取歌手图片需要添加user-agent的表头
     const val HEADER_USER_AGENT = "User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/76.0.3809.132 Safari/537.36"
 
+    // 专辑照片
     const val ALBUM_PIC="http://y.gtimg.cn/music/photo_new/T002R180x180M000"
     const val JPG=".jpg"
     const val SONG_URL_DATA_LEFT="%7B%22req_0%22%3A%7B%22module%22%3A%22vkey.GetVkeyServer%22%2C%22method%22%3A%22CgiGetVkey%22%2C%22param%22%3A%7B%22guid%22%3A%22358840384%22%2C%22songmid%22%3A%5B%22"

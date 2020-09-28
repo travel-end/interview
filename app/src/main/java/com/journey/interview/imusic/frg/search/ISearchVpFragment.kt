@@ -47,7 +47,5 @@ class ISearchVpFragment : BaseVpFragment() {
 //        super.initView()
         mTabLayout = search_title_tabLayout
         mViewPager = search_imusic_main_pager
-
-//        mViewPager.currentItem = 1
     }
 }

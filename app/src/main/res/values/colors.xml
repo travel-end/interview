@@ -29,4 +29,10 @@
     <color name="scrim">#99323232</color>
     <color name="dark">#000000</color>
     <color name="bluebackground">#0091EA</color>
+    <color name="white_8p">#14FFFFFF</color>
+    <color name="black_50p">#80000000</color>
+    <color name="grey">#9E9E9E</color>
+    <color name="white_24p">#3DFFFFFF</color>
+    <color name="white_50p">#80FFFFFF</color>
+    <color name="red_30p">#4CF44336</color>
 </resources>

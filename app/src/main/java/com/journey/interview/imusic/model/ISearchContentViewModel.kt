@@ -93,8 +93,10 @@ class ISearchContentViewModel:BaseViewModel() {
         singerList?.let {
             if (it.isNotEmpty()) {
                 val singer = StringBuilder(it[0].name?:"")
-                for (bean in it) {
-                    singer.append("、").append(bean.name)
+                if (it.size > 1) {
+                    for (bean in it) {
+                        singer.append("、").append(bean.name)
+                    }
                 }
                 return singer.toString()
             }
