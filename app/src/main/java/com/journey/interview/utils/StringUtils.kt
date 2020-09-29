@@ -67,4 +67,27 @@ object StringUtils {
         }
         return Week
     }
+
+    fun formatTime(time:Long):String {
+        val min = "${time / 60}"
+        var sec = "${time % 60}"
+        if (sec.length < 2) {
+            sec = "0$sec"
+        }
+        return "$min:$sec"
+    }
+
+    fun formatSinger(singer:String):String {
+        var sin:String=""
+        if (singer.contains("/")) {
+            val s = singer.split("/")
+            sin = s[0]
+        }
+        return sin.trim()
+    }
+
+    fun formatSize(size:Long):String {
+        val d =size / 1024 / 1024
+        return String.format("%.1f",d)
+    }
 }

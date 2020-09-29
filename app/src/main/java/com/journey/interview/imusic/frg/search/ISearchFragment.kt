@@ -26,7 +26,7 @@ class ISearchFragment : BaseLifeCycleFragment<ISearchViewModel>() {
         search_et.showKeyBoard(requireContext())
         search_et.doAfterTextChanged {
             val content = it?.toString()
-            content?.let {s->
+            content?.let { s ->
                 if (s.isNotEmpty()) {
                     replaceFragment(ISearchVpFragment.newInstance(s))
                     requireActivity().hideKeyboards()
@@ -37,10 +37,9 @@ class ISearchFragment : BaseLifeCycleFragment<ISearchViewModel>() {
     }
 
     private fun replaceFragment(fragment: Fragment) {
-        val i = childFragmentManager.beginTransaction().replace(
+        childFragmentManager.beginTransaction().replace(
             R.id.search_container,
             fragment
-        ).commitAllowingStateLoss()
-        Log.e("JG","i=$i")
+        ).commit()
     }
 }

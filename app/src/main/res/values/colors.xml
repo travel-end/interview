@@ -14,7 +14,7 @@
     <color name="translate">#00000000</color>
     <color name="grayLight">#33F1F1F1</color>
     <color name="red">#FD5F5F</color>
-
+    <color name="actionBarColor">#0f1934</color>
 
     <color name="overlay_dark_50">#40000000</color>
     <color name="always_white_text">#FFFFFF</color>

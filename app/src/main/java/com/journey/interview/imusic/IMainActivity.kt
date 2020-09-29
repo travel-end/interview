@@ -65,6 +65,7 @@ class IMainActivity : BaseLifeCycleActivity<IMainViewModel>() {
             bottom_player.player_song_author.text = it.singer
             val currentTime = it.currentTime// todo 保存当前的歌曲播放进度 在play页面展示
 
+
             if (it.imgUrl == null) {
 
             } else {
@@ -119,12 +120,18 @@ class IMainActivity : BaseLifeCycleActivity<IMainViewModel>() {
                     // 正在播放
                     if (mPlayServiceBinder?.isPlaying == true) {
                         val song2 = FileUtil.getSong()
-                        song2?.currentTime = mPlayServiceBinder?.currentTime?:0
+                        val currenttime = mPlayServiceBinder?.currentTime?:0
+                        Log.e("JG","当前播放进度：$currenttime")
+                        song2?.currentTime = currenttime
                         FileUtil.saveSong(song2)
                         playIntent.putExtra(Constant.PLAY_STATUS,Constant.SONG_PLAY)
                     } else {// 暂停
+                        playIntent.putExtra("online",true)
+                    }
+                    if (FileUtil.getSong()?.imgUrl != null) {
 
                     }
+
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                         startActivity(playIntent,ActivityOptions.makeSceneTransitionAnimation(this@IMainActivity).toBundle())
                     } else {
@@ -227,6 +234,7 @@ class IMainActivity : BaseLifeCycleActivity<IMainViewModel>() {
             startService(playIntent)
         }
         val song = FileUtil.getSong()
+        // 保存歌曲播放时长位置
         song?.currentTime = mPlayServiceBinder?.currentTime ?: 0L
         FileUtil.saveSong(song)
     }
