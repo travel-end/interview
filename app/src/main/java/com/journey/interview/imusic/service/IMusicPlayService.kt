@@ -8,12 +8,12 @@ import android.media.MediaPlayer
 import android.os.Binder
 import android.os.Build
 import android.os.IBinder
+import android.util.Log
 import androidx.core.app.NotificationCompat
 import com.journey.interview.Constant
 import com.journey.interview.R
 import com.journey.interview.imusic.IMainActivity
 import com.journey.interview.imusic.global.IMusicBus
-import com.journey.interview.imusic.net.IMusicApiService
 import com.journey.interview.utils.FileUtil
 
 /**
@@ -26,8 +26,8 @@ class IMusicPlayService : Service() {
     }
 
     private var mIsPlaying: Boolean = false
-    private var isPause: Boolean = false
-    private var mListType: Int? = null
+    private var mIsPause: Boolean = false
+    private var mListType: Int? = null// 歌曲列表类别,0表示当前没有列表，即可能在播放网络歌曲
     private var mCurrent: Int? = null
 
     private val mMediaPlayer by lazy {
@@ -48,12 +48,17 @@ class IMusicPlayService : Service() {
             IMusicBus.sendPlayStatusChangeEvent(Constant.SONG_PAUSE)
             mCurrent = FileUtil.getSong()?.position
         }
+        // 播放的可能是除了网络歌曲之外的其他模式
         if (mListType != 0 && mListType != null) {
             mPlayStatusBinder.play(mListType!!)
         } else {
-
+            mPlayStatusBinder.stop()
         }
-
+        /**
+         * MediaPlayer切歌进入setOnCompletionListener的问题
+         * 因为直接切歌会发生错误，所以增加错误监听器。返回true。就不会回调onCompletion方法了。
+         */
+        mMediaPlayer.setOnErrorListener { _, _, _ -> true }
         return mPlayStatusBinder
 
     }
@@ -104,17 +109,37 @@ class IMusicPlayService : Service() {
             if (mMediaPlayer.isPlaying) {
                 mIsPlaying = false
                 mMediaPlayer.pause()
-                isPause = true
+                mIsPause = true
                 IMusicBus.sendPlayStatusChangeEvent(Constant.SONG_PAUSE)
             }
         }
 
         fun resume() {
-            if (isPause) {
+            if (mIsPause) {
                 mMediaPlayer.start()
                 mIsPlaying = true
-                isPause = false
+                mIsPause = false
                 IMusicBus.sendPlayStatusChangeEvent(Constant.SONG_RESUME)
+            }
+        }
+
+        fun next() {
+            IMusicBus.sendPlayStatusChangeEvent(Constant.SONG_RESUME)
+
+            // 如果是网络歌曲 todo 播放网络 歌曲的另一首
+
+
+
+            if (mListType != 0 && mListType != null) {
+                mPlayStatusBinder.play(mListType!!)
+            }
+        }
+
+        fun last() {
+            IMusicBus.sendPlayStatusChangeEvent(Constant.SONG_RESUME)
+
+            if (mListType != 0 && mListType != null) {
+                mPlayStatusBinder.play(mListType!!)
             }
         }
 
@@ -130,6 +155,8 @@ class IMusicPlayService : Service() {
         }
 
         val isPlaying get() = mIsPlaying
+
+        val isPausing get() = mIsPause
 
         val mediaPlayer get() = mMediaPlayer
 
@@ -162,5 +189,17 @@ class IMusicPlayService : Service() {
                 .setContentTitle(title)
                 .build()
         }
+    }
+
+    override fun onUnbind(intent: Intent?): Boolean {
+        Log.d("JG","播放Service onUnbind--->")
+        return true
+    }
+
+    override fun onDestroy() {
+        Log.d("JG","播放Service被销毁了--->")
+        mMediaPlayer.stop()
+        mMediaPlayer.release()
+        stopForeground(true)
     }
 }

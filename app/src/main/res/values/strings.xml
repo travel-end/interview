@@ -31,7 +31,6 @@
     <string name="auther">作者</string>
     <string name="auther_name">WjxBless</string>
     <string name="project_address">项目源码</string>
-    <string name="csdn博客">个人博客</string>
     <string name="github_url">https://github.com/wangjianxiandev/Weather</string>
     <string name="error_message">发生了一些错误</string>
     <string name="empty_message">没有数据哎~</string>
@@ -46,4 +45,13 @@
     <string name="imusic_tab_song">单曲</string>
     <string name="imusic_tab_album">专辑</string>
     <string name="play_time_start">00:00</string>
+    <string name="loading">努力加载中…</string>
+    <string name="play_all">播放全部</string>
+    <string name="duoxuan">多选</string>
+    <string name="login_now">立即登录</string>
+    <string name="music_local">本地音乐</string>
+    <string name="music_download">已下载</string>
+    <string name="music_recisent">最近播放</string>
+    <string name="music_yigou">已购</string>
+    <string name="music_my_love">我喜欢的音乐</string>
 </resources>

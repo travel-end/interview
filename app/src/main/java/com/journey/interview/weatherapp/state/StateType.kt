@@ -9,5 +9,6 @@ enum class StateType {
     ERROR,
     EMPTY,
     NETWORK_ERROR,
-    LOADING
+    LOADING,
+    DISMISSING
 }

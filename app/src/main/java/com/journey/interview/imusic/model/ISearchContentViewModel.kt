@@ -25,21 +25,25 @@ class ISearchContentViewModel:BaseViewModel() {
     val songUrlResult :MutableLiveData<Map<String,Any>> = MutableLiveData()
 
     fun searchSong(searchContent:String,page:Int) {
+        loadState.value = State(StateType.LOADING)
         viewModelScope.launch {
             val result =  withContext(Dispatchers.IO) {
                 iMusicApiService.search(searchContent,page)
             }
             result.ofMap()?.print().let { Log.e("JG","searchSongResult：$it") }
+            loadState.value = State(StateType.DISMISSING)
             searchResult.value= result
         }
     }
 
     fun searchAlbum(searchContent: String, offSet:Int) {
+        loadState.value = State(StateType.LOADING)
         viewModelScope.launch {
             val result =  withContext(Dispatchers.IO) {
                 iMusicApiService.searchAlbum(searchContent,offSet)
             }
             result.ofMap()?.print().let { Log.e("JG","searchAlbumResult：$it") }
+            loadState.value = State(StateType.DISMISSING)
             searchAlbumResult.value= result
         }
     }
