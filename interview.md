@@ -76,3 +76,44 @@ class OutClass {
  `stopService(Intent)`
  
  
+ #### lrcView API
+ 属性	                描述
+ lrcTextSize	        当前歌词文本字体大小
+ lrcNormalTextSize	    普通歌词文本字体大小
+ lrcNormalTextColor	    非当前行歌词字体颜色
+ lrcCurrentTextColor	当前行歌词字体颜色
+ lrcTimelineTextColor	拖动歌词时选中歌词的字体颜色
+ lrcTextGravity	        歌词对齐方向，center：居中对齐，left：靠左对齐，right：靠右对齐，默认为 center
+ lrcDividerHeight	    歌词间距
+ lrcAnimationDuration	歌词滚动动画时长
+ lrcLabel	            没有歌词时屏幕中央显示的文字，如“暂无歌词”
+ lrcPadding	            歌词文字的左右边距
+ lrcTimelineColor	    拖动歌词时时间线的颜色
+ lrcTimelineHeight	    拖动歌词时时间线的高度
+ lrcPlayDrawable	    拖动歌词时左侧播放按钮图片
+ lrcTimeTextColor	    拖动歌词时右侧时间字体颜色
+ lrcTimeTextSize	    拖动歌词时右侧时间字体大小
+ 
+ 
+ 方法	描述
+ loadLrc(File lrcFile)	                            加载歌词文件
+ loadLrc(File mainLrcFile, File secondLrcFile)	    加载双语歌词文件，两种语言的歌词时间戳需要一致
+ loadLrc(String lrcText)	                        加载歌词文本
+ loadLrc(String mainLrcText, String secondLrcText)	加载双语歌词文本，两种语言的歌词时间戳需要一致
+ loadLrcByUrl(String lrcUrl)	                    加载在线歌词文本，默认使用 utf-8 编码
+ loadLrcByUrl(String lrcUrl, String charset)	    加载在线歌词文本
+ hasLrc()	                                        歌词是否有效
+ setLabel(String label)	                            设置歌词为空时视图中央显示的文字，如“暂无歌词”
+ updateTime(long time)	                            刷新歌词
+ onDrag(long time)	                                将歌词滚动到指定时间。已弃用，请使用 updateTime(long) 代替
+ setOnPlayClickListener(OnPlayClickListener onPlayClickListener)	        设置拖动歌词时，播放按钮点击监听器。如果为非 null ，则激活歌词拖动功能，否则将将禁用歌词拖动功能。已弃用，请使用 setDraggable 代替
+ setDraggable(Boolean draggable, OnPlayClickListener onPlayClickListener)	设置歌词是否允许拖动。如果允许拖动，则 OnPlayClickListener 不能为 null
+ setOnTapListener(LrcView view, float x, float y)	                        设置歌词控件点击监听器
+ setNormalColor	                                    设置非当前行歌词字体颜色
+ setCurrentColor	                                设置当前行歌词字体颜色
+ setTimelineTextColor	                            设置拖动歌词时选中歌词的字体颜色
+ setTimelineColor	                                设置拖动歌词时时间线的颜色
+ setTimeTextColor	                                设置拖动歌词时右侧时间字体颜色
+ setCurrentTextSize	                                当前歌词文本字体大小
+ setNormalTextSize	                                普通歌词文本字体大小
+ 

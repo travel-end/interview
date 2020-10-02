@@ -2,6 +2,7 @@ package com.journey.interview.imusic
 
 import android.animation.ObjectAnimator
 import android.animation.ValueAnimator
+import android.app.ActivityOptions
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
@@ -9,14 +10,14 @@ import android.content.ServiceConnection
 import android.media.MediaPlayer
 import android.os.Build
 import android.os.IBinder
+import android.util.Log
 import android.view.animation.LinearInterpolator
-import androidx.annotation.RequiresApi
-import androidx.navigation.Navigation
+import androidx.constraintlayout.widget.ConstraintLayout
 import com.google.android.material.shape.ShapeAppearanceModel
 import com.journey.interview.Constant
 import com.journey.interview.R
-import com.journey.interview.anim.animSet
 import com.journey.interview.customizeview.swipecaptcha.core.GlideUtil
+import com.journey.interview.imusic.act.IPlayActivity
 import com.journey.interview.imusic.global.IMusicBus
 import com.journey.interview.imusic.model.Song
 import com.journey.interview.imusic.service.IMusicPlayService
@@ -64,6 +65,7 @@ class IMainActivity : BaseLifeCycleActivity<IMainViewModel>() {
             bottom_player.player_song_author.text = it.singer
             val currentTime = it.currentTime// todo 保存当前的歌曲播放进度 在play页面展示
 
+
             if (it.imgUrl == null) {
 
             } else {
@@ -98,7 +100,7 @@ class IMainActivity : BaseLifeCycleActivity<IMainViewModel>() {
                     mPlayServiceBinder?.resume()
                     mFlag = false
                 }
-                else -> {
+                else -> {//退出程序重新打开后的情况
                     if (FileUtil.getSong()?.isOnline == true) {
                         mPlayServiceBinder?.playOnline()
                     } else {
@@ -109,6 +111,36 @@ class IMainActivity : BaseLifeCycleActivity<IMainViewModel>() {
                     mMediaPlayer?.seekTo(currentTime.toInt())
                 }
             }
+        }
+        findViewById<ConstraintLayout>(R.id.bottom_player).setOnClickListener {
+            val song = FileUtil.getSong()
+            if (song != null) {
+                if (song.songName != null) {
+                    val playIntent = Intent(this,IPlayActivity::class.java)
+                    // 正在播放
+                    if (mPlayServiceBinder?.isPlaying == true) {
+                        val song2 = FileUtil.getSong()
+                        val currenttime = mPlayServiceBinder?.currentTime?:0
+                        Log.e("JG","当前播放进度：$currenttime")
+                        song2?.currentTime = currenttime
+                        FileUtil.saveSong(song2)
+                        playIntent.putExtra(Constant.PLAY_STATUS,Constant.SONG_PLAY)
+                    } else {// 暂停
+                        playIntent.putExtra("online",true)
+                    }
+                    if (FileUtil.getSong()?.imgUrl != null) {
+
+                    }
+
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                        startActivity(playIntent,ActivityOptions.makeSceneTransitionAnimation(this@IMainActivity).toBundle())
+                    } else {
+                        startActivity(playIntent)
+                    }
+//                    overridePendingTransition(R.anim.slide_in_bottom,0)
+                }
+            }
+
         }
     }
 
@@ -154,6 +186,7 @@ class IMainActivity : BaseLifeCycleActivity<IMainViewModel>() {
                         if (!s.isOnline) {
 
                         } else {// 在线播放
+                            Log.e("JG","封面图片url:${s.imgUrl}")
                             GlideUtil.loadImg(
                                 this@IMainActivity,
                                 s.imgUrl ?: "",
@@ -201,6 +234,7 @@ class IMainActivity : BaseLifeCycleActivity<IMainViewModel>() {
             startService(playIntent)
         }
         val song = FileUtil.getSong()
+        // 保存歌曲播放时长位置
         song?.currentTime = mPlayServiceBinder?.currentTime ?: 0L
         FileUtil.saveSong(song)
     }

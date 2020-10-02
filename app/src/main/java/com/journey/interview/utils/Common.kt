@@ -294,6 +294,22 @@ fun Activity.isServiceRunning(serviceName:String) :Boolean {
     return false
 }
 
+fun Context?.getScreenWidth():Int {
+    if (this == null) {
+        return 0
+    }
+    return this.resources.displayMetrics.widthPixels
+}
+
+fun Context?.getScreenHeight():Int {
+    if (this == null) {
+        return 0
+    }
+    return this.resources.displayMetrics.heightPixels
+}
+
+
+
 
 
 

@@ -14,16 +14,15 @@ import com.journey.interview.R
  * @By Journey 2020/9/15
  * @Description
  */
-abstract class BaseFragment :Fragment(){
-//AVLoadingIndicatorView todo引入自定义加载Dialog
-    protected lateinit var mRootView:View
-    abstract fun layoutResId():Int
+abstract class BaseFragment : Fragment() {
+    protected lateinit var mRootView: View
+    abstract fun layoutResId(): Int
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        mRootView = inflater.inflate(layoutResId(),container,false)
+        mRootView = inflater.inflate(layoutResId(), container, false)
         return mRootView
     }
 
@@ -32,23 +31,18 @@ abstract class BaseFragment :Fragment(){
         initView()
         initData()
         initStatusBarColor()
-//        ImmersionBar.with(requireActivity()).statusBarColor(R.color.colorWhite).init()
     }
 
     open fun reLoad() = initData()
 
     open fun initView() {
-
     }
-    open fun initData() {
 
+    open fun initData() {
     }
 
     open fun initViewModel() {
-
     }
-
-
 
     private fun initStatusBarColor() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {

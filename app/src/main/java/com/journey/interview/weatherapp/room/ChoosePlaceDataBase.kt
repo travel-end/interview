@@ -7,12 +7,6 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import com.journey.interview.weatherapp.model.ChoosePlaceData
 
-/**
- * Created with Android Studio.
- * Description:
- * @author: Wangjianxian
- * @CreateDate: 2020/6/17 21:38
- */
 @Database(entities = [ChoosePlaceData::class], version = 1, exportSchema = false)
 @TypeConverters(LocationTypeConverter::class)
 abstract class ChoosePlaceDataBase : RoomDatabase() {

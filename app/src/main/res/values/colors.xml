@@ -14,7 +14,7 @@
     <color name="translate">#00000000</color>
     <color name="grayLight">#33F1F1F1</color>
     <color name="red">#FD5F5F</color>
-
+    <color name="actionBarColor">#0f1934</color>
 
     <color name="overlay_dark_50">#40000000</color>
     <color name="always_white_text">#FFFFFF</color>
@@ -29,4 +29,10 @@
     <color name="scrim">#99323232</color>
     <color name="dark">#000000</color>
     <color name="bluebackground">#0091EA</color>
+    <color name="white_8p">#14FFFFFF</color>
+    <color name="black_50p">#80000000</color>
+    <color name="grey">#9E9E9E</color>
+    <color name="white_24p">#3DFFFFFF</color>
+    <color name="white_50p">#80FFFFFF</color>
+    <color name="red_30p">#4CF44336</color>
 </resources>

@@ -8,6 +8,7 @@ import com.google.gson.annotations.SerializedName
 /**
  * @By Journey 2020/9/15
  * @Description
+ * SerializedName将json中的字段名匹配到自己定义的字段中
  */
 @Entity
 data class Place (

@@ -1,5 +1,6 @@
 package com.journey.interview.imusic.frg.search
 
+import android.util.Log
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
 import com.journey.interview.R
@@ -25,7 +26,7 @@ class ISearchFragment : BaseLifeCycleFragment<ISearchViewModel>() {
         search_et.showKeyBoard(requireContext())
         search_et.doAfterTextChanged {
             val content = it?.toString()
-            content?.let {s->
+            content?.let { s ->
                 if (s.isNotEmpty()) {
                     replaceFragment(ISearchVpFragment.newInstance(s))
                     requireActivity().hideKeyboards()
@@ -39,7 +40,6 @@ class ISearchFragment : BaseLifeCycleFragment<ISearchViewModel>() {
         childFragmentManager.beginTransaction().replace(
             R.id.search_container,
             fragment
-        ).commitAllowingStateLoss()
-
+        ).commit()
     }
 }

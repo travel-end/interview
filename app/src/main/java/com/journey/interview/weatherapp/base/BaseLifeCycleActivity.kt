@@ -3,8 +3,6 @@ package com.journey.interview.weatherapp.base
 import android.widget.Toast
 import androidx.lifecycle.Observer
 import com.journey.interview.weatherapp.state.*
-import com.kingja.loadsir.callback.SuccessCallback
-import kotlinx.coroutines.GlobalScope
 
 /**
  * @By Journey 2020/9/15
