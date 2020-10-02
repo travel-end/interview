@@ -62,4 +62,7 @@
         <item name="android:windowEnterAnimation">@anim/translate_pop_in</item>
         <item name="android:windowExitAnimation">@anim/translate_pop_out</item>
     </style>
+    <style name="title_text">
+        <item name="textSize">18sp</item>
+    </style>
 </resources>

@@ -22,4 +22,13 @@ object IMusicBus {
         })
     }
 
+    fun sendLoveSongChange(status:Boolean) {
+        musicEvent.loveSongStatus.value = status
+    }
+
+    fun observeLoveSongChange(o: LifecycleOwner, block:(Boolean)->Unit) {
+        musicEvent.loveSongStatus.observe(o, Observer{
+            block.invoke(it)
+        })
+    }
 }

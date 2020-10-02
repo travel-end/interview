@@ -162,7 +162,7 @@ class IMainActivity : BaseLifeCycleActivity<IMainViewModel>() {
     override fun dataObserve() {
         super.dataObserve()
         // 播放歌曲被改变
-        IMusicBus.observePlayStatusChange(this, {
+        IMusicBus.observePlayStatusChange(this) {
             when (it) {
                 Constant.SONG_PAUSE -> {
                     bottom_player.btn_player.isSelected = false
@@ -197,7 +197,7 @@ class IMainActivity : BaseLifeCycleActivity<IMainViewModel>() {
                     }
                 }
             }
-        })
+        }
     }
 
     //    private val rotationAnim by lazy {

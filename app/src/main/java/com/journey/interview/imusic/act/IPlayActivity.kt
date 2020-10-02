@@ -26,6 +26,7 @@ import com.bumptech.glide.request.transition.Transition
 import com.gyf.immersionbar.ImmersionBar
 import com.journey.interview.Constant
 import com.journey.interview.R
+import com.journey.interview.imusic.global.IMusicBus
 import com.journey.interview.imusic.model.Song
 import com.journey.interview.imusic.service.IMusicPlayService
 import com.journey.interview.imusic.util.ImUtils
@@ -299,7 +300,13 @@ class IPlayActivity : BaseLifeCycleActivity<IPlayViewModel>(), LrcView.OnPlayCli
         mViewModel.addLoveSongResult.observe(this,Observer{
             it?.let {
                 Log.d("JG", "喜欢成功")
-                // todo 通知我喜欢的页面更新
+                IMusicBus.sendLoveSongChange(true)
+            }
+        })
+        mViewModel.deleteLoveSongResult.observe(this,Observer{
+            it?.let {
+                Log.d("JG", "刪除喜欢成功")
+                IMusicBus.sendLoveSongChange(true)
             }
         })
         mViewModel.queryIsMyLoveResult.observe(this,Observer{

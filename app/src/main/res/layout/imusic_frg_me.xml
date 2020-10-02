@@ -2,12 +2,15 @@
 <androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    xmlns:apps="http://schemas.android.com/tools">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:paddingBottom="@dimen/dp_20"
+        android:background="@color/grey_11">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -50,6 +53,7 @@
             android:background="@drawable/shape_bg_me_item"
             android:orientation="horizontal">
             <TextView
+                android:id="@+id/me_tv_local"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -61,7 +65,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="@string/music_local"
+                android:text="@string/music_yigou"
                 android:gravity="center"
                 android:drawablePadding="@dimen/dp_4"
                 app:drawableTopCompat="@drawable/ic_love_selected" />
@@ -70,7 +74,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:text="@string/music_local"
+                android:text="@string/music_recisent"
                 android:drawablePadding="@dimen/dp_4"
                 app:drawableTopCompat="@drawable/ic_love_selected" />
             <TextView
@@ -78,12 +82,13 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:text="@string/music_local"
+                android:text="@string/music_download"
                 android:drawablePadding="@dimen/dp_4"
                 app:drawableTopCompat="@drawable/ic_love_selected" />
 
         </LinearLayout>
-    <LinearLayout
+    <FrameLayout
+        android:id="@+id/fl_my_love_song"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/dp_20"
@@ -95,7 +100,158 @@
             android:layout_width="@dimen/dp_52"
             android:layout_height="@dimen/dp_52"
             android:src="@drawable/icon1" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorBlack2"
+            android:textSize="16sp"
+            android:layout_marginStart="@dimen/dp_65"
+            android:layout_marginTop="@dimen/dp_4"
+            android:text="@string/music_my_love" />
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="5首"
+            android:layout_marginTop="@dimen/dp_30"
+            android:layout_marginStart="@dimen/dp_65" />
+
+    </FrameLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/imusic_create_gedaan"
+            android:layout_marginStart="@dimen/dp_20"
+            android:layout_marginTop="@dimen/dp_20"
+            android:textSize="20sp"
+            android:textColor="@color/colorBlack2" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginStart="@dimen/dp_20"
+            android:layout_marginEnd="@dimen/dp_20"
+            android:layout_marginTop="@dimen/dp_10"
+            android:padding="@dimen/dp_16"
+            android:background="@drawable/shape_bg_me_item">
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/colorGray"
+                    android:layout_gravity="center_vertical"
+                    android:textSize="14sp"
+                    android:text="@string/imusic_create_gedaan" />
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_more"
+                    android:layout_marginTop="1dp"
+                    apps:tint="@color/colorGray"
+                    android:layout_gravity="end|center_vertical" />
+
+                <ImageView
+                    android:layout_width="@dimen/dp_28"
+                    android:layout_height="@dimen/dp_28"
+                    android:src="@drawable/ic_add"
+                    apps:tint="@color/colorGray"
+                    android:layout_marginEnd="@dimen/dp_30"
+                    android:layout_gravity="end" />
+            </FrameLayout>
+            <androidx.recyclerview.widget.RecyclerView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+
+        </LinearLayout>
+
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/imusic_shoucanggedan"
+            android:layout_marginStart="@dimen/dp_20"
+            android:layout_marginTop="@dimen/dp_20"
+            android:textSize="20sp"
+            android:textColor="@color/colorBlack2" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginStart="@dimen/dp_20"
+            android:layout_marginEnd="@dimen/dp_20"
+            android:layout_marginTop="@dimen/dp_10"
+            android:padding="@dimen/dp_16"
+            android:background="@drawable/shape_bg_me_item">
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/colorGray"
+                    android:layout_gravity="center_vertical"
+                    android:textSize="14sp"
+                    android:text="@string/imusic_shoucanggedan" />
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_more"
+                    android:layout_marginTop="1dp"
+                    apps:tint="@color/colorGray"
+                    android:layout_gravity="end|center_vertical" />
+
+            </FrameLayout>
+            <androidx.recyclerview.widget.RecyclerView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/colorGray"
+                android:layout_gravity="center"
+                android:textSize="15sp"
+                android:text="@string/imusic_no_shoucanggedan" />
+
+
+        </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginStart="@dimen/dp_20"
+        android:layout_marginEnd="@dimen/dp_20"
+        android:layout_marginTop="@dimen/dp_10"
+        android:padding="@dimen/dp_16"
+        android:background="@drawable/shape_bg_me_item">
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/imusic_tuijian"
+                android:textSize="18sp"
+                android:textColor="@color/colorBlack2" />
+            <ImageView
+                android:layout_width="@dimen/dp_20"
+                android:layout_height="@dimen/dp_20"
+                android:src="@drawable/ic_cancel"
+                apps:tint="@color/colorGray"
+                android:layout_gravity="end|center_vertical" />
+        </FrameLayout>
+        <androidx.recyclerview.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
     </LinearLayout>
 
     </LinearLayout>

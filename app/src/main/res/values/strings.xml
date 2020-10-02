@@ -43,6 +43,7 @@
     <string name="imusic_tab_cloud_village">云村</string>
     <string name="imusic_tab_video">视频</string>
     <string name="imusic_tab_song">单曲</string>
+    <string name="mv">MV</string>
     <string name="imusic_tab_album">专辑</string>
     <string name="play_time_start">00:00</string>
     <string name="loading">努力加载中…</string>
@@ -54,4 +55,8 @@
     <string name="music_recisent">最近播放</string>
     <string name="music_yigou">已购</string>
     <string name="music_my_love">我喜欢的音乐</string>
+    <string name="imusic_create_gedaan">创建歌单</string>
+    <string name="imusic_shoucanggedan">收藏歌单</string>
+    <string name="imusic_no_shoucanggedan">暂无收藏歌单</string>
+    <string name="imusic_tuijian">推荐歌单</string>
 </resources>

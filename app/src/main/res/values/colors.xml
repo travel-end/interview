@@ -21,6 +21,7 @@
     <color name="material_blue">#6452f0</color>
     <color name="material_blue_dark">#806452f0</color>
     <color name="grey_10">#e6e6e6</color>
+    <color name="grey_11">#F4F4F4</color>
     <color name="grey_80">#333232</color>
     <color name="green_success">#155724</color>
     <color name="light_green">#FF08B32F</color>
