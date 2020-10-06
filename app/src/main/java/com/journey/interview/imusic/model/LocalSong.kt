@@ -1,12 +1,12 @@
 package com.journey.interview.imusic.model
 
 data class LocalSong(
-    val id:Int?=null,
-    val songId:String?=null,
-    val qqId:String?=null,
-    val name:String?=null,
-    val singer:String?=null,
-    val url:String?=null,
-    val pic:String?=null,
-    val duration:Long?=null
+    var id:Int?=null,
+    var songId:String?=null,
+    var qqId:String?=null,
+    var name:String?=null,
+    var singer:String?=null,
+    var url:String?=null,
+    var pic:String?=null,
+    var duration:Long?=null
 )

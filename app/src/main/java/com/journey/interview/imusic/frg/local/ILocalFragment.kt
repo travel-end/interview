@@ -28,5 +28,6 @@ class ILocalFragment:BaseLifeCycleFragment<ILocalSongViewModel>() {
         super.initView()
         type = arguments?.getInt("localType",0)
         Log.e("Jg","type=$type")
+
     }
 }

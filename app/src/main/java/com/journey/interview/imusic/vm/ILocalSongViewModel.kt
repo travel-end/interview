@@ -1,6 +1,5 @@
 package com.journey.interview.imusic.vm
 
-import android.provider.MediaStore
 import android.provider.MediaStore.Audio.*
 import com.journey.interview.InterviewApp
 import com.journey.interview.imusic.model.LocalSong
@@ -23,9 +22,9 @@ class ILocalSongViewModel:BaseViewModel() {
                     cursor.moveToNext()
                     val map3Info = LocalSong()
                     // 标题
-                    val title = cursor.getString(cursor.getColumnIndex(Media.TITLE))
+                    var title = cursor.getString(cursor.getColumnIndex(Media.TITLE))
                     // 歌手
-                    val artist = cursor.getString(cursor.getColumnIndex(Media.ARTIST))
+                    var artist = cursor.getString(cursor.getColumnIndex(Media.ARTIST))
                     // 时长
                     val duration = cursor.getLong(cursor.getColumnIndex(Media.DURATION))
                     // 文件大小
@@ -34,6 +33,25 @@ class ILocalSongViewModel:BaseViewModel() {
                     val url = cursor.getString(cursor.getColumnIndex(Media.DATA))
                     // 是否为音乐
                     val isMusic = cursor.getInt(cursor.getColumnIndex(Media.IS_MUSIC))
+                    // 只把音乐添加到集合当中
+                    if (isMusic != 0) {
+                        if (size > 1000 * 800) {
+                            // 分离出歌曲名和歌手
+                            if (title.contains("-")) {
+                                val array = title.split("-")
+                                artist = array[0]
+                                title = array[1]
+                            }
+                            map3Info.apply {
+                                name = title.trim()
+                                singer = artist
+                                this.duration = duration
+                                this.url = url
+                                songId = "$i"
+                            }
+                            songList.add(map3Info)
+                        }
+                    }
 
                 }
             }
