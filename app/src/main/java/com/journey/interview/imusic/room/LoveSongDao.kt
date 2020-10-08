@@ -2,7 +2,6 @@ package com.journey.interview.imusic.room
 
 import androidx.room.*
 import com.journey.interview.imusic.model.LoveSong
-import com.journey.interview.imusic.model.Song
 
 /**
  * @By Journey 2020/9/30
@@ -38,6 +37,4 @@ interface LoveSongDao {
     @Transaction
     @Delete(entity = LoveSong::class)
     suspend fun deleteMyLove(loveSong: LoveSong):Int?
-
-
 }

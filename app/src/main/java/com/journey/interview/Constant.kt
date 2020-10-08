@@ -1,6 +1,7 @@
 package com.journey.interview
 
 import android.Manifest
+import android.os.Environment
 import java.util.*
 
 /**
@@ -60,6 +61,9 @@ object Constant {
 
     val STORAGE_IMG_FILE =
         InterviewApp.instance.getExternalFilesDir("").toString() + "/imusic/img/"
+    val STORAGE_SONG_FILE =
+        InterviewApp.instance.getExternalFilesDir("").toString() + "/imusic/download/"
+
 
     // 播放顺序
     const val PLAY_ORDER = 0 // 顺序播放
@@ -82,4 +86,22 @@ object Constant {
     // 网络与非网络歌曲
     const val SONG_ONLINE = 0
     const val SONG_LOCAL= 1
+
+    // 最近播放最多歌曲数
+    const val HISTORY_MAX_SIZE = 100
+
+    // 正在下載歌曲列表的狀態
+    const val DOWNLOAD_PAUSED = 0
+    const val DOWNLOAD_WAIT = 1
+    const val DOWNLOAD_ING = 2
+    const val DOWNLOAD_READY = 3
+
+    const val TYPE_DOWNLOADING = 0
+    const val TYPE_DOWNLOAD_PAUSED = 1
+    const val TYPE_DOWNLOAD_CANCELED = 2
+    const val TYPE_DOWNLOAD_SUCCESS = 3
+    const val TYPE_DOWNLOAD_FAILED = 4
+    const val TYPE_DOWNLOADED = 5
+    const val TYPE_DOWNLOAD_ADD = 6
+
 }

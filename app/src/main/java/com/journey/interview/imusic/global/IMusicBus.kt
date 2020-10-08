@@ -3,6 +3,7 @@ package com.journey.interview.imusic.global
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
 import com.journey.interview.InterviewApp
+import com.journey.interview.imusic.model.DownloadEvent
 
 /**
  * @By Journey 2020/9/27
@@ -12,6 +13,9 @@ object IMusicBus {
 
     private val musicEvent = InterviewApp.instance.getGlobalViewModel(IMusicEventViewModel::class.java)
 
+    /**
+     * 播放状态的改变
+     */
     fun sendPlayStatusChangeEvent(status:Int) {
         musicEvent.songStatus.value = status
     }
@@ -22,6 +26,9 @@ object IMusicBus {
         })
     }
 
+    /**
+     * 喜欢/取消喜欢的音乐
+     */
     fun sendLoveSongChange(status:Boolean) {
         musicEvent.loveSongStatus.value = status
     }
@@ -30,5 +37,25 @@ object IMusicBus {
         musicEvent.loveSongStatus.observe(o, Observer{
             block.invoke(it)
         })
+    }
+
+    /**
+     * 播放曲目列表数量的改变
+     */
+    fun sendSongListNumChange(songType:Int) {
+        musicEvent.songListNum.value = songType
+    }
+
+    fun observeSongListNumChange(o:LifecycleOwner,block: (Int) -> Unit) {
+        musicEvent.songListNum.observe(o,Observer{
+            block.invoke(it)
+        })
+    }
+
+    /**
+     * 下載歌曲的狀態
+     */
+    fun sendDownloadSongStatusChange(downloadEvent: DownloadEvent) {
+        musicEvent.downloadSongStatus.value =downloadEvent
     }
 }

@@ -14,7 +14,10 @@ import com.journey.interview.Constant
 import com.journey.interview.R
 import com.journey.interview.imusic.IMainActivity
 import com.journey.interview.imusic.global.IMusicBus
+import com.journey.interview.imusic.model.HistorySong
+import com.journey.interview.imusic.room.IMusicRoomHelper
 import com.journey.interview.utils.FileUtil
+import kotlinx.coroutines.*
 
 /**
  * @By Journey 2020/9/27
@@ -90,8 +93,7 @@ class IMusicPlayService : Service() {
                     setDataSource(song?.url ?: "")
                     prepare()
                     this@IMusicPlayService.mIsPlaying = true
-                    // todo 保存至最近播放数据库
-
+                    saveToHistorySong()
                     start()
                     IMusicBus.sendPlayStatusChangeEvent(Constant.SONG_CHANGE)
                     // 改变通知栏歌曲
@@ -166,6 +168,48 @@ class IMusicPlayService : Service() {
         val currentTime get() = mMediaPlayer.currentPosition.toLong() / 1000
 
     }
+    private var job:Job?=null
+    private fun saveToHistorySong() {
+        val song = FileUtil.getSong()
+        song?.let {
+            job =GlobalScope.launch {
+//                val result =withContext(Dispatchers.IO) {
+//                    IMusicRoomHelper.findHistorySongBySongId(it.songId?:"")
+//                }
+                val historySong = HistorySong().apply {
+                    songId = it.songId
+                    qqId = it.qqId
+                    name = it.songName
+                    singer = it.singer
+                    url = it.url
+                    pic = it.imgUrl
+                    isOnline = it.isOnline
+                    isDownload = it.isDownload
+                    duration = it.duration
+                    mediaId = it.mediaId
+                }
+
+//                if (result != null) {
+//                    if (result.size == 1) {
+//                        val result2 =withContext(Dispatchers.IO) {
+//                            IMusicRoomHelper.deleteHistorySong(historySong)
+//                        }
+//                    }
+//                }
+                val saveResult = withContext(Dispatchers.IO) {
+                    IMusicRoomHelper.saveToHistorySong(historySong)
+                }
+                if (saveResult != null) {
+                    // 更新界面
+                    withContext(Dispatchers.Main) {
+                        IMusicBus.sendSongListNumChange(Constant.LIST_TYPE_HISTORY)
+                        Log.e("JG","保存最近播放曲目成功:  $saveResult")
+                        // todo 如果最近播放的曲目>100 将第一个删除
+                    }
+                }
+            }
+        }
+    }
 
     private val notificationManager get() = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
@@ -201,5 +245,8 @@ class IMusicPlayService : Service() {
         mMediaPlayer.stop()
         mMediaPlayer.release()
         stopForeground(true)
+        if (job?.isCancelled == false) {
+            job?.cancel()
+        }
     }
 }

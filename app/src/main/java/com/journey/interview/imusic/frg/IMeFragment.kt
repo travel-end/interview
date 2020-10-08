@@ -6,6 +6,7 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.navigation.Navigation
 import com.journey.interview.R
+import com.journey.interview.imusic.frg.me.IHistorySongActivity
 import com.journey.interview.imusic.frg.me.ILocalSongActivity
 import com.journey.interview.imusic.frg.me.ILoveSongActivity
 import com.journey.interview.imusic.vm.IMeViewModel
@@ -30,6 +31,9 @@ class IMeFragment:BaseLifeCycleFragment<IMeViewModel>() {
         }
         mRootView.findViewById<TextView>(R.id.me_tv_local).setOnClickListener {
             startActivity(Intent(requireActivity(),ILocalSongActivity::class.java))
+        }
+        mRootView.findViewById<TextView>(R.id.me_tv_history).setOnClickListener {
+            startActivity(Intent(requireActivity(),IHistorySongActivity::class.java))
         }
     }
 }

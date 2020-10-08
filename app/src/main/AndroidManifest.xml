@@ -109,6 +109,7 @@
         <activity android:name=".imusic.frg.me.ILoveSongActivity"
             android:theme="@style/material_style"/>
         <activity android:name=".imusic.frg.me.ILocalSongActivity" />
+        <activity android:name=".imusic.frg.me.IHistorySongActivity" />
 
         <service
             android:name=".imusic.service.IMusicPlayService"

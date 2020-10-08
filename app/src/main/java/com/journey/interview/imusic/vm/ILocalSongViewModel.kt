@@ -1,13 +1,24 @@
 package com.journey.interview.imusic.vm
 
 import android.provider.MediaStore.Audio.*
+import android.util.Log
+import android.widget.Toast
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
 import com.journey.interview.InterviewApp
 import com.journey.interview.imusic.model.LocalSong
+import com.journey.interview.imusic.room.IMusicRoomHelper
+import com.journey.interview.utils.ofMap
+import com.journey.interview.utils.print
 import com.journey.interview.weatherapp.base.BaseViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class ILocalSongViewModel:BaseViewModel() {
 
-    fun getLocalMp3Info():MutableList<LocalSong>? {
+    val localSongResult:MutableLiveData<MutableList<LocalSong>?> = MutableLiveData()
+    private fun initLocalMp3Info():MutableList<LocalSong>? {
 
         val context = InterviewApp.instance.applicationContext
         if (context != null) {
@@ -61,5 +72,37 @@ class ILocalSongViewModel:BaseViewModel() {
         }
         return null
 
+    }
+
+    fun getLocalSongs() {
+        val songList = initLocalMp3Info()
+//        Log.e("JG","检索本地音乐：$songList")
+        if (songList != null) {
+            if (songList.isNotEmpty()) {
+                viewModelScope.launch {
+                    val result = withContext(Dispatchers.IO) {
+                        IMusicRoomHelper.saveLocalSong(songList)
+                    }
+//                    Log.e("JG","存储本地音乐：$result")
+                    if (result != null) {
+                        localSongResult.value = songList
+                    }
+                }
+            } else {
+                localSongResult.value = null
+            }
+        } else {
+            localSongResult.value = null
+        }
+    }
+
+    fun getSavedLocalSongs() {
+        viewModelScope.launch {
+            val result = withContext(Dispatchers.IO) {
+                IMusicRoomHelper.getAllLocalSongs()
+            }
+//            Log.e("JG","查询本地音乐：$result ${result?.size}")
+            localSongResult.value = result
+        }
     }
 }
