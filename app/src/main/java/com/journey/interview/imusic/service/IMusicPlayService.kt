@@ -285,6 +285,7 @@ class IMusicPlayService : Service() {
                 duration = it.duration?.toInt() ?: 0
                 mediaId = it.mediaId
                 isDownload = true
+                albumName = it.albumName
             }
             FileUtil.saveSong(song)
         }

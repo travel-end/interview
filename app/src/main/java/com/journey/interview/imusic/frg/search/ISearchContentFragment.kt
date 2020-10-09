@@ -13,6 +13,7 @@ import androidx.lifecycle.Observer
 import com.journey.interview.Constant
 import com.journey.interview.R
 import com.journey.interview.customizeview.swipecaptcha.core.GlideUtil
+import com.journey.interview.imusic.download.IMusicDownloadUtil
 import com.journey.interview.imusic.model.AlListBean
 import com.journey.interview.imusic.model.ISearchContentViewModel
 import com.journey.interview.imusic.model.ListBean
@@ -100,7 +101,8 @@ class ISearchContentFragment :BaseLifeCycleFragment<ISearchContentViewModel>(){
                                         duration = data.interval
                                         isOnline = true
                                         mediaId = data.strMediaMid
-                                        isDownload = DownloadUtil.isExistOfDownloadSong(data.songmid)//003IHI2x3RbXLS
+                                        albumName = data.albumname
+                                        isDownload = IMusicDownloadUtil.isExistOfDownloadSong(data.songmid?:"")//003IHI2x3RbXLS
                                     }
                                     mViewModel.getSongUrl(song)
                                 })

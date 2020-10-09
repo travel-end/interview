@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.journey.interview.customizeview.ripple.MyRippleView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/dp_65"
+    app:rv_centered="true"
+    app:rv_type="rectangle"
+    app:rv_color="@color/colorTextPink"
+    app:rv_rippleDuration="240"
+    android:paddingTop="@dimen/dp_8"
+    android:paddingBottom="@dimen/dp_4"
+    android:paddingStart="@dimen/dp_18"
+    android:paddingEnd="@dimen/dp_18"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <ImageView
+        android:id="@+id/iv_item_song_laba"
+        android:layout_width="@dimen/dp_18"
+        android:layout_height="@dimen/dp_16"
+        android:layout_centerVertical="true"
+        android:layout_marginEnd="@dimen/dp_16"
+        android:visibility="gone"
+        android:src="@drawable/ic_laba" />
+    <TextView
+        android:id="@+id/tv_item_song_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="演员"
+        android:maxLines="1"
+        android:layout_toEndOf="@id/iv_item_song_laba"
+        android:layout_marginTop="@dimen/dp_4"
+        android:textSize="16sp"
+        android:textColor="@color/colorBlack"
+        />
+
+
+    <TextView
+        android:id="@+id/tv_item_song_singer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/colorGrayDark"
+        android:layout_toEndOf="@id/iv_item_song_laba"
+        android:textSize="12sp"
+        android:text="薛之谦"
+        android:layout_marginBottom="@dimen/dp_4"
+        android:layout_alignParentBottom="true" />
+
+
+    <TextView
+        android:id="@+id/tv_item_song_album_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="6dp"
+        android:textColor="@color/colorGrayDark"
+        android:textSize="12sp"
+        android:visibility="gone"
+        android:text="绅士"
+        android:layout_marginBottom="@dimen/dp_4"
+        android:layout_alignParentBottom="true"
+        android:layout_toEndOf="@id/tv_item_song_singer"/>
+
+<!--    <TextView-->
+<!--        android:id="@+id/tv_song_lyric"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:textColor="@color/colorGrayDark"-->
+<!--        android:textSize="12sp"-->
+<!--        android:layout_marginTop="@dimen/dp_4"-->
+<!--        android:padding="1dp"-->
+<!--        android:visibility="gone"-->
+<!--        android:text="电影《精灵王座》主题曲"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toBottomOf="@id/tv_song_yuanchang" />-->
+<!--    <ImageView-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:src="@drawable/ic_play_song"-->
+<!--        android:layout_marginEnd="@dimen/dp_10"-->
+<!--        app:tint="@color/colorGrayDark"-->
+<!--        app:layout_constraintEnd_toStartOf="@id/iv_song_more"-->
+<!--        app:layout_constraintTop_toTopOf="parent"-->
+<!--        app:layout_constraintBottom_toBottomOf="parent"-->
+<!--        />-->
+    <ImageView
+        android:id="@+id/iv_item_song_more"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_more"
+        app:tint="@color/colorGrayDark"
+        android:layout_centerVertical="true"
+        android:layout_alignParentEnd="true"/>
+
+</com.journey.interview.customizeview.ripple.MyRippleView>

@@ -455,6 +455,7 @@ class IPlayActivity : BaseLifeCycleActivity<IPlayViewModel>(), LrcView.OnPlayCli
             url = mSong?.url
             songName = mSong?.songName
             duration = mSong?.duration
+            albumName = mSong?.albumName
         }
     }
 

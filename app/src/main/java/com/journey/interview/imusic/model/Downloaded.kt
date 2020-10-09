@@ -8,5 +8,6 @@ data class Downloaded(
     var url:String?=null,
     var pic:String?=null,
     var duration:Long?=null,
-    var name:String?=null
+    var name:String?=null,
+    var albumName:String?=null
 )

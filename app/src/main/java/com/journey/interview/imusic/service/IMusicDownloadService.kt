@@ -77,9 +77,8 @@ class IMusicDownloadService : Service() {
                     }
 
                     if (downloadTask != null) {
-                        Toast.makeText(this@IMusicDownloadService, "已经加入下载队列", Toast.LENGTH_SHORT).show()
+//                        Toast.makeText(this@IMusicDownloadService, "已经加入下载队列", Toast.LENGTH_SHORT).show()
                     } else {
-                        Toast.makeText(this@IMusicDownloadService, "开始下载", Toast.LENGTH_SHORT).show()
 //                        start()
                         if (downloadTask == null && !downloadQueue.isEmpty()) {
                             val downloadingSong = downloadQueue.peek()
@@ -101,6 +100,7 @@ class IMusicDownloadService : Service() {
                                         downloadUrl = currentDownloadInfo.url
 //                                        Log.e("JG", "下载路径：$downloadUrl")
                                         downloadTask = IMusicDownloadTask(listener)
+                                        Toast.makeText(this@IMusicDownloadService, "开始下载", Toast.LENGTH_SHORT).show()
                                         downloadTask!!.execute(currentDownloadInfo)
                                         notificationManager.notify(
                                             1,

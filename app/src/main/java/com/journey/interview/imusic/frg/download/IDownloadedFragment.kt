@@ -7,10 +7,12 @@ import android.content.ServiceConnection
 import android.os.IBinder
 import android.util.Log
 import android.view.View
+import android.widget.ImageView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import com.journey.interview.Constant
 import com.journey.interview.R
+import com.journey.interview.customizeview.ripple.MyRippleView
 import com.journey.interview.imusic.download.IMusicDownloadUtil
 import com.journey.interview.imusic.model.Downloaded
 import com.journey.interview.imusic.model.Song
@@ -29,16 +31,13 @@ import com.journey.interview.weatherapp.base.BaseFragment
 class IDownloadedFragment:BaseFragment() {
     private var downloadedSongs:MutableList<Downloaded>?=null
     private var playBinder:IMusicPlayService.PlayStatusBinder?=null
+    private var mLastPosition:Int = -1
     private val playConnection = object :ServiceConnection {
         override fun onServiceDisconnected(name: ComponentName?) {
-
-
         }
-
         override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
             playBinder = service as IMusicPlayService.PlayStatusBinder
         }
-
     }
     companion object {
         fun newInstance(): Fragment {
@@ -57,11 +56,29 @@ class IDownloadedFragment:BaseFragment() {
             rv.setup<Downloaded> {
                 dataSource(downloadedSongs!!)
                 adapter {
-                    addItem(R.layout.imusic_item_search_song) {
+                    addItem(R.layout.imusic_item_song) {
                         bindViewHolder { data, pos, holder ->
-                            setText(R.id.tv_song_name,data?.name)
-                            setText(R.id.tv_song_singer,data?.singer)
+                            setText(R.id.tv_item_song_name,data?.name)
+                            setText(R.id.tv_item_song_singer,data?.singer)
+                            if (data?.albumName != "") {
+                                setText(R.id.tv_item_song_album_name,"- ${data?.albumName}")
+                            }
+                            val currentSongId = FileUtil.getSong()?.songId
+                            if (currentSongId != null &&
+                                    data?.songId == currentSongId) {
+                                itemView?.findViewById<ImageView>(R.id.iv_item_song_laba)?.visibility = View.VISIBLE
+                                mLastPosition = pos
+                            } else {
+                                itemView?.findViewById<ImageView>(R.id.iv_item_song_laba)?.visibility = View.GONE
+                            }
                             itemClicked(View.OnClickListener {
+//                            val rView = holder.itemView as MyRippleView
+//                            rView.setOnRippleCompleteListener {
+                                if (pos != mLastPosition) {
+                                    notifyItemChanged(mLastPosition)
+                                    mLastPosition = pos
+                                }
+                                notifyItemChanged(pos)
                                 val downloadedSong = downloadedSongs!![pos]
                                 Log.e("JG","本地音乐路径：${downloadedSong.url}")
                                 val song = Song().apply {
@@ -79,13 +96,13 @@ class IDownloadedFragment:BaseFragment() {
                                 }
                                 FileUtil.saveSong(song)
                                 playBinder?.play(Constant.LIST_TYPE_DOWNLOAD)
+//                            }
                             })
                         }
                     }
                 }
             }
         }
-
     }
 
     /**

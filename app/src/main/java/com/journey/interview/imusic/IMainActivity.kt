@@ -88,7 +88,7 @@ class IMainActivity : BaseLifeCycleActivity<IMainViewModel>() {
 
     override fun initData() {
         super.initData()
-        bottom_player.btn_player.setOnClickListener {
+        bottom_player.main_rv_play.setOnClickListener {
             mMediaPlayer = mPlayServiceBinder?.mediaPlayer
             when {
                 mPlayServiceBinder?.isPlaying == true -> {

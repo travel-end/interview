@@ -17,5 +17,6 @@ data class DownloadSong(
     var currentSize:Long?=null,
     var totalSize:Long?=null,
     var position:Int?=null,// 正在下載歌曲在列表中的位置
-    var status:Int?=null
+    var status:Int?=null,
+    var albumName:String?=null
 )

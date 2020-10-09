@@ -10,13 +10,5 @@
         android:id="@+id/downloaded_rv"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginBottom="65dp"
-        />
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginBottom="65dp"
-        android:overScrollMode="never"/>
-
+        tools:listitem="@layout/imusic_item_song"/>
 </LinearLayout>

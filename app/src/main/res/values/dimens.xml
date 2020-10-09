@@ -25,8 +25,10 @@
     <dimen name="dp_46">46dp</dimen>
     <dimen name="dp_48">48dp</dimen>
     <dimen name="dp_52">52dp</dimen>
+    <dimen name="dp_54">54dp</dimen>
     <dimen name="dp_58">58dp</dimen>
     <dimen name="dp_62">62dp</dimen>
     <dimen name="dp_65">65dp</dimen>
+    <dimen name="dp_68">68dp</dimen>
     <dimen name="dp_80">80dp</dimen>
 </resources>

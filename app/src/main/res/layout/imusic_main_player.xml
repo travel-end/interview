@@ -42,17 +42,21 @@
 
 
     <com.journey.interview.customizeview.ripple.MyRippleView
-        android:layout_width="@dimen/dp_30"
-        android:layout_height="@dimen/dp_30"
-        android:layout_marginEnd="@dimen/dp_15"
+        android:id="@+id/main_rv_play"
+        android:layout_width="@dimen/dp_68"
+        android:layout_height="match_parent"
+        android:layout_marginEnd="@dimen/dp_10"
         app:rv_centered="true"
+        app:rv_color="@color/colorTextPink"
+        app:rv_rippleDuration="240"
         app:layout_constraintEnd_toStartOf="@id/player_song_list"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent">
         <Button
             android:id="@+id/btn_player"
-            android:layout_width="55dp"
-            android:layout_height="55dp"
+            android:layout_width="@dimen/dp_36"
+            android:layout_height="@dimen/dp_36"
+            android:layout_centerInParent="true"
             android:background="@drawable/selector_player" />
 
     </com.journey.interview.customizeview.ripple.MyRippleView>
