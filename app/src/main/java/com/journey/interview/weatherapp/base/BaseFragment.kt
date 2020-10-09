@@ -26,6 +26,9 @@ abstract class BaseFragment : Fragment() {
         return mRootView
     }
 
+    /**
+     * onViewCreated：紧接着onCreateView后调用
+     */
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         initViewModel()
         initView()

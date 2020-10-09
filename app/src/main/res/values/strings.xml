@@ -59,4 +59,6 @@
     <string name="imusic_shoucanggedan">收藏歌单</string>
     <string name="imusic_no_shoucanggedan">暂无收藏歌单</string>
     <string name="imusic_tuijian">推荐歌单</string>
+    <string name="downloaded">已下载</string>
+    <string name="downloading">下载中</string>
 </resources>

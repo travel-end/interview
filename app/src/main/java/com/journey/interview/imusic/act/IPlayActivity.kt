@@ -27,7 +27,9 @@ import com.gyf.immersionbar.ImmersionBar
 import com.journey.interview.Constant
 import com.journey.interview.R
 import com.journey.interview.imusic.global.IMusicBus
+import com.journey.interview.imusic.model.DownloadSong
 import com.journey.interview.imusic.model.Song
+import com.journey.interview.imusic.service.IMusicDownloadService
 import com.journey.interview.imusic.service.IMusicPlayService
 import com.journey.interview.imusic.util.ImUtils
 import com.journey.interview.imusic.vm.IPlayViewModel
@@ -57,6 +59,7 @@ class IPlayActivity : BaseLifeCycleActivity<IPlayViewModel>(), LrcView.OnPlayCli
     private lateinit var mLrcView: LrcView
     private lateinit var mLovedSongAnimatorSet:AnimatorSet
     private var mPlayStatusBinder: IMusicPlayService.PlayStatusBinder? = null
+    private var mDownloadBinder:IMusicDownloadService.DownloadBinder?=null
     private var mIsDragSeekBar: Boolean = false// 拖动进度条
     private var mIsOnline: Boolean = false// 是否为网络歌曲
     private var mCoverBitmap: Bitmap? = null
@@ -101,6 +104,19 @@ class IPlayActivity : BaseLifeCycleActivity<IPlayViewModel>(), LrcView.OnPlayCli
 
     }
 
+    // 下载service connection
+    private val mDownloadConnection = object :ServiceConnection {
+        override fun onServiceDisconnected(name: ComponentName?) {
+
+
+        }
+
+        override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
+            mDownloadBinder = service as IMusicDownloadService.DownloadBinder
+        }
+
+    }
+
     override fun initStatusBar() {
         ImmersionBar.with(this).statusBarView(R.id.top_view)
             .fullScreen(true).init()
@@ -128,6 +144,9 @@ class IPlayActivity : BaseLifeCycleActivity<IPlayViewModel>(), LrcView.OnPlayCli
         // 绑定服务
         val playIntent = Intent(this, IMusicPlayService::class.java)
         bindService(playIntent, mPlayConnection, Context.BIND_AUTO_CREATE)
+
+        val downloadIntent = Intent(this,IMusicDownloadService::class.java)
+        bindService(downloadIntent,mDownloadConnection,Context.BIND_AUTO_CREATE)
 
         // 界面ui
         mSong?.let { song ->
@@ -280,6 +299,13 @@ class IPlayActivity : BaseLifeCycleActivity<IPlayViewModel>(), LrcView.OnPlayCli
             }
             mIsMyLove = !mIsMyLove
         }
+        play_iv_download.setOnClickListener {
+            if (mSong?.isDownload == true) {
+                Toast.makeText(this,"歌曲已经下载",Toast.LENGTH_SHORT).show()
+            } else {
+                mDownloadBinder?.startDownload(getDownloadSong())
+            }
+        }
     }
 
     override fun onResume() {
@@ -421,10 +447,22 @@ class IPlayActivity : BaseLifeCycleActivity<IPlayViewModel>(), LrcView.OnPlayCli
         }
     }
 
+    private fun getDownloadSong():DownloadSong {
+        return DownloadSong().apply {
+            singer = mSong?.singer
+            progress = 0
+            songId = mSong?.songId
+            url = mSong?.url
+            songName = mSong?.songName
+            duration = mSong?.duration
+        }
+    }
+
 
     override fun onDestroy() {
         super.onDestroy()
         unbindService(mPlayConnection)
+        unbindService(mDownloadConnection)
         stopUpdateSeekBarProgress()
         updateSeekBarHandler.removeCallbacksAndMessages(null)
         unregisterReceiver(mVolumeReceiver)

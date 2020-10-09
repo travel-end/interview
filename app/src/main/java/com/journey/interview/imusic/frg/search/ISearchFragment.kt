@@ -1,5 +1,6 @@
 package com.journey.interview.imusic.frg.search
 
+import android.os.Bundle
 import android.util.Log
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
@@ -33,8 +34,12 @@ class ISearchFragment : BaseLifeCycleFragment<ISearchViewModel>() {
                 }
             }
         }
-
     }
+
+//    override fun onResume() {
+//        super.onResume()
+//        search_et.showKeyBoard(requireContext())
+//    }
 
     private fun replaceFragment(fragment: Fragment) {
         childFragmentManager.beginTransaction().replace(

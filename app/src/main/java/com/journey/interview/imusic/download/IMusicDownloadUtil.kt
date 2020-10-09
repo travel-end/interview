@@ -1,13 +1,13 @@
 package com.journey.interview.imusic.download
 
 import com.journey.interview.Constant
-import com.journey.interview.imusic.model.Downloading
+import com.journey.interview.imusic.model.Downloaded
 import java.io.File
 
 object IMusicDownloadUtil {
-    fun getSongFromFile(fileName:String):MutableList<Downloading>? {
+    fun getSongFromFile(fileName:String):MutableList<Downloaded>? {
         //将.m4a截取掉得到singer-songName-duration-songId-size
-        val res = mutableListOf<Downloading>()
+        val res = mutableListOf<Downloaded>()
         val file = File(fileName)
         if (!file.exists()) {
             file.mkdirs()
@@ -23,7 +23,7 @@ object IMusicDownloadUtil {
                     val size = songValue[4].toLong()
                     //如果文件的大小不等于实际大小，则表示该歌曲还未下载完成，被人为暂停，故跳过该歌曲，不加入到已下载集合
                     if (size != value.length()) continue
-                    val downloadSong = Downloading().apply {
+                    val downloadSong = Downloaded().apply {
                         singer = songValue[0]
                         name = songValue[1]
                         duration = songValue[2].toLong()

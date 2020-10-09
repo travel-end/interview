@@ -13,17 +13,25 @@ import androidx.core.app.NotificationCompat
 import com.journey.interview.Constant
 import com.journey.interview.R
 import com.journey.interview.imusic.IMainActivity
+import com.journey.interview.imusic.download.IMusicDownloadUtil
 import com.journey.interview.imusic.global.IMusicBus
+import com.journey.interview.imusic.model.Downloaded
 import com.journey.interview.imusic.model.HistorySong
+import com.journey.interview.imusic.model.Song
 import com.journey.interview.imusic.room.IMusicRoomHelper
 import com.journey.interview.utils.FileUtil
 import kotlinx.coroutines.*
+import java.io.IOException
+import kotlin.math.sin
 
 /**
  * @By Journey 2020/9/27
  * @Description
  */
 class IMusicPlayService : Service() {
+    /* ***音乐列表*/
+    private var mDownloadedSongs: MutableList<Downloaded>? = null
+
     companion object {
         const val NOTIFICATION_ID = 98
     }
@@ -43,13 +51,28 @@ class IMusicPlayService : Service() {
     override fun onCreate() {
         super.onCreate()
         mListType = FileUtil.getSong()?.listType
+        mListType?.let {
+            when (it) {
+                Constant.LIST_TYPE_DOWNLOAD -> {
+                    mDownloadedSongs =
+                        IMusicDownloadUtil.getSongFromFile(Constant.STORAGE_SONG_FILE)
+                }
+            }
+        }
         startForeground(NOTIFICATION_ID, getNotification("爱音乐，开启你的私人音乐之旅o(*￣▽￣*)ブ"))
     }
 
     override fun onBind(intent: Intent?): IBinder? {
         mMediaPlayer.setOnCompletionListener { mp ->
             IMusicBus.sendPlayStatusChangeEvent(Constant.SONG_PAUSE)
-            mCurrent = FileUtil.getSong()?.position
+            mCurrent = FileUtil.getSong()?.position // 当前歌曲在列表中的位置  如第一首 为：0
+            if (mListType != null) {
+                when (mListType) {
+                    Constant.LIST_TYPE_DOWNLOAD -> {
+                        saveDownloadInfo(mCurrent ?: 0)
+                    }
+                }
+            }
         }
         // 播放的可能是除了网络歌曲之外的其他模式
         if (mListType != 0 && mListType != null) {
@@ -75,9 +98,33 @@ class IMusicPlayService : Service() {
         fun play(listType: Int?) {
             try {
                 this@IMusicPlayService.mListType = listType
+                if (mListType != null) {
+                    when (mListType) {
+                        Constant.LIST_TYPE_DOWNLOAD -> {
+                            mDownloadedSongs =
+                                orderDownloadList(IMusicDownloadUtil.getSongFromFile(Constant.STORAGE_SONG_FILE))
+                        }
+                    }
+                }
                 mCurrent = FileUtil.getSong()?.position
                 // 把各项参数恢复到初始状态
                 mMediaPlayer.reset()
+                when (mListType) {
+                    Constant.LIST_TYPE_DOWNLOAD -> {
+                        mDownloadedSongs?.let {
+                            val url = it[mCurrent?:0].url
+                            if (!url.isNullOrEmpty()) {
+                                mMediaPlayer.setDataSource(url)
+                                startPlay()
+                            }
+                        }
+
+                    }
+                    else->{
+
+                    }
+                }
+
             } catch (e: Exception) {
 
             }
@@ -131,7 +178,6 @@ class IMusicPlayService : Service() {
             // 如果是网络歌曲 todo 播放网络 歌曲的另一首
 
 
-
             if (mListType != 0 && mListType != null) {
                 mPlayStatusBinder.play(mListType!!)
             }
@@ -168,11 +214,24 @@ class IMusicPlayService : Service() {
         val currentTime get() = mMediaPlayer.currentPosition.toLong() / 1000
 
     }
-    private var job:Job?=null
+
+    @Throws(IOException::class)
+    private fun startPlay() {
+        mMediaPlayer.prepare()
+        mIsPlaying = true
+        mMediaPlayer.start()
+        saveToHistorySong()
+        IMusicBus.sendPlayStatusChangeEvent(Constant.SONG_CHANGE)
+        val song = FileUtil.getSong()
+        notificationManager.notify(NOTIFICATION_ID,
+        getNotification("${song?.songName}-${song?.singer}"))
+    }
+
+    private var job: Job? = null
     private fun saveToHistorySong() {
         val song = FileUtil.getSong()
         song?.let {
-            job =GlobalScope.launch {
+            job = GlobalScope.launch {
 //                val result =withContext(Dispatchers.IO) {
 //                    IMusicRoomHelper.findHistorySongBySongId(it.songId?:"")
 //                }
@@ -203,11 +262,31 @@ class IMusicPlayService : Service() {
                     // 更新界面
                     withContext(Dispatchers.Main) {
                         IMusicBus.sendSongListNumChange(Constant.LIST_TYPE_HISTORY)
-                        Log.e("JG","保存最近播放曲目成功:  $saveResult")
+                        Log.e("JG", "保存最近播放曲目成功:  $saveResult")
                         // todo 如果最近播放的曲目>100 将第一个删除
                     }
                 }
             }
+        }
+    }
+
+    private fun saveDownloadInfo(current: Int) {
+        val downloadSong = mDownloadedSongs?.get(current)
+        downloadSong?.let {
+            val song = Song().apply {
+                position = current
+                songId = it.songId
+                songName = it.name
+                singer = it.singer
+                url = it.url
+                imgUrl = it.pic
+                listType = Constant.LIST_TYPE_DOWNLOAD
+                isOnline = false
+                duration = it.duration?.toInt() ?: 0
+                mediaId = it.mediaId
+                isDownload = true
+            }
+            FileUtil.saveSong(song)
         }
     }
 
@@ -236,12 +315,25 @@ class IMusicPlayService : Service() {
     }
 
     override fun onUnbind(intent: Intent?): Boolean {
-        Log.d("JG","播放Service onUnbind--->")
+        Log.d("JG", "播放Service onUnbind--->")
         return true
     }
 
+    private fun orderDownloadList(tempList: MutableList<Downloaded>?): MutableList<Downloaded>? {
+        val downloadSongList = mutableListOf<Downloaded>()
+        downloadSongList.clear()
+        return if (tempList != null) {
+            for (i in tempList.indices.reversed()) {
+                downloadSongList.add(tempList[i])
+            }
+            downloadSongList
+        } else {
+            null
+        }
+    }
+
     override fun onDestroy() {
-        Log.d("JG","播放Service被销毁了--->")
+        Log.d("JG", "播放Service被销毁了--->")
         mMediaPlayer.stop()
         mMediaPlayer.release()
         stopForeground(true)

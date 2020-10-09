@@ -27,11 +27,17 @@ interface DownloadSongDao {
     @Query("SELECT * FROM downloadsong ORDER BY id DESC")
     suspend fun queryAllDownloadSongs():MutableList<DownloadSong>?
 
+
+
     /**
      * 根据跟去songId查找指定歌曲
      */
     @Transaction
     @Query("SELECT * FROM downloadsong WHERE songId = (:songId) ORDER BY id DESC")
     suspend fun queryDownloadSongBySongId(songId:String):MutableList<DownloadSong>?
+
+    @Transaction
+    @Query("SELECT * FROM downloadsong WHERE id > (:id)")
+    suspend fun queryDownloadSongById(id:Long):MutableList<DownloadSong>?
 
 }

@@ -106,13 +106,19 @@
             android:theme="@style/material_style"
             android:windowSoftInputMode="adjustPan|stateHidden" />
         <activity android:name=".imusic.act.IPlayActivity" />
-        <activity android:name=".imusic.frg.me.ILoveSongActivity"
-            android:theme="@style/material_style"/>
-        <activity android:name=".imusic.frg.me.ILocalSongActivity" />
-        <activity android:name=".imusic.frg.me.IHistorySongActivity" />
+<!--        <activity android:name=".imusic.frg.me.ILoveSongActivity"-->
+<!--            android:theme="@style/material_style"/>-->
+<!--        <activity android:name=".imusic.frg.me.ILocalSongActivity" />-->
+<!--        <activity android:name=".imusic.frg.me.IHistorySongActivity" />-->
+<!--        <activity android:name=".imusic.frg.me.IDownloadedSongActivity" />-->
 
         <service
             android:name=".imusic.service.IMusicPlayService"
+            android:enabled="true"
+            android:exported="false" />
+
+        <service
+            android:name=".imusic.service.IMusicDownloadService"
             android:enabled="true"
             android:exported="false" />
     </application>

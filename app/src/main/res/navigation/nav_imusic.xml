@@ -8,13 +8,44 @@
         android:id="@+id/iMainFragment"
         android:name="com.journey.interview.imusic.frg.IMainFragment"
         android:label="HomeFragment">
-            <action
-                android:id="@+id/action_homeFragment_to_searchFragment"
-                app:destination="@id/iSearchFragment"
-                app:enterAnim="@anim/slide_in_right"
-                app:exitAnim="@anim/slide_out_left"
-                app:popEnterAnim="@anim/slide_in_left"
-                app:popExitAnim="@anim/slide_out_right" />
+        <action
+            android:id="@+id/action_homeFragment_to_searchFragment"
+            app:destination="@id/iSearchFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+        <action
+            android:id="@+id/action_homeFragment_to_localFragment"
+            app:destination="@id/iLocalSongVpFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+
+        <action
+            android:id="@+id/action_homeFragment_to_recentPlayFragment"
+            app:destination="@id/iRecentPlayFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+
+        <action
+            android:id="@+id/action_homeFragment_to_loveSongFragment"
+            app:destination="@id/iLoveSongFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+
+        <action
+            android:id="@+id/action_homeFragment_to_downloadFragment"
+            app:destination="@id/iDownloadFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
     </fragment>
 
     <fragment
@@ -25,8 +56,30 @@
 
     </fragment>
 
+    <fragment
+        android:id="@+id/iLocalSongVpFragment"
+        android:name="com.journey.interview.imusic.frg.local.ILocalSongVpFragment"
+        tools:layout="@layout/imusic_frg_local">
 
+    </fragment>
+    <fragment
+        android:id="@+id/iRecentPlayFragment"
+        android:name="com.journey.interview.imusic.frg.recentplay.IRecentPlayFragment"
+        tools:layout="@layout/imusic_act_history">
 
+    </fragment>
 
+    <fragment
+        android:id="@+id/iLoveSongFragment"
+        android:name="com.journey.interview.imusic.frg.love.ILoveSongFragment"
+        tools:layout="@layout/imusic_act_love_song">
 
+    </fragment>
+
+    <fragment
+        android:id="@+id/iDownloadFragment"
+        android:name="com.journey.interview.imusic.frg.download.IDownloadSongVpFragment"
+        tools:layout="@layout/imusic_act_download_vp">
+
+    </fragment>
 </navigation>

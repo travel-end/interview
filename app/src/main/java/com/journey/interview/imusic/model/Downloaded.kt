@@ -1,6 +1,6 @@
 package com.journey.interview.imusic.model
 
-data class Downloading(
+data class Downloaded(
     var id:Long?=null,
     var songId:String?=null,
     var mediaId:String?=null,

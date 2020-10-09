@@ -5,6 +5,7 @@ import androidx.room.PrimaryKey
 
 @Entity
 data class DownloadSong(
+    @PrimaryKey
     var id:Long?=null,
     var songId:String?=null,
     var songName:String?=null,

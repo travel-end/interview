@@ -121,7 +121,6 @@
                     android:layout_width="@dimen/dp_26"
                     android:layout_height="@dimen/dp_26"
                     android:layout_marginTop="@dimen/dp_2"
-                    app:tint="@color/colorWhite"
                     android:layout_marginStart="@dimen/dp_26"
                     android:src="@drawable/ic_download" />
 

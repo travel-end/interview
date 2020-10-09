@@ -1,15 +1,12 @@
 package com.journey.interview.imusic.model
 
-import android.os.Parcelable
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import kotlinx.android.parcel.Parcelize
 import java.io.Serializable
 
 /**
  * Created by 残渊 on 2018/10/19.
  */
-//@Parcelize
 @Entity
 data class Song(
     @PrimaryKey(autoGenerate = true)

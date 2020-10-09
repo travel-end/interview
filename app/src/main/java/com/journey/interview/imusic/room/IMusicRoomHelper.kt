@@ -53,10 +53,10 @@ object IMusicRoomHelper {
         historySongDatabase.historySongDao()
     }
 
-    suspend fun addToMyLoveSong(loveSong: LoveSong):Long? {
+    suspend fun addToMyLoveSong(loveSong: LoveSong): Long? {
         loveSong.songId?.let {
-            loveSongDao.queryIsMyLove(it)?.let {data->
-                if (data.size>0) {
+            loveSongDao.queryIsMyLove(it)?.let { data ->
+                if (data.size > 0) {
                     for (i in data) {
                         val result = loveSongDao.deleteMyLove(i)
                         Log.d("JG", "删除我的喜欢：$i")
@@ -66,25 +66,26 @@ object IMusicRoomHelper {
         }
         return loveSongDao.insertToMyLove(loveSong)
     }
-    suspend fun isMyLoveSong(songId:String?):Boolean {
+
+    suspend fun isMyLoveSong(songId: String?): Boolean {
         songId?.let {
-            loveSongDao.queryIsMyLove(it)?.let {data->
+            loveSongDao.queryIsMyLove(it)?.let { data ->
                 return data.size != 0
             }
         }
         return false
     }
 
-    suspend fun deleteFromMyLoveSong(loveSong: LoveSong):Int? {
+    suspend fun deleteFromMyLoveSong(loveSong: LoveSong): Int? {
         return loveSongDao.deleteMyLove(loveSong)
     }
 
-    suspend fun getAllMyLoveSong():MutableList<LoveSong>? {
+    suspend fun getAllMyLoveSong(): MutableList<LoveSong>? {
         return loveSongDao.queryAllMyLove()
     }
 
-    suspend fun saveLocalSong(localSongs:MutableList<LocalSong>) :Long?{
-        var result :Long?=null
+    suspend fun saveLocalSong(localSongs: MutableList<LocalSong>): Long? {
+        var result: Long? = null
         for (song in localSongs) {
             localSongDao.deleteLocalSongs(song)
             val localSong = LocalSong().apply {
@@ -99,42 +100,50 @@ object IMusicRoomHelper {
         return result
     }
 
-    suspend fun getAllLocalSongs():MutableList<LocalSong>? {
+    suspend fun getAllLocalSongs(): MutableList<LocalSong>? {
         return localSongDao.queryAllLocalSongs()
     }
 
-    suspend fun findHistorySongBySongId(songId: String):MutableList<HistorySong>? {
+    suspend fun findHistorySongBySongId(songId: String): MutableList<HistorySong>? {
         return historySongDao.queryHistorySongBySongId(songId)
     }
 
-    suspend fun deleteHistorySong(historySong: HistorySong):Int? {
+    suspend fun deleteHistorySong(historySong: HistorySong): Int? {
         return historySongDao.deleteHistorySong(historySong)
     }
-    suspend fun saveToHistorySong(historySong: HistorySong):Long? {
-        val song = historySongDao.queryHistorySongBySongId(historySong.songId?:"")
-        return if (song != null && song.size>0) {
+
+    suspend fun saveToHistorySong(historySong: HistorySong): Long? {
+        val song = historySongDao.queryHistorySongBySongId(historySong.songId ?: "")
+        return if (song != null && song.size > 0) {
             null
         } else {
             historySongDao.insertHistorySong(historySong)
         }
     }
-    suspend fun queryAllHistorySongs():MutableList<HistorySong>? {
+
+    suspend fun queryAllHistorySongs(): MutableList<HistorySong>? {
         return historySongDao.queryAllHistorySongs()
     }
 
-    suspend fun findDownloadSongBySongId(songId: String):MutableList<DownloadSong>? {
+    /* ----------下载歌曲------------*/
+    suspend fun findDownloadSongBySongId(songId: String): MutableList<DownloadSong>? {
         return downloadSongDao.queryDownloadSongBySongId(songId)
     }
 
-    suspend fun saveToDownloadSong(downloadSong: DownloadSong):Long? {
-        val song = historySongDao.queryHistorySongBySongId(downloadSong.songId?:"")
-        return if (song != null && song.size>0) {
+    suspend fun saveToDownloadSong(downloadSong: DownloadSong): Long? {
+        val song = downloadSongDao.queryDownloadSongBySongId(downloadSong.songId ?: "")
+        return if (song != null && song.size > 0) {
             null
         } else {
             downloadSongDao.insertDownloadSong(downloadSong)
         }
     }
-    suspend fun queryAllDownloadSongs():MutableList<DownloadSong>? {
+
+    suspend fun queryAllDownloadSongs(): MutableList<DownloadSong>? {
         return downloadSongDao.queryAllDownloadSongs()
+    }
+
+    suspend fun queryDownloadSongById(id: Long): MutableList<DownloadSong>? {
+        return downloadSongDao.queryDownloadSongById(id)
     }
 }
