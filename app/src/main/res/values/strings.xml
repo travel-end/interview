@@ -1,8 +1,10 @@
 <resources>
-    <string name="app_name">Android Review</string>
+    <string name="app_name">Review</string>
     <string name="drawer_open">开</string>
     <string name="drawer_close">关</string>
     <string name="exit_app">再按一次退出程序</string>
+
+    <!--easy weather app-->
     <string name="next_15_days_label">15日天气</string>
     <string name="current_weather">当日天气</string>
     <string name="humidity_label">湿度: </string>
@@ -43,6 +45,7 @@
     <string name="imusic_tab_cloud_village">云村</string>
     <string name="imusic_tab_video">视频</string>
     <string name="imusic_tab_song">单曲</string>
+    <string name="gedan">歌单</string>
     <string name="mv">MV</string>
     <string name="imusic_tab_album">专辑</string>
     <string name="play_time_start">00:00</string>
@@ -61,4 +64,9 @@
     <string name="imusic_tuijian">推荐歌单</string>
     <string name="downloaded">已下载</string>
     <string name="downloading">下载中</string>
+    <string name="local_music">本地音乐</string>
+    <string name="download_music">下载歌曲</string>
+    <string name="refresh_music">刷新看看</string>
+    <string name="no_local_mv">木有MV</string>
+    <string name="no_local_song">没有找到本地音乐的吖o(π π)o</string>
 </resources>

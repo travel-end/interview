@@ -4,5 +4,7 @@
     <!-- Just adding these so I wont have to remove a lot of code from NumberPicker.java. -->
     <item name="np__increment" type="id" />
     <item name="np__decrement" type="id" />
-
+    <item type="id" name="statusbarutil_fake_status_bar_view" />
+    <item type="id" name="statusbarutil_translucent_view" />
+    <item type="id" name="fake_status_bar_view" />
 </resources>

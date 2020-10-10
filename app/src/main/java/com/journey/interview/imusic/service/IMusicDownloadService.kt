@@ -230,22 +230,24 @@ class IMusicDownloadService : Service() {
                 )
             } else {
                 if (downloadQueue.isEmpty()) {
-                    notificationManager.notify(1, getNotification("下载成功", -1))
+                    Log.e("JG","download--->onProgress success")
+                    notificationManager.notify(1, getNotification("下载成功~", -1))
                 }
             }
         }
 
         override fun onSuccess() {
+            Log.e("JG","download--->onSuccess")
             downloadTask = null
             val downloadSong = downloadQueue.poll()
             stopForeground(true)
             if (downloadQueue.isEmpty()) {
-                notificationManager.notify(1, getNotification("下载成功", -1))
+                notificationManager.notify(1, getNotification("下载成功啦~", -1))
             }
+            IMusicBus.sendSongListNumChange(Constant.LIST_TYPE_DOWNLOAD)
         }
 
         override fun hasDownloaded() {
-            TODO("Not yet implemented")
         }
 
         override fun onFailed() {
@@ -253,15 +255,11 @@ class IMusicDownloadService : Service() {
             stopForeground(true)
             notificationManager.notify(1, getNotification("下载失败", -1))
         }
-
         override fun onPaused() {
-            TODO("Not yet implemented")
         }
 
         override fun onCancel() {
-            TODO("Not yet implemented")
         }
-
     }
     private var postJob:Job?=null
 

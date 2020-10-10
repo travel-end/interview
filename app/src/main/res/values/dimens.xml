@@ -31,4 +31,5 @@
     <dimen name="dp_65">65dp</dimen>
     <dimen name="dp_68">68dp</dimen>
     <dimen name="dp_80">80dp</dimen>
+    <dimen name="dp_220">220dp</dimen>
 </resources>

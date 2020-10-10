@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
+import com.gyf.immersionbar.ImmersionBar
 import com.journey.interview.InterviewApp
 import com.journey.interview.R
 import com.journey.interview.utils.decorView
@@ -39,7 +40,12 @@ abstract class BaseActivity<VM:BaseViewModel>:AppCompatActivity() {
     }
 
     open fun initStatusBar() {
-
+        ImmersionBar
+            .with(this)
+            .statusBarView(R.id.top_view)
+            .statusBarColor(R.color.colorWhite)
+            .statusBarDarkFont(true)
+            .init()
     }
 
     protected fun hideStatusBar(isHide:Boolean) {

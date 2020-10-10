@@ -64,5 +64,6 @@
     </style>
     <style name="title_text">
         <item name="textSize">18sp</item>
+        <item name="textAllCaps">false</item>
     </style>
 </resources>

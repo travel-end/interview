@@ -12,6 +12,7 @@
     <color name="colorGrayDark">#666666</color>
     <color name="colorGray2">#999999</color>
     <color name="translate">#00000000</color>
+    <color name="translate1">#10000000</color>
     <color name="grayLight">#33F1F1F1</color>
     <color name="red">#FD5F5F</color>
     <color name="actionBarColor">#0f1934</color>
@@ -36,4 +37,6 @@
     <color name="white_24p">#3DFFFFFF</color>
     <color name="white_50p">#80FFFFFF</color>
     <color name="red_30p">#4CF44336</color>
+    <color name="light_yellow">#F6DEBA</color>
+    <color name="light_yellow2">#FBEFDC</color>
 </resources>

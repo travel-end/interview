@@ -4,29 +4,39 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <FrameLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/dp_48">
-
+        android:layout_height="@dimen/dp_48"
+        android:orientation="horizontal">
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:id="@+id/local_iv_back"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
             android:src="@drawable/ic_arrow_left"
             android:layout_gravity="center_vertical"
             android:layout_marginStart="@dimen/dp_16" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/local_music"
+            android:textColor="@color/colorBlack"
+            android:textSize="18sp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginStart="@dimen/dp_20" />
 
-        <com.journey.interview.customizeview.tablayout.CommonTabLayout
-            android:id="@+id/local_title_tabLayout"
-            android:layout_width="160dp"
-            android:layout_gravity="center_horizontal"
-            android:layout_height="match_parent"
-            app:tl_textBold="SELECT"
-            app:tl_tab_space_equal="true"
-            app:tl_textSelectColor="@color/colorBlack2"
-            app:tl_textUnselectColor="@color/colorGray"
-            app:tl_textsize="16sp" />
-    </FrameLayout>
-
+    </LinearLayout>
+    <com.journey.interview.customizeview.tablayout.CommonTabLayout
+        android:id="@+id/local_title_tabLayout"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_44"
+        app:tl_textBold="SELECT"
+        app:tl_tab_space_equal="true"
+        app:tl_textSelectColor="@color/red"
+        app:tl_textUnselectColor="@color/colorBlack2"
+        app:tl_indicator_color="@color/red"
+        app:tl_indicator_width_equal_title="true"
+        app:tl_indicator_width="@dimen/dp_34"
+        app:tl_textsize="16sp" />
 
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/local_pager"

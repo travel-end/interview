@@ -118,8 +118,7 @@ class IPlayActivity : BaseLifeCycleActivity<IPlayViewModel>(), LrcView.OnPlayCli
     }
 
     override fun initStatusBar() {
-        ImmersionBar.with(this).statusBarView(R.id.top_view)
-            .fullScreen(true).init()
+        ImmersionBar.with(this).statusBarView(R.id.top_view).fullScreen(true).init()
     }
 
     override fun layoutResId() = R.layout.imusic_act_play
@@ -434,12 +433,12 @@ class IPlayActivity : BaseLifeCycleActivity<IPlayViewModel>(), LrcView.OnPlayCli
             super.handleMessage(msg)
             if (!mIsDragSeekBar) {
                 val progress = mPlayStatusBinder?.currentTime
-                Log.e("JG", "播放进度progress=$progress")
+//                Log.e("JG", "播放进度progress=$progress")
                 val pro = progress?.toInt() ?: 0
                 mSeekBar.progress = pro
                 mTvCurrentTime.text = StringUtils.formatTime(mSeekBar.progress.toLong())
                 updateSeekBarProgress()
-                Log.e("JG", "歌词是否有效${lrc_view.hasLrc()}")
+//                Log.e("JG", "歌词是否有效${lrc_view.hasLrc()}")
                 if (mLrcView.hasLrc()) {
                     mLrcView.updateTime(progress ?: 0L)
                 }

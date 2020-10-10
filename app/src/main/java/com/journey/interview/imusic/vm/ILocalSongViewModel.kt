@@ -5,7 +5,9 @@ import android.util.Log
 import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.journey.interview.Constant
 import com.journey.interview.InterviewApp
+import com.journey.interview.imusic.download.IMusicDownloadUtil
 import com.journey.interview.imusic.model.LocalSong
 import com.journey.interview.imusic.room.IMusicRoomHelper
 import com.journey.interview.utils.ofMap
@@ -18,6 +20,9 @@ import kotlinx.coroutines.withContext
 class ILocalSongViewModel:BaseViewModel() {
 
     val localSongResult:MutableLiveData<MutableList<LocalSong>?> = MutableLiveData()
+
+    val localSaveResult:MutableLiveData<MutableList<LocalSong>?> = MutableLiveData()
+
     private fun initLocalMp3Info():MutableList<LocalSong>? {
 
         val context = InterviewApp.instance.applicationContext
@@ -66,12 +71,25 @@ class ILocalSongViewModel:BaseViewModel() {
 
                 }
             }
-
             cursor?.close()
+
+            // 加上下载的歌曲
+            val downloadedSongs = IMusicDownloadUtil.getSongFromFile(Constant.STORAGE_SONG_FILE)
+            downloadedSongs?.let {
+                for (song in it) {
+                    val mp3Info =LocalSong().apply {
+                        name = song.name
+                        singer = song.singer
+                        this.duration = song.duration
+                        this.url = song.url
+                        songId = song.songId
+                    }
+                    songList.add(mp3Info)
+                }
+            }
             return songList
         }
         return null
-
     }
 
     fun getLocalSongs() {
@@ -101,8 +119,8 @@ class ILocalSongViewModel:BaseViewModel() {
             val result = withContext(Dispatchers.IO) {
                 IMusicRoomHelper.getAllLocalSongs()
             }
-//            Log.e("JG","查询本地音乐：$result ${result?.size}")
-            localSongResult.value = result
+            Log.e("JG","查询本地音乐：$result ${result?.size}")
+            localSaveResult.value = result
         }
     }
 }

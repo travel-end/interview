@@ -84,25 +84,30 @@ object IMusicRoomHelper {
         return loveSongDao.queryAllMyLove()
     }
 
+    /* *****本地音乐********/
     suspend fun saveLocalSong(localSongs: MutableList<LocalSong>): Long? {
         var result: Long? = null
         for (song in localSongs) {
-            localSongDao.deleteLocalSongs(song)
-            val localSong = LocalSong().apply {
-                name = song.name
-                singer = song.singer
-                url = song.url
-                songId = song.songId
-                duration = song.duration
+            val s = localSongDao.queryLocalSongsBySongId(song.songId?:"")
+            if (s == null || s.size==0) {
+                val localSong = LocalSong().apply {
+                    name = song.name
+                    singer = song.singer
+                    url = song.url
+                    songId = song.songId
+                    duration = song.duration
+                }
+                result = localSongDao.insertLocalSong(localSong)
             }
-            result = localSongDao.insertLocalSong(localSong)
         }
         return result
     }
 
+
     suspend fun getAllLocalSongs(): MutableList<LocalSong>? {
         return localSongDao.queryAllLocalSongs()
     }
+
 
     suspend fun findHistorySongBySongId(songId: String): MutableList<HistorySong>? {
         return historySongDao.queryHistorySongBySongId(songId)

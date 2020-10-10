@@ -33,7 +33,7 @@ abstract class BaseFragment : Fragment() {
         initViewModel()
         initView()
         initData()
-        initStatusBarColor()
+//        initStatusBarColor()
     }
 
     open fun reLoad() = initData()
@@ -47,7 +47,7 @@ abstract class BaseFragment : Fragment() {
     open fun initViewModel() {
     }
 
-    private fun initStatusBarColor() {
+    open fun initStatusBarColor() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 requireActivity().window.statusBarColor = ContextCompat.getColor(

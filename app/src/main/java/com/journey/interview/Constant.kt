@@ -77,7 +77,7 @@ object Constant {
     // 播放列表
     const val LIST_TYPE_LOCAL=1//本地列表
     const val LIST_TYPE_ONLINE=2//专辑列表
-    const val LIST_TYPE_COLLECTED=3//我的收藏列表
+    const val LIST_TYPE_LOVE=3//我的收藏列表
     const val LIST_TYPE_HISTORY=4//最近播放列表
     const val LIST_TYPE_DOWNLOAD=5//下载列表
 

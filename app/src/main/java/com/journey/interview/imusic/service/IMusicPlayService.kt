@@ -15,14 +15,11 @@ import com.journey.interview.R
 import com.journey.interview.imusic.IMainActivity
 import com.journey.interview.imusic.download.IMusicDownloadUtil
 import com.journey.interview.imusic.global.IMusicBus
-import com.journey.interview.imusic.model.Downloaded
-import com.journey.interview.imusic.model.HistorySong
-import com.journey.interview.imusic.model.Song
+import com.journey.interview.imusic.model.*
 import com.journey.interview.imusic.room.IMusicRoomHelper
 import com.journey.interview.utils.FileUtil
 import kotlinx.coroutines.*
 import java.io.IOException
-import kotlin.math.sin
 
 /**
  * @By Journey 2020/9/27
@@ -31,6 +28,9 @@ import kotlin.math.sin
 class IMusicPlayService : Service() {
     /* ***音乐列表*/
     private var mDownloadedSongs: MutableList<Downloaded>? = null
+    private var mLocalSongs: MutableList<LocalSong>? = null
+    private var mLoveSongs: MutableList<LoveSong>? = null
+
 
     companion object {
         const val NOTIFICATION_ID = 98
@@ -57,6 +57,25 @@ class IMusicPlayService : Service() {
                     mDownloadedSongs =
                         IMusicDownloadUtil.getSongFromFile(Constant.STORAGE_SONG_FILE)
                 }
+                Constant.LIST_TYPE_LOCAL->{
+                    mLocalSongs = runBlocking {
+                        withContext(Dispatchers.IO) {
+                            IMusicRoomHelper.getAllLocalSongs()
+                        }
+                    }
+                    Log.e("JG","onCreate---> localsongs:$mLocalSongs")
+                }
+                Constant.LIST_TYPE_LOVE->{
+                    mLoveSongs = runBlocking {
+                        withContext(Dispatchers.IO) {
+                            IMusicRoomHelper.getAllMyLoveSong()
+                        }
+                    }
+                    Log.e("JG","onCreate---> lovesongs:$mLocalSongs")
+                }
+                else-> {
+
+                }
             }
         }
         startForeground(NOTIFICATION_ID, getNotification("爱音乐，开启你的私人音乐之旅o(*￣▽￣*)ブ"))
@@ -69,7 +88,16 @@ class IMusicPlayService : Service() {
             if (mListType != null) {
                 when (mListType) {
                     Constant.LIST_TYPE_DOWNLOAD -> {
+                        mCurrent = getNextSongPosition(mCurrent?:0,mPlayMode,mDownloadedSongs?.size?:1)
                         saveDownloadInfo(mCurrent ?: 0)
+                    }
+                    Constant.LIST_TYPE_LOCAL->{
+                        mCurrent = getNextSongPosition(mCurrent?:0,mPlayMode,mLocalSongs?.size?:1)
+                        saveLocalSong(mCurrent?:0)
+                    }
+                    Constant.LIST_TYPE_LOVE->{
+                        mCurrent = getNextSongPosition(mCurrent?:0,mPlayMode,mLoveSongs?.size?:1)
+                        saveLoveSong(mCurrent?:0)
                     }
                 }
             }
@@ -104,6 +132,32 @@ class IMusicPlayService : Service() {
                             mDownloadedSongs =
                                 orderDownloadList(IMusicDownloadUtil.getSongFromFile(Constant.STORAGE_SONG_FILE))
                         }
+                        Constant.LIST_TYPE_LOCAL->{
+                            runBlocking {
+                                mLocalSongs = withContext(Dispatchers.IO) {
+                                    IMusicRoomHelper.getAllLocalSongs()
+                                }
+                            }
+                            Log.e("JG","play---> localsongs:$mLocalSongs")
+//                            mLocalSongs = IMusicRoomHelper.getAllLocalSongsExe()
+                            mLocalSongs?.let {
+                                val url = it[mCurrent?:0].url
+                                if (!url.isNullOrEmpty()) {
+                                    mMediaPlayer.setDataSource(url)
+                                    startPlay()
+                                }
+                            }
+                        }
+                        Constant.LIST_TYPE_LOVE->{
+                            runBlocking {
+                                mLoveSongs = withContext(Dispatchers.IO) {
+                                    IMusicRoomHelper.getAllMyLoveSong()
+                                }
+                            }
+                            mLoveSongs = orderLoveList(mLoveSongs)
+                            Log.e("JG","play---> localsongs:$mLocalSongs")
+//                            mLocalSongs = IMusicRoomHelper.getAllLocalSongsExe()
+                        }
                     }
                 }
                 mCurrent = FileUtil.getSong()?.position
@@ -118,18 +172,26 @@ class IMusicPlayService : Service() {
                                 startPlay()
                             }
                         }
+                    }
+                    Constant.LIST_TYPE_LOCAL->{
 
+                    }
+                    Constant.LIST_TYPE_LOVE->{
+                        mLoveSongs?.let {
+                            val url = it[mCurrent?:0].url
+                            if (!url.isNullOrEmpty()) {
+                                mMediaPlayer.setDataSource(url)
+                                startPlay()
+                            }
+                        }
                     }
                     else->{
-
                     }
                 }
-
             } catch (e: Exception) {
-
+                Log.e("JG","play error:${e.message}")
             }
         }
-
 
         // 播放搜索歌曲
         fun playOnline() {
@@ -150,7 +212,6 @@ class IMusicPlayService : Service() {
                     )
                 }
             } catch (e: Exception) {
-
             }
         }
 
@@ -177,7 +238,6 @@ class IMusicPlayService : Service() {
 
             // 如果是网络歌曲 todo 播放网络 歌曲的另一首
 
-
             if (mListType != 0 && mListType != null) {
                 mPlayStatusBinder.play(mListType!!)
             }
@@ -185,7 +245,6 @@ class IMusicPlayService : Service() {
 
         fun last() {
             IMusicBus.sendPlayStatusChangeEvent(Constant.SONG_RESUME)
-
             if (mListType != 0 && mListType != null) {
                 mPlayStatusBinder.play(mListType!!)
             }
@@ -232,9 +291,6 @@ class IMusicPlayService : Service() {
         val song = FileUtil.getSong()
         song?.let {
             job = GlobalScope.launch {
-//                val result =withContext(Dispatchers.IO) {
-//                    IMusicRoomHelper.findHistorySongBySongId(it.songId?:"")
-//                }
                 val historySong = HistorySong().apply {
                     songId = it.songId
                     qqId = it.qqId
@@ -247,14 +303,6 @@ class IMusicPlayService : Service() {
                     duration = it.duration
                     mediaId = it.mediaId
                 }
-
-//                if (result != null) {
-//                    if (result.size == 1) {
-//                        val result2 =withContext(Dispatchers.IO) {
-//                            IMusicRoomHelper.deleteHistorySong(historySong)
-//                        }
-//                    }
-//                }
                 val saveResult = withContext(Dispatchers.IO) {
                     IMusicRoomHelper.saveToHistorySong(historySong)
                 }
@@ -288,6 +336,74 @@ class IMusicPlayService : Service() {
                 albumName = it.albumName
             }
             FileUtil.saveSong(song)
+        }
+    }
+
+    private fun saveLocalSong(current: Int) {
+        mLocalSongs = runBlocking {
+            withContext(Dispatchers.IO) {
+                IMusicRoomHelper.getAllLocalSongs()
+            }
+        }
+        Log.e("JG","saveLocalSong---> localsongs:$mLocalSongs")
+        val localSong = mLocalSongs?.let { it[current] }
+        localSong?.let {
+            val song = Song().apply {
+                position = current
+                songId = it.songId
+                songName = it.name
+                singer = it.singer
+                url = it.url
+                listType = Constant.LIST_TYPE_DOWNLOAD
+                isOnline = false
+                duration = it.duration?.toInt() ?: 0
+                qqId = it.qqId
+                listType = Constant.LIST_TYPE_LOCAL
+            }
+            FileUtil.saveSong(song)
+        }
+    }
+
+    private fun saveLoveSong(current: Int) {
+        mLoveSongs = runBlocking {
+            withContext(Dispatchers.IO) {
+                IMusicRoomHelper.getAllMyLoveSong()
+            }
+        }
+        mLoveSongs = orderLoveList(mLoveSongs)
+        Log.e("JG","saveLoveSong---> lovesongs:$mLocalSongs")
+        val loveSong = mLoveSongs?.let { it[current] }
+        loveSong?.let {
+            val song = Song().apply {
+                position = current
+                songId = it.songId
+                songName = it.name
+                qqId = it.qqId
+                singer = it.singer
+                url = it.url
+                imgUrl = it.pic
+                listType = Constant.LIST_TYPE_LOVE
+                mediaId = it.mediaId
+                isOnline = it.isOnline?:false
+                isDownload = it.isDownload?:false
+                duration = it.duration?: 0
+            }
+            FileUtil.saveSong(song)
+        }
+    }
+
+
+    private fun getNextSongPosition(current: Int,playMode:Int,len:Int):Int {
+        return when (playMode) {
+            Constant.PLAY_ORDER -> {
+                (current + 1) % len
+            }
+            Constant.PLAY_RANDOM -> {
+                (current + (Math.random() * len).toInt()) % len
+            }
+            else -> {
+                current
+            }
         }
     }
 
@@ -328,6 +444,19 @@ class IMusicPlayService : Service() {
                 downloadSongList.add(tempList[i])
             }
             downloadSongList
+        } else {
+            null
+        }
+    }
+
+    private fun orderLoveList(tempList: MutableList<LoveSong>?): MutableList<LoveSong>? {
+        val loveSongList = mutableListOf<LoveSong>()
+        loveSongList.clear()
+        return if (tempList != null) {
+            for (i in tempList.indices.reversed()) {
+                loveSongList.add(tempList[i])
+            }
+            loveSongList
         } else {
             null
         }

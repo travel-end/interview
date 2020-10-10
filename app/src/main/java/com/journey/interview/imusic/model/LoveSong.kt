@@ -14,7 +14,7 @@ data class LoveSong(
     val songId:String?=null,
     val mediaId:String?=null,// 下载标识符
     val qqId:String?=null,
-    val name:String?=null,
+    var name:String?=null,
     val singer:String?=null,
     val url:String?=null,
     val pic:String?=null,
