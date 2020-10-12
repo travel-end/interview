@@ -59,16 +59,26 @@ object Constant {
     const val ONLINE_SONG_LRC = "https://c.y.qq.com/lyric/fcgi-bin/fcg_query_lyric_new.fcg?format=json&nobase64=1"
 
 
+    // 保存封面图片的路径
     val STORAGE_IMG_FILE =
         InterviewApp.instance.getExternalFilesDir("").toString() + "/imusic/img/"
+    // 保存下载歌曲的路径
     val STORAGE_SONG_FILE =
         InterviewApp.instance.getExternalFilesDir("").toString() + "/imusic/download/"
+    // 保存歌词的路径
+    val STORAGE_LRC_FILE =
+        InterviewApp.instance.getExternalFilesDir("").toString() + "/imusic/lrc/"
+
+
+    const val SONG_ID_UNFIND = "unFind"
 
 
     // 播放顺序
+    const val KEY_PLAY_MODE = "play_mode"
+    const val SP_NAME_PLAY_MODE = "sp_play_name"
     const val PLAY_ORDER = 0 // 顺序播放
-    const val PLAY_SINGER = 1//单曲循环
-    const val PLAY_RANDOM = 2// 随机播放
+    const val PLAY_RANDOM = 1// 随机播放
+    const val PLAY_SINGER = 2//单曲循环
     // 播放状态
     const val SONG_PLAY = 0
     const val SONG_PAUSE = 1

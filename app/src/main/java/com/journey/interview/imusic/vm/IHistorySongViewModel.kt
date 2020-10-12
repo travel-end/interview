@@ -12,12 +12,24 @@ import kotlinx.coroutines.withContext
 class IHistorySongViewModel:BaseViewModel() {
 
     val historySongsResult:MutableLiveData<MutableList<HistorySong>?> = MutableLiveData()
+    val deleteSongsResult :MutableLiveData<Boolean> = MutableLiveData()
     fun getAllHistorySongs() {
         viewModelScope.launch {
             val result = withContext(Dispatchers.IO) {
                 IMusicRoomHelper.queryAllHistorySongs()
             }
             historySongsResult.value = result
+        }
+    }
+
+    fun deleteAllHistorySongs() {
+        viewModelScope.launch {
+            val result = withContext(Dispatchers.IO) {
+                IMusicRoomHelper.deleteAllHistorySong()
+            }
+            if (result != null) {
+                deleteSongsResult.value = true
+            }
         }
     }
 }

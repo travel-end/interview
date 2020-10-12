@@ -64,10 +64,8 @@ class IMainActivity : BaseLifeCycleActivity<IMainViewModel>() {
             bottom_player.player_song_name.text = it.songName
             bottom_player.player_song_author.text = it.singer
             val currentTime = it.currentTime// todo 保存当前的歌曲播放进度 在play页面展示
-
-
             if (it.imgUrl == null) {
-
+                FileUtil.setLocalCoverImg(this@IMainActivity,it.singer?:"",bottom_player.player_song_icon)
             } else {
                 GlideUtil.loadImg(
                     this@IMainActivity,
@@ -126,10 +124,10 @@ class IMainActivity : BaseLifeCycleActivity<IMainViewModel>() {
                         FileUtil.saveSong(song2)
                         playIntent.putExtra(Constant.PLAY_STATUS,Constant.SONG_PLAY)
                     } else {// 暂停
-                        playIntent.putExtra("online",true)
+//                        playIntent.putExtra("online",true)
                     }
                     if (FileUtil.getSong()?.imgUrl != null) {
-
+                        playIntent.putExtra("online",true)
                     }
 
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -137,7 +135,6 @@ class IMainActivity : BaseLifeCycleActivity<IMainViewModel>() {
                     } else {
                         startActivity(playIntent)
                     }
-//                    overridePendingTransition(R.anim.slide_in_bottom,0)
                 }
             }
 
@@ -184,7 +181,7 @@ class IMainActivity : BaseLifeCycleActivity<IMainViewModel>() {
                         bottom_player.btn_player.isSelected = true
                         rotationAnim.start()
                         if (!s.isOnline) {
-
+                            FileUtil.setLocalCoverImg(this@IMainActivity,s.singer?:"",bottom_player.player_song_icon)
                         } else {// 在线播放
                             Log.e("JG","封面图片url:${s.imgUrl}")
                             GlideUtil.loadImg(
@@ -199,20 +196,6 @@ class IMainActivity : BaseLifeCycleActivity<IMainViewModel>() {
             }
         }
     }
-
-    //    private val rotationAnim by lazy {
-//        animSet {
-//            objectAnim {
-//                target = bottom_player.player_song_icon
-//                rotation = floatArrayOf(0.0f, 360.0f)
-//                duration = 30000
-//                interpolator = LinearInterpolator()
-//                repeatCount = ValueAnimator.INFINITE// 循环播放
-//                repeatMode = ValueAnimator.RESTART
-//            }
-//        }
-//
-//    }
     private val rotationAnim by lazy {
         ObjectAnimator.ofFloat(bottom_player.player_song_icon,"rotation", 0.0f, 360.0f).apply {
             duration = 30000

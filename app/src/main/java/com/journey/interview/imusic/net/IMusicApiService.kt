@@ -1,12 +1,7 @@
 package com.journey.interview.imusic.net
 
-import com.journey.interview.imusic.model.Album
-import com.journey.interview.imusic.model.OnlineSongLrc
-import com.journey.interview.imusic.model.SearchSong
-import com.journey.interview.imusic.model.SongUrl
-import retrofit2.http.GET
-import retrofit2.http.Headers
-import retrofit2.http.Query
+import com.journey.interview.imusic.model.*
+import retrofit2.http.*
 
 /**
  * @By Journey 2020/9/26
@@ -45,5 +40,13 @@ interface IMusicApiService {
     @Headers("Referer:https://y.qq.com/portal/player.html")
     @GET("https://c.y.qq.com/lyric/fcgi-bin/fcg_query_lyric_new.fcg?format=json&nobase64=1")//根据qq音乐的mid获取歌词
     suspend fun getOnlineSongLrc(@Query("songmid") songId:String): OnlineSongLrc
+
+    /**
+     * 得到歌手照片 主要用于本地音乐 http://music.163.com/api/search/get/web?s=刘瑞琦&type=100
+     */
+    @Headers("User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/76.0.3809.132 Safari/537.36")
+    @POST("api/search/get/web?csrf_token=&type=100")
+    @FormUrlEncoded
+    suspend fun getLocalSingerImg(@Field("s") singer:String):SingerImg
 
 }

@@ -62,12 +62,12 @@ class ILoveSongFragment:BaseLifeCycleFragment<ILoveSongViewModel>() {
 //                        isForViewType { data, position -> data is MutableList<SingerBean> }
                     bindViewHolder { data, pos, holder ->
                         data?.let {
-                            setText(R.id.tv_item_song_name,data.name)
-                            setText(R.id.tv_item_song_singer,data.singer)
-                            setVisible(R.id.tv_item_download_ok,data.isDownload==true)
+                            setText(R.id.tv_item_song_name,it.name)
+                            setText(R.id.tv_item_song_singer,it.singer)
+                            setVisible(R.id.tv_item_download_ok,it.isDownload==true)
                             val currentSongId = FileUtil.getSong()?.songId
                             if (currentSongId != null &&
-                                data.songId == currentSongId) {
+                                it.songId == currentSongId) {
                                 itemView?.findViewById<ImageView>(R.id.iv_item_song_laba)?.visibility = View.VISIBLE
                                 mLastPosition = pos
                             } else {

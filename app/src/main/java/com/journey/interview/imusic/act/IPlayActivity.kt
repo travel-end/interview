@@ -5,6 +5,7 @@ import android.animation.AnimatorSet
 import android.annotation.SuppressLint
 import android.content.*
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
 import android.media.AudioManager
@@ -20,14 +21,19 @@ import android.widget.*
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.Observer
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.DataSource
+import com.bumptech.glide.load.engine.GlideException
+import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.target.SimpleTarget
+import com.bumptech.glide.request.target.Target
 import com.bumptech.glide.request.transition.Transition
 import com.gyf.immersionbar.ImmersionBar
 import com.journey.interview.Constant
 import com.journey.interview.R
 import com.journey.interview.imusic.global.IMusicBus
 import com.journey.interview.imusic.model.DownloadSong
+import com.journey.interview.imusic.model.LocalSong
 import com.journey.interview.imusic.model.Song
 import com.journey.interview.imusic.service.IMusicDownloadService
 import com.journey.interview.imusic.service.IMusicPlayService
@@ -37,6 +43,7 @@ import com.journey.interview.imusic.widget.DiscView
 import com.journey.interview.utils.FileUtil
 import com.journey.interview.utils.StringUtils
 import com.journey.interview.utils.getScreenHeight
+import com.journey.interview.utils.getString
 import com.journey.interview.weatherapp.base.BaseLifeCycleActivity
 import kotlinx.android.synthetic.main.imusic_act_play.*
 import kotlinx.android.synthetic.main.imusic_play_bottom_controller.view.*
@@ -56,10 +63,11 @@ class IPlayActivity : BaseLifeCycleActivity<IPlayViewModel>(), LrcView.OnPlayCli
     private lateinit var mVolumeSeekBar: SeekBar
     private lateinit var mTvCurrentTime: TextView
     private lateinit var mDiscImageView: ImageView
+    private lateinit var mIvPlayMode:ImageView
     private lateinit var mLrcView: LrcView
-    private lateinit var mLovedSongAnimatorSet:AnimatorSet
+    private lateinit var mLovedSongAnimatorSet: AnimatorSet
     private var mPlayStatusBinder: IMusicPlayService.PlayStatusBinder? = null
-    private var mDownloadBinder:IMusicDownloadService.DownloadBinder?=null
+    private var mDownloadBinder: IMusicDownloadService.DownloadBinder? = null
     private var mIsDragSeekBar: Boolean = false// 拖动进度条
     private var mIsOnline: Boolean = false// 是否为网络歌曲
     private var mCoverBitmap: Bitmap? = null
@@ -68,8 +76,9 @@ class IPlayActivity : BaseLifeCycleActivity<IPlayViewModel>(), LrcView.OnPlayCli
     private var mIsSeek: Boolean = false //  标记是否在暂停的时候拖动进度条
     private var mFlag: Boolean = false // 用作暂停的标记
     private var mIsPlaying: Boolean = false
-    private var mIsMyLove:Boolean =false
+    private var mIsMyLove: Boolean = false
     private var mAudioManager: AudioManager? = null
+    private var mPlayMode :Int = Constant.PLAY_ORDER
     private val mPlayConnection = object : ServiceConnection {
         override fun onServiceDisconnected(name: ComponentName?) {
         }
@@ -77,6 +86,10 @@ class IPlayActivity : BaseLifeCycleActivity<IPlayViewModel>(), LrcView.OnPlayCli
         // 播放
         override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
             mPlayStatusBinder = service as IMusicPlayService.PlayStatusBinder
+            // 播放模式
+            mPlayMode = mViewModel.getPlayMode()
+            mPlayStatusBinder?.setPlayMode(mPlayMode)
+
             mIsOnline = FileUtil.getSong()?.isOnline ?: false
             Log.e("JG", "是否是网络歌曲--->$mIsOnline")
             if (mIsOnline) {
@@ -89,7 +102,8 @@ class IPlayActivity : BaseLifeCycleActivity<IPlayViewModel>(), LrcView.OnPlayCli
                     updateSeekBarProgress()
                 }
             } else {
-
+                mSeekBar.secondaryProgress = mSong?.duration?.toInt() ?: 0
+                setLocalCoverImg(mSong?.singer ?: "")
             }
             play_bottom_controller.tv_total_time.text =
                 StringUtils.formatTime(mSong?.duration?.toLong() ?: 0)
@@ -105,7 +119,7 @@ class IPlayActivity : BaseLifeCycleActivity<IPlayViewModel>(), LrcView.OnPlayCli
     }
 
     // 下载service connection
-    private val mDownloadConnection = object :ServiceConnection {
+    private val mDownloadConnection = object : ServiceConnection {
         override fun onServiceDisconnected(name: ComponentName?) {
 
 
@@ -136,6 +150,7 @@ class IPlayActivity : BaseLifeCycleActivity<IPlayViewModel>(), LrcView.OnPlayCli
         mDiscView = disc_view as DiscView
         mSeekBar = play_bottom_controller.sb_progress
         mTvCurrentTime = play_bottom_controller.tv_current_time
+        mIvPlayMode = play_bottom_controller.iv_mode
         mDiscImageView = mDiscView.findViewById(R.id.iv_disc_background)
         mLrcView = lrc_view
         mVolumeSeekBar = play_top_volume.sb_volume
@@ -144,8 +159,8 @@ class IPlayActivity : BaseLifeCycleActivity<IPlayViewModel>(), LrcView.OnPlayCli
         val playIntent = Intent(this, IMusicPlayService::class.java)
         bindService(playIntent, mPlayConnection, Context.BIND_AUTO_CREATE)
 
-        val downloadIntent = Intent(this,IMusicDownloadService::class.java)
-        bindService(downloadIntent,mDownloadConnection,Context.BIND_AUTO_CREATE)
+        val downloadIntent = Intent(this, IMusicDownloadService::class.java)
+        bindService(downloadIntent, mDownloadConnection, Context.BIND_AUTO_CREATE)
 
         // 界面ui
         mSong?.let { song ->
@@ -156,6 +171,8 @@ class IPlayActivity : BaseLifeCycleActivity<IPlayViewModel>(), LrcView.OnPlayCli
             mSeekBar.progress = song.currentTime.toInt()
             // todo 下载  喜欢
 
+
+            initPlayMode()
         }
         initCoverLrc() // 初始化歌词设置
     }
@@ -242,7 +259,7 @@ class IPlayActivity : BaseLifeCycleActivity<IPlayViewModel>(), LrcView.OnPlayCli
         // 下一首
         play_bottom_controller.iv_next.setOnClickListener {
             mPlayStatusBinder?.next()
-            play_bottom_controller.iv_play.isSelected = mPlayStatusBinder?.isPlaying==true
+            play_bottom_controller.iv_play.isSelected = mPlayStatusBinder?.isPlaying == true
             mDiscView.next()
         }
 
@@ -256,12 +273,27 @@ class IPlayActivity : BaseLifeCycleActivity<IPlayViewModel>(), LrcView.OnPlayCli
         // 点击唱碟
         mDiscView.setOnClickListener {
             if (!mIsOnline) {
-
+                val lrc = FileUtil.getLrcFromNative(mSong?.songName ?: "imusic")
+                if (lrc == null) {
+                    val qqId = mSong?.qqId
+                    Log.e("JG", "qqId: $qqId")
+                    // 匹配不到歌词
+                    if (Constant.SONG_ID_UNFIND == qqId) {
+                        getLrcError(null)
+                    } else if (null == qqId) {// 歌曲id未匹配到
+                        mViewModel.getSongId(mSong?.songName?:"",mSong?.duration?:-1)
+                    } else {// 歌词还未匹配到
+                        mViewModel.getOnlineSongLrc(mSong?.songId?:"",Constant.SONG_LOCAL,mSong?.songName?:"")
+                    }
+                } else {
+                    switchCoverLrc(false)
+                    mLrcView.loadLrc(lrc)
+                }
             } else {
                 val songId = mSong?.songId
                 if (!songId.isNullOrEmpty()) {
                     switchCoverLrc(false)
-                    mViewModel.getOnlineSongLrc(songId, Constant.SONG_ONLINE)
+                    mViewModel.getOnlineSongLrc(songId, Constant.SONG_ONLINE, mSong?.songName ?: "")
                 }
             }
         }
@@ -283,10 +315,11 @@ class IPlayActivity : BaseLifeCycleActivity<IPlayViewModel>(), LrcView.OnPlayCli
             }
         })
 
-        mLovedSongAnimatorSet = AnimatorInflater.loadAnimator(this,R.animator.favorites_anim) as AnimatorSet
+        mLovedSongAnimatorSet =
+            AnimatorInflater.loadAnimator(this, R.animator.favorites_anim) as AnimatorSet
         mLovedSongAnimatorSet.setTarget(play_btn_love)
         // 添加至我的喜欢
-        play_btn_love.setOnClickListener {v->
+        play_btn_love.setOnClickListener { v ->
             mLovedSongAnimatorSet.start()
             if (mIsMyLove) {
                 v?.isSelected = false
@@ -300,11 +333,15 @@ class IPlayActivity : BaseLifeCycleActivity<IPlayViewModel>(), LrcView.OnPlayCli
         }
         play_iv_download.setOnClickListener {
             if (mSong?.isDownload == true) {
-                Toast.makeText(this,"歌曲已经下载",Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "歌曲已经下载", Toast.LENGTH_SHORT).show()
             } else {
                 mDownloadBinder?.startDownload(getDownloadSong())
             }
         }
+        mIvPlayMode.setOnClickListener {
+            switchPlayMode()
+        }
+
     }
 
     override fun onResume() {
@@ -322,23 +359,44 @@ class IPlayActivity : BaseLifeCycleActivity<IPlayViewModel>(), LrcView.OnPlayCli
                 mLrcView.loadLrc(lrc)
             }
         })
-        mViewModel.addLoveSongResult.observe(this,Observer{
+        mViewModel.addLoveSongResult.observe(this, Observer {
             it?.let {
                 Log.d("JG", "喜欢成功")
                 IMusicBus.sendLoveSongChange(true)
             }
         })
-        mViewModel.deleteLoveSongResult.observe(this,Observer{
+        mViewModel.deleteLoveSongResult.observe(this, Observer {
             it?.let {
                 Log.d("JG", "刪除喜欢成功")
                 IMusicBus.sendLoveSongChange(true)
             }
         })
-        mViewModel.queryIsMyLoveResult.observe(this,Observer{
-            it?.let {b->
+        mViewModel.queryIsMyLoveResult.observe(this, Observer {
+            it?.let { b ->
                 play_btn_love.isSelected = b
             }
         })
+        mViewModel.lrcError.observe(this, Observer {
+            getLrcError(it)
+        })
+        mViewModel.songIdResult.observe(this,Observer{
+
+        })
+
+        mViewModel.localSongImg.observe(this,Observer {
+            getSongCoverImg(it)
+        })
+
+        mViewModel.localSongId.observe(this, Observer{
+            mSong?.qqId = it
+            FileUtil.saveSong(mSong)
+        })
+    }
+
+    private fun getLrcError(content:String?) {
+        Log.d("JG", "获取歌词:$content")
+        mSong?.qqId = content
+        FileUtil.saveSong(mSong)
     }
 
     private fun initCoverLrc() {
@@ -357,6 +415,32 @@ class IPlayActivity : BaseLifeCycleActivity<IPlayViewModel>(), LrcView.OnPlayCli
         val currentVolume = mAudioManager?.getStreamVolume(AudioManager.STREAM_MUSIC) ?: 0
         Log.d("JG", "当前音量：$currentVolume")
         mVolumeSeekBar.progress = currentVolume
+    }
+
+    private fun switchPlayMode() {
+        var mode = mViewModel.getPlayMode()
+        when(mode) {
+            Constant.PLAY_ORDER->{
+                mode = Constant.PLAY_RANDOM
+                Toast.makeText(this,R.string.random_play.getString(),Toast.LENGTH_SHORT).show()
+            }
+            Constant.PLAY_RANDOM->{
+                mode = Constant.PLAY_SINGER
+                Toast.makeText(this,R.string.single_play.getString(),Toast.LENGTH_SHORT).show()
+            }
+            Constant.PLAY_SINGER->{
+                mode = Constant.PLAY_ORDER
+                Toast.makeText(this,R.string.order_play.getString(),Toast.LENGTH_SHORT).show()
+            }
+        }
+        mViewModel.setPlayMode(mode)
+        initPlayMode()
+    }
+
+    private fun initPlayMode() {
+        mPlayMode = mViewModel.getPlayMode()
+        mPlayStatusBinder?.setPlayMode(mPlayMode)
+        mIvPlayMode.setImageLevel(mPlayMode)
     }
 
 
@@ -384,9 +468,15 @@ class IPlayActivity : BaseLifeCycleActivity<IPlayViewModel>(), LrcView.OnPlayCli
                     mCoverBitmap = (resource as BitmapDrawable).bitmap
                     // 如果是本地音乐
                     if (!mIsOnline) {
-
+                        // 保存图片到本地
+                        FileUtil.saveImgToNative(mCoverBitmap, mViewModel.getSingerName() ?: "")
+                        // 将封面地址保存到数据库中
+                        val localSong = LocalSong()
+                        localSong.pic =
+                            "${Constant.STORAGE_IMG_FILE}${FileUtil.getSong()?.singer}.jpg"
+                        mViewModel.updateLocalSong(localSong)
                     }
-                    setDiscViewCover()
+                    setDiscViewCover(mCoverBitmap!!)
                 }
             })
     }
@@ -400,8 +490,8 @@ class IPlayActivity : BaseLifeCycleActivity<IPlayViewModel>(), LrcView.OnPlayCli
         updateSeekBarHandler.removeMessages(0)
     }
 
-    private fun setDiscViewCover() {
-        mDiscImageView.setImageDrawable(mDiscView.getDiscDrawable(mCoverBitmap))
+    private fun setDiscViewCover(bitmap: Bitmap) {
+        mDiscImageView.setImageDrawable(mDiscView.getDiscDrawable(bitmap))
         val marginTop = (ImUtils.SCALE_DISC_MARGIN_TOP * getScreenHeight()).toInt()
         val lp = mDiscImageView.layoutParams as RelativeLayout.LayoutParams
         lp.setMargins(0, marginTop, 0, 0)
@@ -446,7 +536,7 @@ class IPlayActivity : BaseLifeCycleActivity<IPlayViewModel>(), LrcView.OnPlayCli
         }
     }
 
-    private fun getDownloadSong():DownloadSong {
+    private fun getDownloadSong(): DownloadSong {
         return DownloadSong().apply {
             singer = mSong?.singer
             progress = 0
@@ -472,6 +562,53 @@ class IPlayActivity : BaseLifeCycleActivity<IPlayViewModel>(), LrcView.OnPlayCli
         override fun onReceive(context: Context?, intent: Intent?) {
             mVolumeSeekBar.progress = mAudioManager?.getStreamVolume(AudioManager.STREAM_MUSIC) ?: 0
         }
+    }
+
+    private fun setLocalCoverImg(singer: String) {
+        val imgUrl = "${Constant.STORAGE_IMG_FILE}${StringUtils.formatSinger(singer)}.jpg"
+        Glide.with(this)
+            .load(imgUrl)
+            .listener(object : RequestListener<Drawable> {
+                override fun onLoadFailed(
+                    e: GlideException?,
+                    model: Any?,
+                    target: Target<Drawable>?,
+                    isFirstResource: Boolean
+                ): Boolean {
+                    if (mSong?.songName != null) {
+                        mViewModel.getLocalSongImg(mViewModel.getSingerName()?:"",mSong?.songName!!,mSong?.duration?:0)
+                    }
+                    setDiscViewCover(
+                        BitmapFactory.decodeResource(
+                            resources,
+                            R.drawable.default_disc
+                        )
+                    )
+                    return true
+                }
+
+                override fun onResourceReady(
+                    resource: Drawable?,
+                    model: Any?,
+                    target: Target<Drawable>?,
+                    dataSource: DataSource?,
+                    isFirstResource: Boolean
+                ): Boolean {
+                    return false
+                }
+            })
+            .apply(RequestOptions.placeholderOf(R.drawable.icon1))
+            .apply(RequestOptions.errorOf(R.drawable.icon2))
+            .into(object : SimpleTarget<Drawable>() {
+                override fun onResourceReady(
+                    resource: Drawable,
+                    transition: Transition<in Drawable>?
+                ) {
+                    mCoverBitmap = (resource as BitmapDrawable).bitmap
+                    setDiscViewCover(mCoverBitmap!!)
+                }
+
+            })
     }
 
     /**

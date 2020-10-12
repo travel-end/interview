@@ -34,4 +34,11 @@ interface HistorySongDao {
     @Query("SELECT * FROM historySong WHERE songId = (:songId) ORDER BY id DESC")
     suspend fun queryHistorySongBySongId(songId:String):MutableList<HistorySong>?
 
+    /**
+     * 删除全部数据
+     */
+    @Transaction
+    @Query("DELETE FROM historysong")
+    suspend fun deleteAllHistory():Int?
+
 }

@@ -69,4 +69,7 @@
     <string name="refresh_music">刷新看看</string>
     <string name="no_local_mv">木有MV</string>
     <string name="no_local_song">没有找到本地音乐的吖o(π π)o</string>
+    <string name="order_play">顺序播放</string>
+    <string name="random_play">随机播放</string>
+    <string name="single_play">单曲循环</string>
 </resources>

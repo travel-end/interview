@@ -30,6 +30,7 @@ class IMusicPlayService : Service() {
     private var mDownloadedSongs: MutableList<Downloaded>? = null
     private var mLocalSongs: MutableList<LocalSong>? = null
     private var mLoveSongs: MutableList<LoveSong>? = null
+    private var mHistorySongs: MutableList<HistorySong>? = null
 
 
     companion object {
@@ -73,6 +74,17 @@ class IMusicPlayService : Service() {
                     }
                     Log.e("JG","onCreate---> lovesongs:$mLocalSongs")
                 }
+                Constant.LIST_TYPE_HISTORY->{
+                    mHistorySongs = runBlocking {
+                        withContext(Dispatchers.IO) {
+                            IMusicRoomHelper.queryAllHistorySongs()
+                        }
+                    }
+                    // 保证最近播放的歌曲总是列表的第一个
+                    val song = FileUtil.getSong()
+                    song?.position = 0
+                    FileUtil.saveSong(song)
+                }
                 else-> {
 
                 }
@@ -82,6 +94,7 @@ class IMusicPlayService : Service() {
     }
 
     override fun onBind(intent: Intent?): IBinder? {
+        Log.e("JG","--->onBind")
         mMediaPlayer.setOnCompletionListener { mp ->
             IMusicBus.sendPlayStatusChangeEvent(Constant.SONG_PAUSE)
             mCurrent = FileUtil.getSong()?.position // 当前歌曲在列表中的位置  如第一首 为：0
@@ -98,6 +111,10 @@ class IMusicPlayService : Service() {
                     Constant.LIST_TYPE_LOVE->{
                         mCurrent = getNextSongPosition(mCurrent?:0,mPlayMode,mLoveSongs?.size?:1)
                         saveLoveSong(mCurrent?:0)
+                    }
+                    Constant.LIST_TYPE_HISTORY->{
+                        mCurrent = getNextSongPosition(mCurrent?:0,mPlayMode,mHistorySongs?.size?:1)
+                        saveHistorySong(mCurrent?:0)
                     }
                 }
             }
@@ -139,14 +156,6 @@ class IMusicPlayService : Service() {
                                 }
                             }
                             Log.e("JG","play---> localsongs:$mLocalSongs")
-//                            mLocalSongs = IMusicRoomHelper.getAllLocalSongsExe()
-                            mLocalSongs?.let {
-                                val url = it[mCurrent?:0].url
-                                if (!url.isNullOrEmpty()) {
-                                    mMediaPlayer.setDataSource(url)
-                                    startPlay()
-                                }
-                            }
                         }
                         Constant.LIST_TYPE_LOVE->{
                             runBlocking {
@@ -155,12 +164,15 @@ class IMusicPlayService : Service() {
                                 }
                             }
                             mLoveSongs = orderLoveList(mLoveSongs)
-                            Log.e("JG","play---> localsongs:$mLocalSongs")
-//                            mLocalSongs = IMusicRoomHelper.getAllLocalSongsExe()
+                            Log.e("JG","play---> lovesongs:$mLoveSongs")
+                        }
+                        Constant.LIST_TYPE_HISTORY->{
+
                         }
                     }
                 }
                 mCurrent = FileUtil.getSong()?.position
+                Log.e("JG","mCurrent:$mCurrent")
                 // 把各项参数恢复到初始状态
                 mMediaPlayer.reset()
                 when (mListType) {
@@ -174,10 +186,25 @@ class IMusicPlayService : Service() {
                         }
                     }
                     Constant.LIST_TYPE_LOCAL->{
-
+                        mLocalSongs?.let {
+                            val url = it[mCurrent?:0].url
+                            if (!url.isNullOrEmpty()) {
+                                mMediaPlayer.setDataSource(url)
+                                startPlay()
+                            }
+                        }
                     }
                     Constant.LIST_TYPE_LOVE->{
                         mLoveSongs?.let {
+                            val url = it[mCurrent?:0].url
+                            if (!url.isNullOrEmpty()) {
+                                mMediaPlayer.setDataSource(url)
+                                startPlay()
+                            }
+                        }
+                    }
+                    Constant.LIST_TYPE_HISTORY->{
+                        mHistorySongs?.let {
                             val url = it[mCurrent?:0].url
                             if (!url.isNullOrEmpty()) {
                                 mMediaPlayer.setDataSource(url)
@@ -390,6 +417,27 @@ class IMusicPlayService : Service() {
             }
             FileUtil.saveSong(song)
         }
+    }
+    private fun saveHistorySong(current: Int) {
+        val history = mHistorySongs?.get(current)
+        history?.let {
+            val song = Song().apply {
+                position = current
+                songId = it.songId
+                qqId = it.qqId
+                songName = it.name
+                singer = it.singer
+                url = it.url
+                imgUrl = it.pic
+                listType = Constant.LIST_TYPE_HISTORY
+                isOnline = it.isOnline
+                duration = it.duration?:0
+                mediaId = it.mediaId
+                isDownload = it.isDownload
+            }
+            FileUtil.saveSong(song)
+        }
+
     }
 
 

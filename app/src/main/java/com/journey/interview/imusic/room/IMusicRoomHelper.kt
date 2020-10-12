@@ -108,7 +108,11 @@ object IMusicRoomHelper {
         return localSongDao.queryAllLocalSongs()
     }
 
+    suspend fun updateLocalSong(localSong:LocalSong):Int? {
+        return localSongDao.updateLocalSong(localSong)
+    }
 
+    /* 历史播放记录音乐*/
     suspend fun findHistorySongBySongId(songId: String): MutableList<HistorySong>? {
         return historySongDao.queryHistorySongBySongId(songId)
     }
@@ -124,6 +128,10 @@ object IMusicRoomHelper {
         } else {
             historySongDao.insertHistorySong(historySong)
         }
+    }
+
+    suspend fun deleteAllHistorySong():Int? {
+        return historySongDao.deleteAllHistory()
     }
 
     suspend fun queryAllHistorySongs(): MutableList<HistorySong>? {
