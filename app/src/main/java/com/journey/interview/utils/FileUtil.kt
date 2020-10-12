@@ -22,7 +22,7 @@ object FileUtil {
     fun saveSong(song: Song?) {
         try {
             val file =
-                File(InterviewApp.instance.getExternalFilesDir("i_music")?.absolutePath?:"")
+                File(InterviewApp.instance.getExternalFilesDir("imusic")?.absolutePath?:"")
             if (!file.exists()) {
                 file.mkdirs()
             }
@@ -43,7 +43,7 @@ object FileUtil {
         try {
             val ois = ObjectInputStream(
                 FileInputStream(
-                    InterviewApp.instance.getExternalFilesDir("").toString() + "/i_music/song.txt"
+                    InterviewApp.instance.getExternalFilesDir("imusic").toString() + "/song.txt"
                 )
             )
             return ois.readObject() as Song //返回对象

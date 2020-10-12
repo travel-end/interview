@@ -132,7 +132,13 @@ class IPlayActivity : BaseLifeCycleActivity<IPlayViewModel>(), LrcView.OnPlayCli
     }
 
     override fun initStatusBar() {
-        ImmersionBar.with(this).statusBarView(R.id.top_view).fullScreen(true).init()
+        ImmersionBar
+            .with(this)
+            .statusBarView(R.id.top_view)
+            .transparentBar()
+            .fullScreen(true)
+            .init()
+
     }
 
     override fun layoutResId() = R.layout.imusic_act_play
@@ -449,9 +455,11 @@ class IPlayActivity : BaseLifeCycleActivity<IPlayViewModel>(), LrcView.OnPlayCli
         if (showCover) {
             ll_lrc.visibility = View.GONE
             mDiscView.visibility = View.VISIBLE
+            play_ll_function.visibility = View.VISIBLE
         } else {
             ll_lrc.visibility = View.VISIBLE
             mDiscView.visibility = View.GONE
+            play_ll_function.visibility = View.GONE
         }
     }
 
