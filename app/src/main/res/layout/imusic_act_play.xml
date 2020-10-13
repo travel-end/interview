@@ -88,35 +88,34 @@
                     android:id="@+id/play_top_volume"
                     layout="@layout/imusic_volume_bar" />
 
-<!--                <me.wcy.lrcview.LrcView-->
-<!--                    android:id="@+id/lrc_view"-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:layout_marginTop="15dp"-->
-<!--                    lrc:lrcAnimationDuration="1000"-->
-<!--                    lrc:lrcCurrentTextColor="@color/bluebackground"-->
-<!--                    lrc:lrcDividerHeight="24dp"-->
-<!--                    lrc:lrcNormalTextColor="@color/white_50p"-->
-<!--                    lrc:lrcPadding="40dp"-->
-<!--                    lrc:lrcTextSize="16sp"-->
-<!--                    lrc:lrcLabel=""-->
-<!--                    lrc:lrcTimelineColor="@color/white_50p"-->
-<!--                    lrc:lrcTimelineTextColor="#CCFFFFFF" />-->
-
-                <com.journey.interview.customizeview.rectcoverview.LyricView
+                <me.wcy.lrcview.LrcView
                     android:id="@+id/lrc_view"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    lrc:current_color="#ffffff"
-                    lrc:default_label="暂无歌词，我也不知道怎么上传OvO"
-                    lrc:lrc_padding="@dimen/dp_10"
-                    lrc:normal_color="#808080"
-                    lrc:text_divider="@dimen/dp_15"
-                    lrc:text_gravity="center"
-                    lrc:text_size="16sp"
-                    lrc:time_color="#c5c3c2"
-                    lrc:time_text_size="13sp"
-                    lrc:timeline_color="#4d4948" />
+                    android:layout_marginTop="15dp"
+                    lrc:lrcAnimationDuration="1000"
+                    lrc:lrcCurrentTextColor="@color/bluebackground"
+                    lrc:lrcDividerHeight="24dp"
+                    lrc:lrcNormalTextColor="@color/white_50p"
+                    lrc:lrcPadding="40dp"
+                    lrc:lrcTextSize="16sp"
+                    lrc:lrcLabel=""
+                    lrc:lrcTimelineColor="@color/white_50p"
+                    lrc:lrcTimelineTextColor="#CCFFFFFF" />
+<!--                <com.journey.interview.customizeview.rectcoverview.LyricView-->
+<!--                    android:id="@+id/lrc_view"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    lrc:current_color="#ffffff"-->
+<!--                    lrc:default_label="暂无歌词，我也不知道怎么上传OvO"-->
+<!--                    lrc:lrc_padding="@dimen/dp_10"-->
+<!--                    lrc:normal_color="#808080"-->
+<!--                    lrc:text_divider="@dimen/dp_15"-->
+<!--                    lrc:text_gravity="center"-->
+<!--                    lrc:text_size="16sp"-->
+<!--                    lrc:time_color="#c5c3c2"-->
+<!--                    lrc:time_text_size="13sp"-->
+<!--                    lrc:timeline_color="#4d4948" />-->
 
             </LinearLayout>
 

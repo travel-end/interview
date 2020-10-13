@@ -42,6 +42,7 @@ class IMainActivity : BaseLifeCycleActivity<IMainViewModel>() {
     private var mMediaPlayer:MediaPlayer?=null
     private var mTime:Int?=null // 记录暂停的时间
     private var isSeek:Boolean = false// 标记是否在暂停的时候拖动进度条
+    private var mCurrentTime:Long?=null
     override fun layoutResId() = R.layout.imusic_act_main
 
     private val playConnection = object : ServiceConnection {
@@ -65,7 +66,8 @@ class IMainActivity : BaseLifeCycleActivity<IMainViewModel>() {
         mSong?.let {
             bottom_player.player_song_name.text = it.songName
             bottom_player.player_song_author.text = it.singer
-            val currentTime = it.currentTime// todo 保存当前的歌曲播放进度 在play页面展示
+            mCurrentTime = it.currentTime// todo 保存当前的歌曲播放进度 在play页面展示
+            Log.e("JG","播放进度：$mCurrentTime")
             if (it.imgUrl == null) {
                 FileUtil.setLocalCoverImg(this@IMainActivity,it.singer?:"",bottom_player.player_song_icon)
             } else {
@@ -77,6 +79,11 @@ class IMainActivity : BaseLifeCycleActivity<IMainViewModel>() {
                 )
             }
         }
+        // 没有歌曲
+        if (mSong == null) {
+
+        }
+
         if (isServiceRunning(IMusicPlayService::class.java.name)) {
             bottom_player.btn_player.isSelected = true
             rotationAnim.start()
@@ -121,12 +128,15 @@ class IMainActivity : BaseLifeCycleActivity<IMainViewModel>() {
                     if (mPlayServiceBinder?.isPlaying == true) {
                         val song2 = FileUtil.getSong()
                         val currenttime = mPlayServiceBinder?.currentTime?:0
-                        Log.e("JG","当前播放进度：$currenttime")
+//                        Log.e("JG","当前播放进度：$currenttime")
                         song2?.currentTime = currenttime
                         FileUtil.saveSong(song2)
                         playIntent.putExtra(Constant.PLAY_STATUS,Constant.SONG_PLAY)
                     } else {// 暂停
-//                        playIntent.putExtra("online",true)
+                        val song3 = FileUtil.getSong()
+                        song3?.currentTime = mCurrentTime?:0
+                        Log.e("JG","暂停播放进度：$mCurrentTime")
+                        FileUtil.saveSong(song3)
                     }
                     if (FileUtil.getSong()?.imgUrl != null) {
                         playIntent.putExtra("online",true)
@@ -174,6 +184,7 @@ class IMainActivity : BaseLifeCycleActivity<IMainViewModel>() {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
                         rotationAnim.resume()
                     }
+                    mCurrentTime = mPlayServiceBinder?.currentTime
                 }
                 Constant.SONG_CHANGE -> {
                     mSong = FileUtil.getSong()
@@ -182,6 +193,7 @@ class IMainActivity : BaseLifeCycleActivity<IMainViewModel>() {
                         bottom_player.player_song_author.text = s.singer
                         bottom_player.btn_player.isSelected = true
                         rotationAnim.start()
+                        mCurrentTime = mPlayServiceBinder?.currentTime
                         if (!s.isOnline) {
                             FileUtil.setLocalCoverImg(this@IMainActivity,s.singer?:"",bottom_player.player_song_icon)
                         } else {// 在线播放
