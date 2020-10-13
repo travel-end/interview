@@ -31,6 +31,7 @@ import com.bumptech.glide.request.transition.Transition
 import com.gyf.immersionbar.ImmersionBar
 import com.journey.interview.Constant
 import com.journey.interview.R
+import com.journey.interview.customizeview.rectcoverview.LyricView
 import com.journey.interview.imusic.global.IMusicBus
 import com.journey.interview.imusic.model.DownloadSong
 import com.journey.interview.imusic.model.LocalSong
@@ -53,9 +54,10 @@ import me.wcy.lrcview.LrcView
 /**
  * @By Journey 2020/9/28
  * @Description
+ * , LrcView.OnPlayClickListener
  */
 @RequiresApi(Build.VERSION_CODES.KITKAT)
-class IPlayActivity : BaseLifeCycleActivity<IPlayViewModel>(), LrcView.OnPlayClickListener {
+class IPlayActivity : BaseLifeCycleActivity<IPlayViewModel>() {
     private var mPlayStatus: Int? = null
     private var mSong: Song? = null
     private lateinit var mDiscView: DiscView
@@ -64,7 +66,8 @@ class IPlayActivity : BaseLifeCycleActivity<IPlayViewModel>(), LrcView.OnPlayCli
     private lateinit var mTvCurrentTime: TextView
     private lateinit var mDiscImageView: ImageView
     private lateinit var mIvPlayMode:ImageView
-    private lateinit var mLrcView: LrcView
+//    private lateinit var mLrcView: LrcView
+    private lateinit var mLrcView: LyricView
     private lateinit var mLovedSongAnimatorSet: AnimatorSet
     private var mPlayStatusBinder: IMusicPlayService.PlayStatusBinder? = null
     private var mDownloadBinder: IMusicDownloadService.DownloadBinder? = null
@@ -210,9 +213,9 @@ class IPlayActivity : BaseLifeCycleActivity<IPlayViewModel>(), LrcView.OnPlayCli
             // 进度条停止拖动的时候调用
             override fun onStopTrackingTouch(seekBar: SeekBar?) {
                 val progress = seekBar?.progress?.toLong() ?: 0
-                if (mLrcView.hasLrc()) {
+//                if (mLrcView.hasLrc()) {
                     mLrcView.updateTime(progress)
-                }
+//                }
 
                 if (mPlayStatusBinder?.isPlaying == true) {
                     mMediaPlayer = mPlayStatusBinder?.mediaPlayer
@@ -293,7 +296,7 @@ class IPlayActivity : BaseLifeCycleActivity<IPlayViewModel>(), LrcView.OnPlayCli
                     }
                 } else {
                     switchCoverLrc(false)
-                    mLrcView.loadLrc(lrc)
+                    mLrcView.loadLrc(lrc,"")
                 }
             } else {
                 val songId = mSong?.songId
@@ -362,13 +365,13 @@ class IPlayActivity : BaseLifeCycleActivity<IPlayViewModel>(), LrcView.OnPlayCli
             if (it != null) {
                 val lrc = it.lyric
                 if (lrc.isBlank()) {
-                    mLrcView.setLabel("没有发现歌词o(π﹏π)o")
+//                    mLrcView.setLabel("没有发现歌词o(π﹏π)o")
                 } else {
                     Log.d("JG", "歌词lyric: $lrc")
-                    mLrcView.loadLrc(lrc)
+                    mLrcView.loadLrc(lrc,"")
                 }
             } else {
-                mLrcView.setLabel("没有发现歌词o(π﹏π)o")
+//                mLrcView.setLabel("没有发现歌词o(π﹏π)o")
             }
         })
         mViewModel.addLoveSongResult.observe(this, Observer {
@@ -412,11 +415,16 @@ class IPlayActivity : BaseLifeCycleActivity<IPlayViewModel>(), LrcView.OnPlayCli
     }
 
     private fun initCoverLrc() {
-        mLrcView.setDraggable(true, this)
+//        mLrcView.setDraggable(true, this)
         // 点击歌词
-        mLrcView.setOnTapListener { view, x, y ->
+//        mLrcView.setOnTapListener { view, x, y ->
+//            switchCoverLrc(true)
+//        }
+
+        mLrcView.setCoverChangeListener {
             switchCoverLrc(true)
         }
+
         initVolume() // 初始化音量设置
         switchCoverLrc(true)
     }
@@ -543,9 +551,9 @@ class IPlayActivity : BaseLifeCycleActivity<IPlayViewModel>(), LrcView.OnPlayCli
                 mTvCurrentTime.text = StringUtils.formatTime(mSeekBar.progress.toLong())
                 updateSeekBarProgress()
 //                Log.e("JG", "歌词是否有效${lrc_view.hasLrc()}")
-                if (mLrcView.hasLrc()) {
+//                if (mLrcView.hasLrc()) {
                     mLrcView.updateTime(progress ?: 0L)
-                }
+//                }
             }
         }
     }
@@ -628,14 +636,14 @@ class IPlayActivity : BaseLifeCycleActivity<IPlayViewModel>(), LrcView.OnPlayCli
     /**
      * 歌词播放按钮点击监听器，点击后应该跳转到指定播放位置
      */
-    override fun onPlayClick(view: LrcView?, time: Long): Boolean {
-        if (mPlayStatusBinder?.isPlaying == true || mPlayStatusBinder?.isPausing == true) {
-            mMediaPlayer?.seekTo(time.toInt())
-            if (mPlayStatusBinder?.isPausing == true) {
-                // todo
-            }
-            return true
-        }
-        return false
-    }
+//    override fun onPlayClick(view: LrcView?, time: Long): Boolean {
+//        if (mPlayStatusBinder?.isPlaying == true || mPlayStatusBinder?.isPausing == true) {
+//            mMediaPlayer?.seekTo(time.toInt())
+//            if (mPlayStatusBinder?.isPausing == true) {
+//                // todo
+//            }
+//            return true
+//        }
+//        return false
+//    }
 }

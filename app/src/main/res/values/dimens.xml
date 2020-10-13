@@ -5,6 +5,8 @@
     <dimen name="safe_padding">8dp</dimen>
     <dimen name="card_radius">12dp</dimen>
     <dimen name="card_view_height">300dp</dimen>
+    <dimen name="sp_16">16sp</dimen>
+    <dimen name="sp_10">10sp</dimen>
     <dimen name="dp_5">5dp</dimen>
     <dimen name="dp_4">4dp</dimen>
     <dimen name="dp_6">6dp</dimen>
