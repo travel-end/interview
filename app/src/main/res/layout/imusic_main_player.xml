@@ -52,12 +52,12 @@
         app:layout_constraintEnd_toStartOf="@id/player_song_list"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent">
-        <Button
+        <ImageView
             android:id="@+id/btn_player"
             android:layout_width="@dimen/dp_36"
             android:layout_height="@dimen/dp_36"
             android:layout_centerInParent="true"
-            android:background="@drawable/selector_player" />
+            android:src="@drawable/selector_player" />
 
     </com.journey.interview.customizeview.ripple.MyRippleView>
 

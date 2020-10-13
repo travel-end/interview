@@ -99,6 +99,7 @@
                     lrc:lrcNormalTextColor="@color/white_50p"
                     lrc:lrcPadding="40dp"
                     lrc:lrcTextSize="16sp"
+                    lrc:lrcLabel=""
                     lrc:lrcTimelineColor="@color/white_50p"
                     lrc:lrcTimelineTextColor="#CCFFFFFF" />
             </LinearLayout>

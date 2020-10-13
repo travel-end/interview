@@ -359,10 +359,16 @@ class IPlayActivity : BaseLifeCycleActivity<IPlayViewModel>(), LrcView.OnPlayCli
     override fun dataObserve() {
         super.dataObserve()
         mViewModel.songLrc.observe(this, Observer {
-            it?.let { songLrc ->
-                val lrc = songLrc.lyric
-                Log.d("JG", "歌词lyric: $lrc")
-                mLrcView.loadLrc(lrc)
+            if (it != null) {
+                val lrc = it.lyric
+                if (lrc.isBlank()) {
+                    mLrcView.setLabel("没有发现歌词o(π﹏π)o")
+                } else {
+                    Log.d("JG", "歌词lyric: $lrc")
+                    mLrcView.loadLrc(lrc)
+                }
+            } else {
+                mLrcView.setLabel("没有发现歌词o(π﹏π)o")
             }
         })
         mViewModel.addLoveSongResult.observe(this, Observer {

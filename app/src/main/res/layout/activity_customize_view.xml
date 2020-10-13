@@ -78,4 +78,11 @@
         android:layout_height="30dp"
         android:text="测试popupWindow，自定义弹窗" />
 
+    <TextView
+        android:id="@+id/testStackLayoutManager"
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:text="测试自定义LayoutManager" />
+
+
 </LinearLayout>

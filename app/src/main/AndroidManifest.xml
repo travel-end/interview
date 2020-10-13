@@ -106,7 +106,9 @@
             android:theme="@style/material_style"
             android:windowSoftInputMode="adjustPan|stateHidden" />
         <activity android:name=".imusic.act.IPlayActivity" />
-<!--        <activity android:name=".imusic.frg.me.ILoveSongActivity"-->
+        <activity android:name=".customizeview.pager.StackLayoutManagerActivity" />
+        <activity android:name=".customizeview.pager.FocusLayoutManagerActivity" />
+        <!--        <activity android:name=".imusic.frg.me.ILoveSongActivity"-->
 <!--            android:theme="@style/material_style"/>-->
 <!--        <activity android:name=".imusic.frg.me.ILocalSongActivity" />-->
 <!--        <activity android:name=".imusic.frg.me.IHistorySongActivity" />-->

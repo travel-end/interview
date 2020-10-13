@@ -15,9 +15,14 @@ private fun dpToPx(context: Context, dp: Float): Float {
     return dp * context.resources.displayMetrics.density
 }
 
-fun Float.toIntPx() = dpToPx(InterviewApp.instance, this).toInt()
+private fun dp2Px(context: Context,dp: Float):Float {
+    return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,dp
+    ,context.resources.displayMetrics)
+}
 
-fun Float.toFloatPx() = dpToPx(InterviewApp.instance,this)
+fun Float.toIntPx(context:Context = InterviewApp.instance) = dp2Px(context,this).toInt()
+
+fun Float.toFloatPx(context:Context = InterviewApp.instance) = dp2Px(context,this)
 
 fun String.logV()  {
     Log.v("Kotlin",this)

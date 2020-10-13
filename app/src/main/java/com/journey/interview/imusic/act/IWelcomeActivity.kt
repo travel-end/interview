@@ -29,23 +29,6 @@ class IWelcomeActivity:BaseActivity<IWelcomeViewModel>() {
         ImmersionBar.with(this).transparentBar().init()
     }
 
-//    override fun initStatusBar() {
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-//            window?.run {
-//                clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
-//                decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-//                addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
-//                statusBarColor = Color.TRANSPARENT
-//            }
-//        } else {
-//            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-//                window.addFlags(
-//                    WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS
-//                )
-//            }
-//        }
-//    }
-
     override fun initData() {
         super.initData()
         if (ContextCompat.checkSelfPermission(this,mPermission)!= PackageManager.PERMISSION_GRANTED) {

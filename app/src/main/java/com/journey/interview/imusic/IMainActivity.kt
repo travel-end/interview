@@ -12,6 +12,7 @@ import android.os.Build
 import android.os.IBinder
 import android.util.Log
 import android.view.animation.LinearInterpolator
+import android.widget.ImageView
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.google.android.material.shape.ShapeAppearanceModel
 import com.journey.interview.Constant
@@ -37,6 +38,7 @@ class IMainActivity : BaseLifeCycleActivity<IMainViewModel>() {
     private var mPlayServiceBinder: IMusicPlayService.PlayStatusBinder? = null
     private var isExistService: Boolean = false// 服务是否存活
     private var mFlag:Boolean = false// 用作暂停的标记
+    private lateinit var mPlayBtn:ImageView
     private var mMediaPlayer:MediaPlayer?=null
     private var mTime:Int?=null // 记录暂停的时间
     private var isSeek:Boolean = false// 标记是否在暂停的时候拖动进度条

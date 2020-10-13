@@ -17,7 +17,7 @@ import kotlinx.coroutines.withContext
  * @Description
  */
 class IPlayViewModel : BaseViewModel() {
-    val songLrc: MutableLiveData<OnlineSongLrc> = MutableLiveData()
+    val songLrc: MutableLiveData<OnlineSongLrc?> = MutableLiveData()
 
     val addLoveSongResult: MutableLiveData<Long?> = MutableLiveData()
 
@@ -38,13 +38,18 @@ class IPlayViewModel : BaseViewModel() {
      */
     fun getOnlineSongLrc(songId: String, songType: Int, songName: String) {
         viewModelScope.launch {
-            val result = withContext(Dispatchers.IO) {
-                iMusicApiService.getOnlineSongLrc(songId)
-            }
-            songLrc.value = result
-            // 如果是本地音乐 则将歌词保存起来
-            if (songType == Constant.SONG_LOCAL) {
-                FileUtil.saveLrcToNative(result.lyric, songName)
+            runCatching {
+                withContext(Dispatchers.IO) {
+                    iMusicApiService.getOnlineSongLrc(songId)
+                }
+            }.onSuccess {
+                songLrc.value = it
+                // 如果是本地音乐 则将歌词保存起来
+                if (songType == Constant.SONG_LOCAL) {
+                    FileUtil.saveLrcToNative(it.lyric, songName)
+                }
+            }.onFailure {
+                songLrc.value=null
             }
         }
     }
