@@ -88,8 +88,9 @@ object IMusicRoomHelper {
     suspend fun saveLocalSong(localSongs: MutableList<LocalSong>): Long? {
         var result: Long? = null
         for (song in localSongs) {
-            val s = localSongDao.queryLocalSongsBySongId(song.songId?:"")
-            if (s == null || s.size==0) {
+//            val s = localSongDao.queryLocalSongsBySongId(song.songId?:"")
+            localSongDao.deleteLocalSongs(song)
+//            if (s == null || s.size==0) {
                 val localSong = LocalSong().apply {
                     name = song.name
                     singer = song.singer
@@ -98,7 +99,7 @@ object IMusicRoomHelper {
                     duration = song.duration
                 }
                 result = localSongDao.insertLocalSong(localSong)
-            }
+//            }
         }
         return result
     }

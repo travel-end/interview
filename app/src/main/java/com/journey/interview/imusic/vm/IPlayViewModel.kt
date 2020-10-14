@@ -1,11 +1,12 @@
 package com.journey.interview.imusic.vm
 
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.journey.interview.Constant
 import com.journey.interview.imusic.model.*
 import com.journey.interview.imusic.room.IMusicRoomHelper
-import com.journey.interview.utils.FileUtil
+import com.journey.interview.utils.SongUtil
 import com.journey.interview.utils.SpUtil
 import com.journey.interview.weatherapp.base.BaseViewModel
 import kotlinx.coroutines.Dispatchers
@@ -43,10 +44,11 @@ class IPlayViewModel : BaseViewModel() {
                     iMusicApiService.getOnlineSongLrc(songId)
                 }
             }.onSuccess {
+                Log.e("JG","--->getOnlineSongLrc onSuccess")
                 songLrc.value = it
                 // 如果是本地音乐 则将歌词保存起来
                 if (songType == Constant.SONG_LOCAL) {
-                    FileUtil.saveLrcToNative(it.lyric, songName)
+                    SongUtil.saveLrcToNative(it.lyric, songName)
                 }
             }.onFailure {
                 songLrc.value=null
@@ -109,7 +111,7 @@ class IPlayViewModel : BaseViewModel() {
     }
 
     fun getSingerName(): String? {
-        val song = FileUtil.getSong()
+        val song = SongUtil.getSong()
         song?.let {
             val singer = it.singer
             if (singer != null) {

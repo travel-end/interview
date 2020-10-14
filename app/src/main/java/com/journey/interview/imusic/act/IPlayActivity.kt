@@ -1,7 +1,6 @@
 package com.journey.interview.imusic.act
 
-import android.animation.AnimatorInflater
-import android.animation.AnimatorSet
+import android.animation.*
 import android.annotation.SuppressLint
 import android.content.*
 import android.graphics.Bitmap
@@ -17,6 +16,7 @@ import android.os.Message
 import android.transition.Slide
 import android.util.Log
 import android.view.View
+import android.view.animation.LinearInterpolator
 import android.widget.*
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.Observer
@@ -31,7 +31,7 @@ import com.bumptech.glide.request.transition.Transition
 import com.gyf.immersionbar.ImmersionBar
 import com.journey.interview.Constant
 import com.journey.interview.R
-import com.journey.interview.customizeview.rectcoverview.LyricView
+import com.journey.interview.customizeview.lrcview.LrcView
 import com.journey.interview.imusic.global.IMusicBus
 import com.journey.interview.imusic.model.DownloadSong
 import com.journey.interview.imusic.model.LocalSong
@@ -41,7 +41,7 @@ import com.journey.interview.imusic.service.IMusicPlayService
 import com.journey.interview.imusic.util.ImUtils
 import com.journey.interview.imusic.vm.IPlayViewModel
 import com.journey.interview.imusic.widget.DiscView
-import com.journey.interview.utils.FileUtil
+import com.journey.interview.utils.SongUtil
 import com.journey.interview.utils.StringUtils
 import com.journey.interview.utils.getScreenHeight
 import com.journey.interview.utils.getString
@@ -49,7 +49,6 @@ import com.journey.interview.weatherapp.base.BaseLifeCycleActivity
 import kotlinx.android.synthetic.main.imusic_act_play.*
 import kotlinx.android.synthetic.main.imusic_play_bottom_controller.view.*
 import kotlinx.android.synthetic.main.imusic_volume_bar.view.*
-import me.wcy.lrcview.LrcView
 
 /**
  * @By Journey 2020/9/28
@@ -57,7 +56,7 @@ import me.wcy.lrcview.LrcView
  * , LrcView.OnPlayClickListener
  */
 @RequiresApi(Build.VERSION_CODES.KITKAT)
-class IPlayActivity : BaseLifeCycleActivity<IPlayViewModel>() ,LrcView.OnPlayClickListener{
+class IPlayActivity : BaseLifeCycleActivity<IPlayViewModel>() {
     private var mPlayStatus: Int? = null
     private var mSong: Song? = null
     private lateinit var mDiscView: DiscView
@@ -65,9 +64,10 @@ class IPlayActivity : BaseLifeCycleActivity<IPlayViewModel>() ,LrcView.OnPlayCli
     private lateinit var mVolumeSeekBar: SeekBar
     private lateinit var mTvCurrentTime: TextView
     private lateinit var mDiscImageView: ImageView
-    private lateinit var mIvPlayMode:ImageView
+    private lateinit var mIvPlayMode: ImageView
     private lateinit var mLrcView: LrcView
-//    private lateinit var mLrcView: LyricView
+    private var alphaAnim1:ObjectAnimator?=null
+    private var alphaAnim2:ObjectAnimator?=null
     private lateinit var mLovedSongAnimatorSet: AnimatorSet
     private var mPlayStatusBinder: IMusicPlayService.PlayStatusBinder? = null
     private var mDownloadBinder: IMusicDownloadService.DownloadBinder? = null
@@ -81,8 +81,10 @@ class IPlayActivity : BaseLifeCycleActivity<IPlayViewModel>() ,LrcView.OnPlayCli
     private var mIsPlaying: Boolean = false
     private var mIsMyLove: Boolean = false
     private var mAudioManager: AudioManager? = null
-    private var mPlayMode :Int = Constant.PLAY_ORDER
-    private var mListType:Int?=null
+    private var mPlayMode: Int = Constant.PLAY_ORDER
+    private var mListType: Int? = null
+
+    private var hasLrc:Boolean = false
 
     private val mPlayConnection = object : ServiceConnection {
         override fun onServiceDisconnected(name: ComponentName?) {
@@ -90,16 +92,16 @@ class IPlayActivity : BaseLifeCycleActivity<IPlayViewModel>() ,LrcView.OnPlayCli
 
         // 播放
         override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
-            Log.d("JG","--->onServiceConnected")
-                mPlayStatusBinder = service as IMusicPlayService.PlayStatusBinder
+            Log.e("JG", "--->onServiceConnected")
+            mPlayStatusBinder = service as IMusicPlayService.PlayStatusBinder
             // 播放模式
             mPlayMode = mViewModel.getPlayMode()
             mPlayStatusBinder?.setPlayMode(mPlayMode)
 
-            mIsOnline = FileUtil.getSong()?.isOnline ?: false
+            mIsOnline = SongUtil.getSong()?.isOnline ?: false
 //            Log.e("JG", "是否是网络歌曲--->$mIsOnline")
             if (mIsOnline) {
-                val coverImg = FileUtil.getSong()?.imgUrl
+                val coverImg = SongUtil.getSong()?.imgUrl
 //                Log.e("JG", "IPlayActivity--->coverImg:$coverImg")
                 getSongCoverImg(coverImg)
                 if (mPlayStatus == Constant.SONG_PLAY) {
@@ -151,12 +153,14 @@ class IPlayActivity : BaseLifeCycleActivity<IPlayViewModel>() ,LrcView.OnPlayCli
 
 
     override fun initView() {
+        Log.e("JG", "--->initView")
         super.initView()
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             window.enterTransition = Slide()
             window.exitTransition = Slide()
         }
         mPlayStatus = intent?.getIntExtra(Constant.PLAY_STATUS, 2)
+        Log.e("JG", "--->mPlayStatus: $mPlayStatus")
 
         mDiscView = disc_view as DiscView
         mSeekBar = play_bottom_controller.sb_progress
@@ -172,20 +176,29 @@ class IPlayActivity : BaseLifeCycleActivity<IPlayViewModel>() ,LrcView.OnPlayCli
         val downloadIntent = Intent(this, IMusicDownloadService::class.java)
         bindService(downloadIntent, mDownloadConnection, Context.BIND_AUTO_CREATE)
 
-        mSong = FileUtil.getSong() // 初始化当前播放歌曲
+        mSong = SongUtil.getSong() // 初始化当前播放歌曲
         // 界面ui
         mSong?.let { song ->
             mListType = song.listType
             play_tv_song_singer.text = song.singer
             play_tv_song_name.text = song.songName
-            Log.e("JG","当前播放进度：${song.currentTime.toInt()}")
+            Log.e("JG", "当前播放进度：${song.currentTime}")
+            Log.e("JG", "当前播放总时长：${mSong?.duration?.toLong()}")//263593
             mTvCurrentTime.text = StringUtils.formatTime(song.currentTime)
+            play_bottom_controller.tv_total_time.text =
+                StringUtils.formatTime(mSong?.duration?.toLong() ?: 0)
             mSeekBar.max = song.duration
-            mSeekBar.progress = song.currentTime.toInt()
+            val time = if (song.currentTime < 1L) {
+                0
+            } else {
+                song.currentTime.toInt()
+            }
+            mSeekBar.progress = time
 
             initPlayMode()
         }
         initCoverLrc() // 初始化歌词设置
+        initAnim()
     }
 
 
@@ -216,9 +229,8 @@ class IPlayActivity : BaseLifeCycleActivity<IPlayViewModel>() ,LrcView.OnPlayCli
             override fun onStopTrackingTouch(seekBar: SeekBar?) {
                 val progress = seekBar?.progress?.toLong() ?: 0
                 if (mLrcView.hasLrc()) {
-                    mLrcView.updateTime(progress)
+                    mLrcView.updateTime(progress*1000)
                 }
-
                 if (mPlayStatusBinder?.isPlaying == true) {
                     mMediaPlayer = mPlayStatusBinder?.mediaPlayer
                     mMediaPlayer?.seekTo(seekBar?.progress ?: 0 * 1000)
@@ -259,7 +271,7 @@ class IPlayActivity : BaseLifeCycleActivity<IPlayViewModel>() ,LrcView.OnPlayCli
                     if (mIsOnline) {
                         mPlayStatusBinder?.playOnline()
                     }
-                    mMediaPlayer?.seekTo((mSong?.currentTime ?: 0 * 1000).toInt())
+                    mMediaPlayer?.seekTo(((mSong?.currentTime ?: 0) * 1000).toInt())
                     mDiscView.play()
                     it?.isSelected = true
                     updateSeekBarProgress()
@@ -281,34 +293,55 @@ class IPlayActivity : BaseLifeCycleActivity<IPlayViewModel>() ,LrcView.OnPlayCli
             mDiscView.last()
         }
 
-        // 点击唱碟
+        // *******点击唱碟**********/
         mDiscView.setOnClickListener {
-            if (!mIsOnline) {
-                val lrc = FileUtil.getLrcFromNative(mSong?.songName ?: "imusic")
-                if (lrc == null) {
-                    val qqId = mSong?.qqId
-                    Log.e("JG", "qqId: $qqId")
-                    // 匹配不到歌词
-                    if (Constant.SONG_ID_UNFIND == qqId) {
-                        getLrcError(null)
-                    } else if (null == qqId) {// 歌曲id未匹配到
-                        mViewModel.getSongId(mSong?.songName?:"",mSong?.duration?:-1)
-                    } else {// 歌词还未匹配到
-                        mViewModel.getOnlineSongLrc(mSong?.songId?:"",Constant.SONG_LOCAL,mSong?.songName?:"")
+            alphaAnim1?.start()
+        }
+        alphaAnim1?.addListener(object : AnimatorListenerAdapter() {
+            override fun onAnimationEnd(animation: Animator?) {
+                super.onAnimationEnd(animation)
+                if (!mIsOnline) {
+                    Log.e("JG", "--->查询离线歌词")
+                    val lrc = SongUtil.getLrcFromNative(mSong?.songName ?: "imusic")
+                    if (lrc == null) {
+                        val qqId = mSong?.qqId
+//                        Log.e("JG", "qqId: $qqId")
+                        // 匹配不到歌词
+                        if (Constant.SONG_ID_UNFIND == qqId) {
+                            getLrcError(null)
+                        } else if (null == qqId) {// 歌曲id未匹配到
+                            mViewModel.getSongId(mSong?.songName ?: "", mSong?.duration ?: -1)
+                        } else {// 歌词还未匹配到
+                            mViewModel.getOnlineSongLrc(
+                                mSong?.songId ?: "",
+                                Constant.SONG_LOCAL,
+                                mSong?.songName ?: ""
+                            )
+                        }
+                    } else {
+                        switchCoverLrc(false)
+                        mLrcView.loadLrc(lrc)
                     }
                 } else {
-                    switchCoverLrc(false)
-                    mLrcView.loadLrc(lrc)
-                    mLrcView.updateTime(20)
-                }
-            } else {
-                val songId = mSong?.songId
-                if (!songId.isNullOrEmpty()) {
-                    switchCoverLrc(false)
-                    mViewModel.getOnlineSongLrc(songId, Constant.SONG_ONLINE, mSong?.songName ?: "")
+                    Log.e("JG", "--->查询在线歌词")
+                    if (hasLrc) {
+                        switchCoverLrc(false)
+                    } else {
+                        val songId = mSong?.songId
+                        switchCoverLrc(false)
+                        if (!songId.isNullOrEmpty()) {
+                            mViewModel.getOnlineSongLrc(
+                                songId,
+                                Constant.SONG_ONLINE,
+                                mSong?.songName ?: ""
+                            )
+                        }
+                    }
                 }
             }
-        }
+        })
+
+
 
         // 音量
         mVolumeSeekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
@@ -335,10 +368,10 @@ class IPlayActivity : BaseLifeCycleActivity<IPlayViewModel>() ,LrcView.OnPlayCli
             mLovedSongAnimatorSet.start()
             if (mIsMyLove) {
                 v?.isSelected = false
-                FileUtil.getSong()?.let { mViewModel.deleteFromMyLoveSong(it) }
+                SongUtil.getSong()?.let { mViewModel.deleteFromMyLoveSong(it) }
             } else {
                 v.isSelected = true
-                val song = FileUtil.getSong()
+                val song = SongUtil.getSong()
                 song?.let { mViewModel.addToMyLove(song) }
             }
             mIsMyLove = !mIsMyLove
@@ -366,26 +399,23 @@ class IPlayActivity : BaseLifeCycleActivity<IPlayViewModel>() ,LrcView.OnPlayCli
         super.dataObserve()
         mViewModel.songLrc.observe(this, Observer {
             if (it != null) {
-                val lrc = it.lyric
-                if (lrc.isBlank()) {
-                    mLrcView.setLabel("没有发现歌词o(π﹏π)o")
-                } else {
-                    Log.d("JG", "歌词lyric: $lrc")
-                    mLrcView.loadLrc(lrc,"")
-                }
+                hasLrc = true
+                mLrcView.loadLrc(it.lyric)
             } else {
-                mLrcView.setLabel("没有发现歌词o(π﹏π)o")
+                hasLrc = false
+//                mLrcView.setLabel("没有发现歌词o(π﹏π)o")
+                Log.e("JG", "查询歌词为null")
             }
         })
         mViewModel.addLoveSongResult.observe(this, Observer {
             it?.let {
-                Log.d("JG", "喜欢成功")
+                Log.e("JG", "喜欢成功")
                 IMusicBus.sendLoveSongChange(true)
             }
         })
         mViewModel.deleteLoveSongResult.observe(this, Observer {
             it?.let {
-                Log.d("JG", "刪除喜欢成功")
+                Log.e("JG", "刪除喜欢成功")
                 IMusicBus.sendLoveSongChange(true)
             }
         })
@@ -397,31 +427,44 @@ class IPlayActivity : BaseLifeCycleActivity<IPlayViewModel>() ,LrcView.OnPlayCli
         mViewModel.lrcError.observe(this, Observer {
             getLrcError(it)
         })
-        mViewModel.songIdResult.observe(this,Observer{
+        mViewModel.songIdResult.observe(this, Observer {
 
         })
 
-        mViewModel.localSongImg.observe(this,Observer {
+        mViewModel.localSongImg.observe(this, Observer {
             getSongCoverImg(it)
         })
 
-        mViewModel.localSongId.observe(this, Observer{
+        mViewModel.localSongId.observe(this, Observer {
             mSong?.qqId = it
-            FileUtil.saveSong(mSong)
+            SongUtil.saveSong(mSong)
+        })
+        IMusicBus.observePlayStatusChange(this,{
+            if (it == Constant.SONG_COMPLETE) {
+                Log.e("JG","--->歌曲播放完毕")
+                mLrcView.updateTime(0)
+            }
         })
     }
 
-    private fun getLrcError(content:String?) {
-        Log.d("JG", "获取歌词:$content")
+    private fun getLrcError(content: String?) {
+        Log.e("JG", "获取歌词:$content")
         mSong?.qqId = content
-        FileUtil.saveSong(mSong)
+        SongUtil.saveSong(mSong)
     }
 
     private fun initCoverLrc() {
-        mLrcView.setDraggable(true, this)
+        mLrcView.setDraggable(true
+        ) { _, time ->
+            mMediaPlayer?.seekTo(time.toInt())
+            if (mPlayStatusBinder?.isPlaying == false) {
+            }
+            true
+        }
         // 点击歌词
         mLrcView.setOnTapListener { view, x, y ->
             switchCoverLrc(true)
+            alphaAnim2?.start()
         }
         initVolume() // 初始化音量设置
         switchCoverLrc(true)
@@ -431,24 +474,24 @@ class IPlayActivity : BaseLifeCycleActivity<IPlayViewModel>() ,LrcView.OnPlayCli
         mAudioManager = getSystemService(Context.AUDIO_SERVICE) as AudioManager
         mVolumeSeekBar.max = mAudioManager?.getStreamMaxVolume(AudioManager.STREAM_MUSIC) ?: 0
         val currentVolume = mAudioManager?.getStreamVolume(AudioManager.STREAM_MUSIC) ?: 0
-        Log.d("JG", "当前音量：$currentVolume")
+        Log.e("JG", "当前音量：$currentVolume")
         mVolumeSeekBar.progress = currentVolume
     }
 
     private fun switchPlayMode() {
         var mode = mViewModel.getPlayMode()
-        when(mode) {
-            Constant.PLAY_ORDER->{
+        when (mode) {
+            Constant.PLAY_ORDER -> {
                 mode = Constant.PLAY_RANDOM
-                Toast.makeText(this,R.string.random_play.getString(),Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, R.string.random_play.getString(), Toast.LENGTH_SHORT).show()
             }
-            Constant.PLAY_RANDOM->{
+            Constant.PLAY_RANDOM -> {
                 mode = Constant.PLAY_SINGER
-                Toast.makeText(this,R.string.single_play.getString(),Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, R.string.single_play.getString(), Toast.LENGTH_SHORT).show()
             }
-            Constant.PLAY_SINGER->{
+            Constant.PLAY_SINGER -> {
                 mode = Constant.PLAY_ORDER
-                Toast.makeText(this,R.string.order_play.getString(),Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, R.string.order_play.getString(), Toast.LENGTH_SHORT).show()
             }
         }
         mViewModel.setPlayMode(mode)
@@ -489,11 +532,11 @@ class IPlayActivity : BaseLifeCycleActivity<IPlayViewModel>() ,LrcView.OnPlayCli
                     // 如果是本地音乐
                     if (!mIsOnline) {
                         // 保存图片到本地
-                        FileUtil.saveImgToNative(mCoverBitmap, mViewModel.getSingerName() ?: "")
+                        SongUtil.saveImgToNative(mCoverBitmap, mViewModel.getSingerName() ?: "")
                         // 将封面地址保存到数据库中
                         val localSong = LocalSong()
                         localSong.pic =
-                            "${Constant.STORAGE_IMG_FILE}${FileUtil.getSong()?.singer}.jpg"
+                            "${Constant.STORAGE_IMG_FILE}${SongUtil.getSong()?.singer}.jpg"
                         mViewModel.updateLocalSong(localSong)
                     }
                     setDiscViewCover(mCoverBitmap!!)
@@ -503,7 +546,7 @@ class IPlayActivity : BaseLifeCycleActivity<IPlayViewModel>() ,LrcView.OnPlayCli
 
     private fun updateSeekBarProgress() {
         stopUpdateSeekBarProgress()
-        updateSeekBarHandler.sendEmptyMessageDelayed(0, 1000)
+        updateSeekBarHandler.sendEmptyMessageDelayed(0, 300)
     }
 
     private fun stopUpdateSeekBarProgress() {
@@ -543,14 +586,14 @@ class IPlayActivity : BaseLifeCycleActivity<IPlayViewModel>() ,LrcView.OnPlayCli
             super.handleMessage(msg)
             if (!mIsDragSeekBar) {
                 val progress = mPlayStatusBinder?.currentTime
-//                Log.e("JG", "播放进度progress=$progress")
                 val pro = progress?.toInt() ?: 0
+//                Log.e("JG", "pro=$pro")
                 mSeekBar.progress = pro
                 mTvCurrentTime.text = StringUtils.formatTime(mSeekBar.progress.toLong())
                 updateSeekBarProgress()
-//                Log.e("JG", "歌词是否有效${lrc_view.hasLrc()}")
                 if (mLrcView.hasLrc()) {
-                    mLrcView.updateTime(progress ?: 0L)
+//                    Log.e("JG", "歌词滚动$progress")
+                    mLrcView.updateTime(progress!!*1000)
                 }
             }
         }
@@ -576,6 +619,7 @@ class IPlayActivity : BaseLifeCycleActivity<IPlayViewModel>() ,LrcView.OnPlayCli
         stopUpdateSeekBarProgress()
         updateSeekBarHandler.removeCallbacksAndMessages(null)
         unregisterReceiver(mVolumeReceiver)
+        hasLrc = false
     }
 
     private val mVolumeReceiver = object : BroadcastReceiver() {
@@ -596,7 +640,11 @@ class IPlayActivity : BaseLifeCycleActivity<IPlayViewModel>() ,LrcView.OnPlayCli
                     isFirstResource: Boolean
                 ): Boolean {
                     if (mSong?.songName != null) {
-                        mViewModel.getLocalSongImg(mViewModel.getSingerName()?:"",mSong?.songName!!,mSong?.duration?:0)
+                        mViewModel.getLocalSongImg(
+                            mViewModel.getSingerName() ?: "",
+                            mSong?.songName!!,
+                            mSong?.duration ?: 0
+                        )
                     }
                     setDiscViewCover(
                         BitmapFactory.decodeResource(
@@ -631,17 +679,14 @@ class IPlayActivity : BaseLifeCycleActivity<IPlayViewModel>() ,LrcView.OnPlayCli
             })
     }
 
-    /**
-     * 歌词播放按钮点击监听器，点击后应该跳转到指定播放位置
-     */
-    override fun onPlayClick(view: LrcView?, time: Long): Boolean {
-        if (mPlayStatusBinder?.isPlaying == true || mPlayStatusBinder?.isPausing == true) {
-            mMediaPlayer?.seekTo(time.toInt())
-            if (mPlayStatusBinder?.isPausing == true) {
-                // todo
-            }
-            return true
-        }
-        return false
+
+    private fun initAnim() {
+        alphaAnim1 = ObjectAnimator.ofFloat(mDiscView, "alpha", 1.0f, 0.0f)
+        alphaAnim1?.duration=240
+        alphaAnim1?.interpolator = LinearInterpolator()
+
+        alphaAnim2 = ObjectAnimator.ofFloat(mDiscView, "alpha",  0f, 1.0f)
+        alphaAnim2?.duration=240
+        alphaAnim2?.interpolator = LinearInterpolator()
     }
 }

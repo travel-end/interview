@@ -2,12 +2,13 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="@dimen/dp_52"
+    android:layout_marginEnd="@dimen/dp_14"
+    android:layout_marginStart="@dimen/dp_14"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <TextView
         android:id="@+id/find_tv_title_main"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/dp_10"
         android:text="懂你的精选歌单"
         android:textStyle="bold"
         android:textColor="@color/colorBlack"
@@ -18,7 +19,6 @@
         android:id="@+id/find_mb_second"
         android:layout_width="wrap_content"
         android:layout_height="@dimen/dp_36"
-        android:layout_marginEnd="@dimen/dp_10"
         android:textSize="14sp"
         android:backgroundTint="@color/translate"
         android:textColor="@color/colorGrayDark"

@@ -66,4 +66,18 @@
         <item name="textSize">18sp</item>
         <item name="textAllCaps">false</item>
     </style>
+
+    <style name="bar_style">
+        <item name="android:layout_height">2dp</item>
+        <item name="android:layout_width">match_parent</item>
+<!--        <item name="progress_max">100</item>-->
+        <item name="progress_current">0</item>
+        <item name="progress_unreached_color">@color/grayLight</item>
+        <item name="progress_reached_color">@color/material_blue_dark</item>
+<!--        <item name="progress_text_size">10sp</item>-->
+<!--        <item name="progress_text_color">#0491ff</item>-->
+        <item name="progress_text_visibility">invisible</item>
+        <item name="progress_reached_bar_height">1dp</item>
+        <item name="progress_unreached_bar_height">1dp</item>
+    </style>
 </resources>

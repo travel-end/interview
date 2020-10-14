@@ -20,8 +20,7 @@ import com.journey.interview.imusic.model.ListBean
 import com.journey.interview.imusic.model.Song
 import com.journey.interview.imusic.service.IMusicPlayService
 import com.journey.interview.recyclerview.core.*
-import com.journey.interview.utils.DownloadUtil
-import com.journey.interview.utils.FileUtil
+import com.journey.interview.utils.SongUtil
 import com.journey.interview.weatherapp.base.BaseLifeCycleFragment
 import kotlinx.android.synthetic.main.imusic_frg_search_content.*
 
@@ -172,7 +171,7 @@ class ISearchContentFragment :BaseLifeCycleFragment<ISearchContentViewModel>(){
                     entry.key == "url"
                 }?.value as String
                 song.url = url
-                FileUtil.saveSong(song)
+                SongUtil.saveSong(song)
                 // 开始播放音乐
                 mPlayStatusBinder?.playOnline()
             }

@@ -117,3 +117,139 @@ class OutClass {
  setCurrentTextSize	                                当前歌词文本字体大小
  setNormalTextSize	                                普通歌词文本字体大小
  
+ 
+ ####todo
+ 自定义Toast（表情包）
+ 本地歌曲Fragment使用下拉刷新
+ 歌词自动滚动
+ 
+ 
+ ####动画
+ xml中属性
+ 属性	含义
+ android:duration	动画执行时间
+ android:interpolator	插值器
+ android:repeatCount	重复次数
+ android:repeatMode	重复模式，reverse：倒着重放动画。restart：正着重放动画
+ android:startOffset	延迟开始动画时间
+ android:valueFrom	值得开始值，int float color
+ android:valueTo	值得目标值 int float color
+ android:valueType=	值得类型 intType floatType
+ 
+ 
+ ####Android MediaPlayer简介
+ 1）如何获得MediaPlayer实例：
+ 可以使用直接new的方式：
+ MediaPlayer mp = new MediaPlayer();
+ 也可以使用create的方式，如：
+ MediaPlayer mp = MediaPlayer.create(this, R.raw.test);//这时就不用调用setDataSource了
+ 
+ 2) 如何设置要播放的文件：
+ MediaPlayer要播放的文件主要包括3个来源：
+ a. 用户在应用中事先自带的resource资源
+ 例如：MediaPlayer.create(this, R.raw.test);
+ b. 存储在SD卡或其他文件路径下的媒体文件
+ 例如：mp.setDataSource("/sdcard/test.mp3");
+ c. 网络上的媒体文件
+ 例如：mp.setDataSource("http://www.citynorth.cn/music/confucius.mp3");
+ 
+3）方法介绍
+void start()：开始或恢复播放。
+void stop()：停止播放。
+void pause()：暂停播放。
+
+int getDuration()：获取流媒体的总播放时长，单位是毫秒。
+int getCurrentPosition()：获取当前流媒体的播放的位置，单位是毫秒。
+void seekTo(int msec)：设置当前MediaPlayer的播放位置，单位是毫秒。
+void setLooping(boolean looping)：设置是否循环播放。
+boolean isLooping()：判断是否循环播放。
+boolean  isPlaying()：判断是否正在播放。
+void prepare()：同步的方式装载流媒体文件。
+void prepareAsync()：异步的方式装载流媒体文件。
+void release ()：回收流媒体资源。 
+void setAudioStreamType(int streamtype)：设置播放流媒体类型。
+void setWakeMode(Context context, int mode)：设置CPU唤醒的状态。
+setNextMediaPlayer(MediaPlayer next)：设置当前流媒体播放完毕，下一个播放的MediaPlayer。
+ 
+ 
+ 除了上面介绍的一些方法外，MediaPlayer还提供了一些事件的回调函数，这里介绍几个常用的：
+ setOnCompletionListener(MediaPlayer.OnCompletionListener listener)：当流媒体播放完毕的时候回调。
+ setOnErrorListener(MediaPlayer.OnErrorListener listener)：当播放中发生错误的时候回调。
+ setOnPreparedListener(MediaPlayer.OnPreparedListener listener)：当装载流媒体完毕的时候回调。
+ setOnSeekCompleteListener(MediaPlayer.OnSeekCompleteListener listener)：当使用seekTo()设置播放位置的时候回调。
+``
+                    mediaPlayer = new MediaPlayer();
+02.2                 mediaPlayer.setDataSource(path);
+03.3                 mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+04.4                
+05.5                 // 通过异步的方式装载媒体资源
+06.6                 mediaPlayer.prepareAsync();
+07.7                 mediaPlayer.setOnPreparedListener(new OnPreparedListener() {                   
+08.8                     @Override
+09.9                     public void onPrepared(MediaPlayer mp) {
+10.10                         // 装载完毕回调
+11.11                         mediaPlayer.start();
+12.12                     }
+13.13                 })
+``
+
+4)使用技巧
+1、在使用start()播放流媒体之前，需要装载流媒体资源。这里最好使用prepareAsync()用异步的方式装载流媒体资源。
+因为流媒体资源的装载是会消耗系统资源的，在一些硬件不理想的设备上，如果使用prepare()同步的方式装载资源，
+可能会造成UI界面的卡顿，这是非常影响用于体验的。因为推荐使用异步装载的方式，为了避免还没有装载完成就调用start()而报错的问题，
+需要绑定MediaPlayer.setOnPreparedListener()事件，它将在异步装载完成之后回调。异步装载还有一个好处就是避免装载超
+时引发ANR（(Application Not Responding）错误。
+
+2、使用完MediaPlayer需要回收资源。MediaPlayer是很消耗系统资源的，所以在使用完MediaPlayer，不要等待系统自动回收，最好是主动回收资源。
+``
+            if (mediaPlayer != null && mediaPlayer.isPlaying()) {
+2.2             mediaPlayer.stop();
+3.3             mediaPlayer.release();
+4.4             mediaPlayer = null;
+5.5         }
+``
+
+3、使用MediaPlayer最好使用一个Service来使用，并且在Service的onDestory()方法中回收MediaPlayer资源，实际上，
+就算是直接使用Activity承载MediaPlayer，也最好在销毁的时候判断一下MediaPlayer是否被回收，如果未被回收，回收其资源，
+因为底层调用的native方法，如果不销毁还是会在底层继续播放，而承载的组件已经被销毁了，这个时候就无法获取到这个MediaPlayer
+进而控制它。
+``
+           @Override
+02.2     protected void onDestroy() {
+03.3         if (mediaPlayer != null && mediaPlayer.isPlaying()) {
+04.4             mediaPlayer.stop();
+05.5             mediaPlayer.release();
+06.6             mediaPlayer = null;
+07.7         }
+08.8         super.onDestroy();
+09.9     }
+``
+
+4、对于单曲循环之类的操作，除了可以使用setLooping()方法进行设置之外，还可以为MediaPlayer注册回调函数，
+MediaPlayer.setOnCompletionListener()，它会在MediaPlayer播放完毕被回调。
+``
+01.1                 // 设置循环播放
+02.2 //                mediaPlayer.setLooping(true);
+03.3                 mediaPlayer.setOnCompletionListener(new OnCompletionListener() {
+04.4                    
+05.5                     @Override
+06.6                     public void onCompletion(MediaPlayer mp) {
+07.7                         // 在播放完毕被回调
+08.8                         play();                       
+09.9                     }
+10.10                 });
+``
+5、因为MediaPlayer一直操作的是一个流媒体，所以无可避免的可能一段流媒体资源，前半段可以正常播放，
+而中间一段因为解析或者源文件错误等问题，造成中间一段无法播放问题，需要我们处理这个错误，否则会影响Ux（用户体验）。
+可以为MediaPlayer注册回调函数setOnErrorListener()来设置出错之后的解决办法，一般重新播放或者播放下一个流媒体即可
+``
+1.1                 mediaPlayer.setOnErrorListener(new OnErrorListener() {
+2.2                    
+3.3                     @Override
+4.4                     public boolean onError(MediaPlayer mp, int what, int extra) {
+5.5                         play();
+6.6                         return false;
+7.7                     }
+8.8                 })
+``
+@link https://blog.csdn.net/world_kun/article/details/79788250

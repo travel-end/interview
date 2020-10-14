@@ -5,6 +5,13 @@
     <dimen name="safe_padding">8dp</dimen>
     <dimen name="card_radius">12dp</dimen>
     <dimen name="card_view_height">300dp</dimen>
+    <integer name="lrc_animation_duration">1000</integer>
+    <dimen name="lrc_text_size">16sp</dimen>
+    <dimen name="lrc_time_text_size">12sp</dimen>
+    <dimen name="lrc_divider_height">16dp</dimen>
+    <dimen name="lrc_timeline_height">1dp</dimen>
+    <dimen name="lrc_drawable_width">30dp</dimen>
+    <dimen name="lrc_time_width">40dp</dimen>
     <dimen name="sp_16">16sp</dimen>
     <dimen name="sp_10">10sp</dimen>
     <dimen name="dp_5">5dp</dimen>
@@ -13,6 +20,7 @@
     <dimen name="dp_2">2dp</dimen>
     <dimen name="dp_8">8dp</dimen>
     <dimen name="dp_10">10dp</dimen>
+    <dimen name="dp_14">14dp</dimen>
     <dimen name="dp_15">15dp</dimen>
     <dimen name="dp_16">16dp</dimen>
     <dimen name="dp_18">18dp</dimen>
@@ -20,6 +28,7 @@
     <dimen name="dp_26">26dp</dimen>
     <dimen name="dp_28">28dp</dimen>
     <dimen name="dp_30">30dp</dimen>
+    <dimen name="dp_32">32dp</dimen>
     <dimen name="dp_34">34dp</dimen>
     <dimen name="dp_36">36dp</dimen>
     <dimen name="dp_40">40dp</dimen>

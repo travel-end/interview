@@ -22,9 +22,8 @@ import com.journey.interview.imusic.model.Song
 import com.journey.interview.imusic.service.IMusicPlayService
 import com.journey.interview.imusic.vm.ILocalSongViewModel
 import com.journey.interview.recyclerview.core.*
-import com.journey.interview.utils.FileUtil
+import com.journey.interview.utils.SongUtil
 import com.journey.interview.utils.getString
-import com.journey.interview.weatherapp.base.BaseFragment
 import com.journey.interview.weatherapp.base.BaseLifeCycleFragment
 import kotlinx.android.synthetic.main.imusic_frg_local.*
 
@@ -62,6 +61,7 @@ class ILocalFragment:BaseLifeCycleFragment<ILocalSongViewModel>() {
     }
     override fun layoutResId()=R.layout.imusic_frg_local
 
+
     override fun initView() {
         super.initView()
         val playIntent = Intent(requireActivity(),IMusicPlayService::class.java)
@@ -81,7 +81,7 @@ class ILocalFragment:BaseLifeCycleFragment<ILocalSongViewModel>() {
                         bindViewHolder { data, pos, holder ->
                             setText(R.id.tv_item_local_song_name,data?.name)
                             setText(R.id.tv_item_local_song_singer,data?.singer)
-                            val currentSongId = FileUtil.getSong()?.songId
+                            val currentSongId = SongUtil.getSong()?.songId
                             if (currentSongId != null &&
                                 data?.songId == currentSongId) {
                                 itemView?.findViewById<ImageView>(R.id.iv_item_local_song_laba)?.visibility = View.VISIBLE
@@ -106,7 +106,7 @@ class ILocalFragment:BaseLifeCycleFragment<ILocalSongViewModel>() {
                                     songId = mp3Info.songId
                                     listType = Constant.LIST_TYPE_LOCAL
                                 }
-                                FileUtil.saveSong(song)
+                                SongUtil.saveSong(song)
                                 playBinder?.play(Constant.LIST_TYPE_LOCAL)
                             })
                         }
@@ -114,8 +114,8 @@ class ILocalFragment:BaseLifeCycleFragment<ILocalSongViewModel>() {
                 }
             }
             // 滚动至当前播放的位置
-            if (FileUtil.getSong() != null) {
-                layoutManager.scrollToPositionWithOffset(FileUtil.getSong()!!.position-4,mRvLocalSong.height)
+            if (SongUtil.getSong() != null) {
+                layoutManager.scrollToPositionWithOffset(SongUtil.getSong()!!.position-4,mRvLocalSong.height)
             }
         } else if (type == MV) {
             local_tv_songs.visibility = View.VISIBLE
@@ -171,10 +171,23 @@ class ILocalFragment:BaseLifeCycleFragment<ILocalSongViewModel>() {
                 }
             }
         }
+//        IMusicBus.observeRefreshLocalSongChange(this,{
+//            if (type == SONG) {
+//                mViewModel.getLocalSongs()
+//            }
+//        })
+//        IMusicBus.musicEvent.commonEventStatus.observe(this,observer)
     }
+
+//    private val observer = Observer<Int> {
+//        if (type == SONG) {
+//            mViewModel.getLocalSongs()
+//        }
+//    }
 
     override fun onDestroy() {
         super.onDestroy()
         requireActivity().unbindService(playConnection)
+//        IMusicBus.musicEvent.commonEventStatus.removeObserver(observer)
     }
 }

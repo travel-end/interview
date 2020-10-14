@@ -271,4 +271,41 @@
             <enum name="right" value="2" />
         </attr>
     </declare-styleable>
+    <declare-styleable name="DigistProgressBar">
+        <attr name="progress_current" format="integer" />
+        <attr name="progress_max" format="integer" />
+        <attr name="progress_unreached_color" format="color" />
+        <attr name="progress_reached_color" format="color" />
+        <attr name="progress_reached_bar_height" format="dimension" />
+        <attr name="progress_unreached_bar_height" format="dimension" />
+        <attr name="progress_text_size" format="dimension" />
+        <attr name="progress_text_color" format="color" />
+        <attr name="progress_text_offset" format="dimension" />
+        <attr name="progress_text_visibility" format="enum">
+            <enum name="visible" value="0" />
+            <enum name="invisible" value="1" />
+        </attr>
+    </declare-styleable>
+
+    <declare-styleable name="LrcView">
+        <attr name="lrcTextSize" format="dimension" />
+        <attr name="lrcNormalTextSize" format="dimension" />
+        <attr name="lrcDividerHeight" format="dimension" />
+        <attr name="lrcNormalTextColor" format="reference|color" />
+        <attr name="lrcCurrentTextColor" format="reference|color" />
+        <attr name="lrcTimelineTextColor" format="reference|color" />
+        <attr name="lrcAnimationDuration" format="integer" />
+        <attr name="lrcLabel" format="string" />
+        <attr name="lrcPadding" format="dimension" />
+        <attr name="lrcTimelineColor" format="reference|color" />
+        <attr name="lrcTimelineHeight" format="dimension" />
+        <attr name="lrcPlayDrawable" format="reference" />
+        <attr name="lrcTimeTextColor" format="reference|color" />
+        <attr name="lrcTimeTextSize" format="dimension" />
+        <attr name="lrcTextGravity">
+            <enum name="center" value="0" />
+            <enum name="left" value="1" />
+            <enum name="right" value="2" />
+        </attr>
+    </declare-styleable>
 </resources>

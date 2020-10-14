@@ -9,6 +9,7 @@ import android.os.Binder
 import android.os.Build
 import android.os.IBinder
 import android.util.Log
+import android.widget.Toast
 import androidx.core.app.NotificationCompat
 import com.journey.interview.Constant
 import com.journey.interview.R
@@ -17,13 +18,15 @@ import com.journey.interview.imusic.download.IMusicDownloadUtil
 import com.journey.interview.imusic.global.IMusicBus
 import com.journey.interview.imusic.model.*
 import com.journey.interview.imusic.room.IMusicRoomHelper
-import com.journey.interview.utils.FileUtil
+import com.journey.interview.utils.SongUtil
+import com.journey.interview.utils.getString
 import kotlinx.coroutines.*
 import java.io.IOException
 
 /**
  * @By Journey 2020/9/27
  * @Description
+ * @link https://www.jianshu.com/p/8d0cde35eb10
  */
 class IMusicPlayService : Service() {
     /* ***音乐列表*/
@@ -49,9 +52,18 @@ class IMusicPlayService : Service() {
     private val mPlayStatusBinder = PlayStatusBinder()
     var mPlayMode = Constant.PLAY_ORDER // 默认设置为顺序播放
 
+    /**
+     * 1、调用时机：手动调用startService方法（本项目在[IMainActivity]onCreate中调用的）
+     * 2、说明：
+     * 1）即使一个Service被startService启动多次，onCreate方法也只会调用一次（在Service中，
+     * 只有onStartCommand方法可以被多次调用，其他方法都只能被调用一次，即onStartCommand调用次数=startService调用次数）
+     * 2）
+     *
+     */
     override fun onCreate() {
+        Log.e("JG","--->IMusicPlayService onCreate")
         super.onCreate()
-        mListType = FileUtil.getSong()?.listType
+        mListType = SongUtil.getSong()?.listType
         mListType?.let {
             when (it) {
                 Constant.LIST_TYPE_DOWNLOAD -> {
@@ -81,9 +93,9 @@ class IMusicPlayService : Service() {
                         }
                     }
                     // 保证最近播放的歌曲总是列表的第一个
-                    val song = FileUtil.getSong()
+                    val song = SongUtil.getSong()
                     song?.position = 0
-                    FileUtil.saveSong(song)
+                    SongUtil.saveSong(song)
                 }
                 else-> {
 
@@ -93,11 +105,18 @@ class IMusicPlayService : Service() {
         startForeground(NOTIFICATION_ID, getNotification("爱音乐，开启你的私人音乐之旅o(*￣▽￣*)ブ"))
     }
 
+    /**
+     * 调用bindService时调用，如果在之前已经调用过bindService，则不会调用该方法
+     * 如[IMainActivity]中已经调用过bindService，在[IPlayActivity]中的bindService 方法
+     * 就不会再调用该方法
+     */
     override fun onBind(intent: Intent?): IBinder? {
-        Log.e("JG","--->onBind")
+        Log.e("JG","--->IMusicPlayService onBind")
+        // 音乐播放完毕的时候调用
         mMediaPlayer.setOnCompletionListener { mp ->
             IMusicBus.sendPlayStatusChangeEvent(Constant.SONG_PAUSE)
-            mCurrent = FileUtil.getSong()?.position // 当前歌曲在列表中的位置  如第一首 为：0
+            IMusicBus.sendPlayStatusChangeEvent(Constant.SONG_COMPLETE)
+            mCurrent = SongUtil.getSong()?.position // 当前歌曲在列表中的位置  如第一首 为：0
             if (mListType != null) {
                 when (mListType) {
                     Constant.LIST_TYPE_DOWNLOAD -> {
@@ -171,7 +190,7 @@ class IMusicPlayService : Service() {
                         }
                     }
                 }
-                mCurrent = FileUtil.getSong()?.position
+                mCurrent = SongUtil.getSong()?.position
                 Log.e("JG","mCurrent:$mCurrent")
                 // 把各项参数恢复到初始状态
                 mMediaPlayer.reset()
@@ -217,13 +236,14 @@ class IMusicPlayService : Service() {
                 }
             } catch (e: Exception) {
                 Log.e("JG","play error:${e.message}")
+                Toast.makeText(this@IMusicPlayService,R.string.play_error.getString(),Toast.LENGTH_SHORT).show()
             }
         }
 
         // 播放搜索歌曲
         fun playOnline() {
             try {
-                val song = FileUtil.getSong()
+                val song = SongUtil.getSong()
                 mMediaPlayer.run {
                     reset()
                     setDataSource(song?.url ?: "")
@@ -304,18 +324,18 @@ class IMusicPlayService : Service() {
     @Throws(IOException::class)
     private fun startPlay() {
         mMediaPlayer.prepare()
-        mIsPlaying = true
+        this@IMusicPlayService.mIsPlaying = true
         mMediaPlayer.start()
         saveToHistorySong()
         IMusicBus.sendPlayStatusChangeEvent(Constant.SONG_CHANGE)
-        val song = FileUtil.getSong()
+        val song = SongUtil.getSong()
         notificationManager.notify(NOTIFICATION_ID,
         getNotification("${song?.songName}-${song?.singer}"))
     }
 
     private var job: Job? = null
     private fun saveToHistorySong() {
-        val song = FileUtil.getSong()
+        val song = SongUtil.getSong()
         song?.let {
             job = GlobalScope.launch {
                 val historySong = HistorySong().apply {
@@ -362,7 +382,7 @@ class IMusicPlayService : Service() {
                 isDownload = true
                 albumName = it.albumName
             }
-            FileUtil.saveSong(song)
+            SongUtil.saveSong(song)
         }
     }
 
@@ -387,7 +407,7 @@ class IMusicPlayService : Service() {
                 qqId = it.qqId
                 listType = Constant.LIST_TYPE_LOCAL
             }
-            FileUtil.saveSong(song)
+            SongUtil.saveSong(song)
         }
     }
 
@@ -415,7 +435,7 @@ class IMusicPlayService : Service() {
                 isDownload = it.isDownload?:false
                 duration = it.duration?: 0
             }
-            FileUtil.saveSong(song)
+            SongUtil.saveSong(song)
         }
     }
     private fun saveHistorySong(current: Int) {
@@ -435,7 +455,7 @@ class IMusicPlayService : Service() {
                 mediaId = it.mediaId
                 isDownload = it.isDownload
             }
-            FileUtil.saveSong(song)
+            SongUtil.saveSong(song)
         }
 
     }
@@ -480,7 +500,7 @@ class IMusicPlayService : Service() {
     }
 
     override fun onUnbind(intent: Intent?): Boolean {
-        Log.d("JG", "播放Service onUnbind--->")
+        Log.d("JG", "IMusicPlayService onUnbind--->")
         return true
     }
 
@@ -511,12 +531,19 @@ class IMusicPlayService : Service() {
     }
 
     override fun onDestroy() {
-        Log.d("JG", "播放Service被销毁了--->")
+        Log.d("JG", "--->IMusicPlayService onDestroy")
         mMediaPlayer.stop()
         mMediaPlayer.release()
         stopForeground(true)
         if (job?.isCancelled == false) {
             job?.cancel()
         }
+    }
+
+    /**
+     *
+     */
+    override fun stopService(name: Intent?): Boolean {
+        return super.stopService(name)
     }
 }

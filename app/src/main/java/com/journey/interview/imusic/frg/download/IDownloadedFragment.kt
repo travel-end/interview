@@ -12,7 +12,6 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import com.journey.interview.Constant
 import com.journey.interview.R
-import com.journey.interview.customizeview.ripple.MyRippleView
 import com.journey.interview.imusic.download.IMusicDownloadUtil
 import com.journey.interview.imusic.model.Downloaded
 import com.journey.interview.imusic.model.Song
@@ -21,7 +20,7 @@ import com.journey.interview.recyclerview.core.addItem
 import com.journey.interview.recyclerview.core.itemClicked
 import com.journey.interview.recyclerview.core.setText
 import com.journey.interview.recyclerview.core.setup
-import com.journey.interview.utils.FileUtil
+import com.journey.interview.utils.SongUtil
 import com.journey.interview.weatherapp.base.BaseFragment
 
 /**
@@ -63,7 +62,7 @@ class IDownloadedFragment:BaseFragment() {
                             if (data?.albumName != "") {
                                 setText(R.id.tv_item_song_album_name,"- ${data?.albumName}")
                             }
-                            val currentSongId = FileUtil.getSong()?.songId
+                            val currentSongId = SongUtil.getSong()?.songId
                             if (currentSongId != null &&
                                     data?.songId == currentSongId) {
                                 itemView?.findViewById<ImageView>(R.id.iv_item_song_laba)?.visibility = View.VISIBLE
@@ -94,7 +93,7 @@ class IDownloadedFragment:BaseFragment() {
                                     mediaId = downloadedSong.mediaId
                                     isDownload = true
                                 }
-                                FileUtil.saveSong(song)
+                                SongUtil.saveSong(song)
                                 playBinder?.play(Constant.LIST_TYPE_DOWNLOAD)
 //                            }
                             })

@@ -72,4 +72,7 @@
     <string name="order_play">顺序播放</string>
     <string name="random_play">随机播放</string>
     <string name="single_play">单曲循环</string>
+    <string name="refresh">刷新</string>
+    <string name="play_error">出现了不可描述的错误￣へ￣</string>
+    <string name="lrc_empty">还没发现歌词￣へ￣</string>
 </resources>

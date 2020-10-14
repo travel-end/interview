@@ -4,10 +4,9 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <LinearLayout
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/dp_48"
-        android:orientation="horizontal">
+        android:layout_height="@dimen/dp_48">
         <ImageView
             android:id="@+id/local_iv_back"
             android:layout_width="30dp"
@@ -22,9 +21,19 @@
             android:textColor="@color/colorBlack"
             android:textSize="18sp"
             android:layout_gravity="center_vertical"
-            android:layout_marginStart="@dimen/dp_20" />
+            android:layout_marginStart="@dimen/dp_54" />
+        <TextView
+            android:id="@+id/local_tv_refresh"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/sp_16"
+            android:textColor="@color/colorGrayDark"
+            android:layout_gravity="center_vertical|end"
+            android:layout_marginEnd="@dimen/dp_16"
+            android:text="@string/refresh" />
 
-    </LinearLayout>
+
+    </FrameLayout>
     <com.journey.interview.customizeview.tablayout.CommonTabLayout
         android:id="@+id/local_title_tabLayout"
         android:layout_width="match_parent"

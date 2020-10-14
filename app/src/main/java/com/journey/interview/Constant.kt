@@ -84,6 +84,7 @@ object Constant {
     const val SONG_PAUSE = 1
     const val SONG_RESUME = 2
     const val SONG_CHANGE = 3
+    const val SONG_COMPLETE = 4
     // 播放列表
     const val LIST_TYPE_LOCAL=1//本地列表
     const val LIST_TYPE_ONLINE=2//专辑列表
@@ -113,5 +114,9 @@ object Constant {
     const val TYPE_DOWNLOAD_FAILED = 4
     const val TYPE_DOWNLOADED = 5
     const val TYPE_DOWNLOAD_ADD = 6
+
+
+    // 普通事件传递
+    const val EVENT_REFRESH_LOCAL_SONG = 0
 
 }

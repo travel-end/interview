@@ -2,6 +2,7 @@ package com.journey.interview.imusic
 
 import android.animation.ObjectAnimator
 import android.animation.ValueAnimator
+import android.annotation.SuppressLint
 import android.app.ActivityOptions
 import android.content.ComponentName
 import android.content.Context
@@ -9,7 +10,9 @@ import android.content.Intent
 import android.content.ServiceConnection
 import android.media.MediaPlayer
 import android.os.Build
+import android.os.Handler
 import android.os.IBinder
+import android.os.Message
 import android.util.Log
 import android.view.animation.LinearInterpolator
 import android.widget.ImageView
@@ -17,13 +20,14 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import com.google.android.material.shape.ShapeAppearanceModel
 import com.journey.interview.Constant
 import com.journey.interview.R
+import com.journey.interview.customizeview.progressbar.DigistProgressBar
 import com.journey.interview.customizeview.swipecaptcha.core.GlideUtil
 import com.journey.interview.imusic.act.IPlayActivity
 import com.journey.interview.imusic.global.IMusicBus
 import com.journey.interview.imusic.model.Song
 import com.journey.interview.imusic.service.IMusicPlayService
 import com.journey.interview.imusic.vm.IMainViewModel
-import com.journey.interview.utils.FileUtil
+import com.journey.interview.utils.SongUtil
 import com.journey.interview.utils.isServiceRunning
 import com.journey.interview.weatherapp.base.BaseLifeCycleActivity
 import kotlinx.android.synthetic.main.imusic_act_main.*
@@ -37,12 +41,15 @@ class IMainActivity : BaseLifeCycleActivity<IMainViewModel>() {
     private var mSong: Song? = null
     private var mPlayServiceBinder: IMusicPlayService.PlayStatusBinder? = null
     private var isExistService: Boolean = false// 服务是否存活
-    private var mFlag:Boolean = false// 用作暂停的标记
-    private lateinit var mPlayBtn:ImageView
-    private var mMediaPlayer:MediaPlayer?=null
-    private var mTime:Int?=null // 记录暂停的时间
-    private var isSeek:Boolean = false// 标记是否在暂停的时候拖动进度条
-    private var mCurrentTime:Long?=null
+    private var mFlag: Boolean = false// 用作暂停的标记
+    private lateinit var mPlayBtn: ImageView
+    private var mMediaPlayer: MediaPlayer? = null
+    private var mTime: Int? = null // 记录暂停的时间
+    private var isSeek: Boolean = false// 标记是否在暂停的时候拖动进度条
+    private var isChange: Boolean = false
+    private var mCurrentTime: Long? = null
+    private lateinit var progressBar: DigistProgressBar
+    private var progressBarThread: Thread? = null
     override fun layoutResId() = R.layout.imusic_act_main
 
     private val playConnection = object : ServiceConnection {
@@ -61,15 +68,22 @@ class IMainActivity : BaseLifeCycleActivity<IMainViewModel>() {
             ShapeAppearanceModel.Builder()
                 .setAllCornerSizes(ShapeAppearanceModel.PILL)
                 .build()
-
-        mSong = FileUtil.getSong()
+        progressBar = bottom_player.play_progress_bar
+        mSong = SongUtil.getSong()
         mSong?.let {
             bottom_player.player_song_name.text = it.songName
             bottom_player.player_song_author.text = it.singer
             mCurrentTime = it.currentTime// todo 保存当前的歌曲播放进度 在play页面展示
-            Log.e("JG","播放进度：$mCurrentTime")
+            progressBar.max = mSong?.duration ?: 100
+            progressBar.progress = mSong?.currentTime?.toInt() ?: 0
+
+            Log.e("JG", "播放进度：$mCurrentTime")
             if (it.imgUrl == null) {
-                FileUtil.setLocalCoverImg(this@IMainActivity,it.singer?:"",bottom_player.player_song_icon)
+                SongUtil.setLocalCoverImg(
+                    this@IMainActivity,
+                    it.singer ?: "",
+                    bottom_player.player_song_icon
+                )
             } else {
                 GlideUtil.loadImg(
                     this@IMainActivity,
@@ -101,17 +115,17 @@ class IMainActivity : BaseLifeCycleActivity<IMainViewModel>() {
                 mPlayServiceBinder?.isPlaying == true -> {
                     mTime = mMediaPlayer?.currentPosition
                     mPlayServiceBinder?.pause()
-                    mFlag=true
+                    mFlag = true
                 }
                 mFlag -> {
                     mPlayServiceBinder?.resume()
                     mFlag = false
                 }
                 else -> {//退出程序重新打开后的情况
-                    if (FileUtil.getSong()?.isOnline == true) {
+                    if (SongUtil.getSong()?.isOnline == true) {
                         mPlayServiceBinder?.playOnline()
                     } else {
-                        mPlayServiceBinder?.play(FileUtil.getSong()?.listType)
+                        mPlayServiceBinder?.play(SongUtil.getSong()?.listType)
                     }
                     mMediaPlayer = mPlayServiceBinder?.mediaPlayer
                     val currentTime = (mSong?.currentTime)!! * 1000
@@ -120,30 +134,34 @@ class IMainActivity : BaseLifeCycleActivity<IMainViewModel>() {
             }
         }
         findViewById<ConstraintLayout>(R.id.bottom_player).setOnClickListener {
-            val song = FileUtil.getSong()
+            val song = SongUtil.getSong()
             if (song != null) {
                 if (song.songName != null) {
-                    val playIntent = Intent(this,IPlayActivity::class.java)
+                    val playIntent = Intent(this, IPlayActivity::class.java)
                     // 正在播放
                     if (mPlayServiceBinder?.isPlaying == true) {
-                        val song2 = FileUtil.getSong()
-                        val currenttime = mPlayServiceBinder?.currentTime?:0
+                        val song2 = SongUtil.getSong()
+                        val currenttime = mPlayServiceBinder?.currentTime ?: 0
 //                        Log.e("JG","当前播放进度：$currenttime")
                         song2?.currentTime = currenttime
-                        FileUtil.saveSong(song2)
-                        playIntent.putExtra(Constant.PLAY_STATUS,Constant.SONG_PLAY)
+                        SongUtil.saveSong(song2)
+                        playIntent.putExtra(Constant.PLAY_STATUS, Constant.SONG_PLAY)
                     } else {// 暂停
-                        val song3 = FileUtil.getSong()
-                        song3?.currentTime = mCurrentTime?:0
-                        Log.e("JG","暂停播放进度：$mCurrentTime")
-                        FileUtil.saveSong(song3)
+                        val song3 = SongUtil.getSong()
+                        Log.e("JG", "暂停播放进度：${progressBar.progress.toLong()}")
+                        song3?.currentTime = progressBar.progress.toLong()
+                        SongUtil.saveSong(song3)
                     }
-                    if (FileUtil.getSong()?.imgUrl != null) {
-                        playIntent.putExtra("online",true)
+                    if (SongUtil.getSong()?.imgUrl != null) {
+                        playIntent.putExtra("online", true)
                     }
 
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                        startActivity(playIntent,ActivityOptions.makeSceneTransitionAnimation(this@IMainActivity).toBundle())
+                        startActivity(
+                            playIntent,
+                            ActivityOptions.makeSceneTransitionAnimation(this@IMainActivity)
+                                .toBundle()
+                        )
                     } else {
                         startActivity(playIntent)
                     }
@@ -184,20 +202,29 @@ class IMainActivity : BaseLifeCycleActivity<IMainViewModel>() {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
                         rotationAnim.resume()
                     }
-                    mCurrentTime = mPlayServiceBinder?.currentTime
+//                    mCurrentTime = mPlayServiceBinder?.currentTime
+                    startProgressBar()
                 }
                 Constant.SONG_CHANGE -> {
-                    mSong = FileUtil.getSong()
+                    Log.e("JG", "---->SONG_CHANGE")
+                    mSong = SongUtil.getSong()
                     mSong?.let { s ->
                         bottom_player.player_song_name.text = s.songName
                         bottom_player.player_song_author.text = s.singer
+                        progressBar.progress = 0
+                        progressBar.max = mSong?.duration ?: 100
                         bottom_player.btn_player.isSelected = true
                         rotationAnim.start()
-                        mCurrentTime = mPlayServiceBinder?.currentTime
+//                        mCurrentTime = mPlayServiceBinder?.currentTime
+                        startProgressBar()
                         if (!s.isOnline) {
-                            FileUtil.setLocalCoverImg(this@IMainActivity,s.singer?:"",bottom_player.player_song_icon)
+                            SongUtil.setLocalCoverImg(
+                                this@IMainActivity,
+                                s.singer ?: "",
+                                bottom_player.player_song_icon
+                            )
                         } else {// 在线播放
-                            Log.e("JG","封面图片url:${s.imgUrl}")
+                            Log.e("JG", "封面图片url:${s.imgUrl}")
                             GlideUtil.loadImg(
                                 this@IMainActivity,
                                 s.imgUrl ?: "",
@@ -210,12 +237,35 @@ class IMainActivity : BaseLifeCycleActivity<IMainViewModel>() {
             }
         }
     }
+
     private val rotationAnim by lazy {
-        ObjectAnimator.ofFloat(bottom_player.player_song_icon,"rotation", 0.0f, 360.0f).apply {
+        ObjectAnimator.ofFloat(bottom_player.player_song_icon, "rotation", 0.0f, 360.0f).apply {
             duration = 30000
             interpolator = LinearInterpolator()
             repeatCount = ValueAnimator.INFINITE// 循环播放
             repeatMode = ValueAnimator.RESTART
+        }
+    }
+
+    private fun startProgressBar() {
+//        progressBar.visibility = View.VISIBLE
+//        progressBarThread = Thread(ProgressBarRunnable())
+//        progressBarThread?.start()
+        progressBarHandler.removeMessages(1)
+        progressBarHandler.sendEmptyMessageDelayed(1, 1000)
+    }
+
+    @SuppressLint("HandlerLeak")
+    private val progressBarHandler = object : Handler() {
+        override fun handleMessage(msg: Message) {
+            super.handleMessage(msg)
+            if (mPlayServiceBinder != null) {
+                if (mPlayServiceBinder!!.isPlaying) {
+//                    Log.e("JG", "progress: ${mPlayServiceBinder!!.currentTime.toInt()}")
+                    progressBar.progress = mPlayServiceBinder!!.currentTime.toInt()
+                    startProgressBar()
+                }
+            }
         }
     }
 
@@ -230,9 +280,11 @@ class IMainActivity : BaseLifeCycleActivity<IMainViewModel>() {
         } else {
             startService(playIntent)
         }
-        val song = FileUtil.getSong()
+        val song = SongUtil.getSong()
         // 保存歌曲播放时长位置
         song?.currentTime = mPlayServiceBinder?.currentTime ?: 0L
-        FileUtil.saveSong(song)
+        SongUtil.saveSong(song)
+        progressBarHandler.removeMessages(1)
+        progressBarHandler.removeCallbacksAndMessages(null)
     }
 }

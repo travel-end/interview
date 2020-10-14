@@ -94,14 +94,14 @@ class ILocalSongViewModel:BaseViewModel() {
 
     fun getLocalSongs() {
         val songList = initLocalMp3Info()
-//        Log.e("JG","检索本地音乐：$songList")
+        Log.e("JG","检索本地音乐：$songList")
         if (songList != null) {
             if (songList.isNotEmpty()) {
                 viewModelScope.launch {
                     val result = withContext(Dispatchers.IO) {
                         IMusicRoomHelper.saveLocalSong(songList)
                     }
-//                    Log.e("JG","存储本地音乐：$result")
+                    Log.e("JG","存储本地音乐：$result")
                     if (result != null) {
                         localSongResult.value = songList
                     }

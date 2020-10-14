@@ -17,7 +17,7 @@ import kotlin.concurrent.thread
  * @By Journey 2020/9/27
  * @Description
  */
-object FileUtil {
+object SongUtil {
 
     fun saveSong(song: Song?) {
         try {

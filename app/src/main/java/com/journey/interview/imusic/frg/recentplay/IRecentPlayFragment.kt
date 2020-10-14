@@ -17,7 +17,7 @@ import com.journey.interview.imusic.model.Song
 import com.journey.interview.imusic.service.IMusicPlayService
 import com.journey.interview.imusic.vm.IHistorySongViewModel
 import com.journey.interview.recyclerview.core.*
-import com.journey.interview.utils.FileUtil
+import com.journey.interview.utils.SongUtil
 import com.journey.interview.weatherapp.base.BaseLifeCycleFragment
 import kotlinx.android.synthetic.main.imusic_act_history.*
 
@@ -48,7 +48,7 @@ class IRecentPlayFragment:BaseLifeCycleFragment<IHistorySongViewModel>() {
                     bindViewHolder { data, pos, holder ->
                         setText(R.id.tv_item_song_name,data?.name)
                         setText(R.id.tv_item_song_singer,data?.singer)
-                        val currentSongId = FileUtil.getSong()?.songId
+                        val currentSongId = SongUtil.getSong()?.songId
                         if (currentSongId != null &&
                             data?.songId == currentSongId) {
                             itemView?.findViewById<ImageView>(R.id.iv_item_song_laba)?.visibility = View.VISIBLE
@@ -76,7 +76,7 @@ class IRecentPlayFragment:BaseLifeCycleFragment<IHistorySongViewModel>() {
                                 listType = Constant.LIST_TYPE_HISTORY
                                 mediaId = historySong.mediaId
                             }
-                            FileUtil.saveSong(song)
+                            SongUtil.saveSong(song)
                             playBinder?.play(Constant.LIST_TYPE_HISTORY)
                         })
                     }

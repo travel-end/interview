@@ -11,7 +11,7 @@ import com.journey.interview.imusic.model.DownloadEvent
  */
 object IMusicBus {
 
-    private val musicEvent = InterviewApp.instance.getGlobalViewModel(IMusicEventViewModel::class.java)
+    val musicEvent = InterviewApp.instance.getGlobalViewModel(IMusicEventViewModel::class.java)
 
     /**
      * 播放状态的改变
@@ -57,5 +57,18 @@ object IMusicBus {
      */
     fun sendDownloadSongStatusChange(downloadEvent: DownloadEvent) {
         musicEvent.downloadSongStatus.value =downloadEvent
+    }
+
+    /**
+     * 刷新本地歌曲
+     */
+    fun sendRefreshLocalSong(event:Int) {
+        musicEvent.commonEventStatus.value = event
+    }
+
+    fun observeRefreshLocalSongChange(o:LifecycleOwner,block: (Int) -> Unit) {
+        musicEvent.commonEventStatus.observe(o,Observer<Int>{
+            block.invoke(it)
+        })
     }
 }

@@ -20,4 +20,8 @@ class IMusicEventViewModel:ViewModel() {
 
     // 監聽下載歌曲的狀態
     val downloadSongStatus:MutableLiveData<DownloadEvent> = MutableLiveData()
+
+
+    // 普通事件传递
+    val commonEventStatus:MutableLiveData<Int> = MutableLiveData()
 }

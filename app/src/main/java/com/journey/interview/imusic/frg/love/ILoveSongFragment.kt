@@ -7,7 +7,6 @@ import android.content.ServiceConnection
 import android.graphics.Color
 import android.os.Build
 import android.os.IBinder
-import android.util.Log
 import android.view.View
 import android.view.WindowManager
 import android.widget.ImageView
@@ -15,18 +14,15 @@ import androidx.appcompat.widget.Toolbar
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.appbar.AppBarLayout
-import com.gyf.immersionbar.ImmersionBar
 import com.journey.interview.Constant
 import com.journey.interview.R
 import com.journey.interview.imusic.global.IMusicBus
-import com.journey.interview.imusic.model.Downloaded
 import com.journey.interview.imusic.model.LoveSong
 import com.journey.interview.imusic.model.Song
 import com.journey.interview.imusic.service.IMusicPlayService
 import com.journey.interview.imusic.vm.ILoveSongViewModel
 import com.journey.interview.recyclerview.core.*
-import com.journey.interview.utils.DensityUtil
-import com.journey.interview.utils.FileUtil
+import com.journey.interview.utils.SongUtil
 import com.journey.interview.utils.toIntPx
 import com.journey.interview.weatherapp.base.BaseLifeCycleFragment
 import kotlinx.android.synthetic.main.imusic_act_love_song.*
@@ -65,7 +61,7 @@ class ILoveSongFragment:BaseLifeCycleFragment<ILoveSongViewModel>() {
                             setText(R.id.tv_item_song_name,it.name)
                             setText(R.id.tv_item_song_singer,it.singer)
                             setVisible(R.id.tv_item_download_ok,it.isDownload==true)
-                            val currentSongId = FileUtil.getSong()?.songId
+                            val currentSongId = SongUtil.getSong()?.songId
                             if (currentSongId != null &&
                                 it.songId == currentSongId) {
                                 itemView?.findViewById<ImageView>(R.id.iv_item_song_laba)?.visibility = View.VISIBLE
@@ -94,7 +90,7 @@ class ILoveSongFragment:BaseLifeCycleFragment<ILoveSongViewModel>() {
                                     listType = Constant.LIST_TYPE_LOVE
                                     mediaId = loveSong.mediaId
                                 }
-                                FileUtil.saveSong(song)
+                                SongUtil.saveSong(song)
                                 playBinder?.play(Constant.LIST_TYPE_LOVE)
                             })
                         }
