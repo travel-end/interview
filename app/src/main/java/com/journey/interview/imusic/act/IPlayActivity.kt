@@ -454,6 +454,7 @@ class IPlayActivity : BaseLifeCycleActivity<IPlayViewModel>() {
     }
 
     private fun initCoverLrc() {
+        // true:支持手动拖动   回调：滚动至某处，并点击播放按钮时回调
         mLrcView.setDraggable(true
         ) { _, time ->
             mMediaPlayer?.seekTo(time.toInt())
