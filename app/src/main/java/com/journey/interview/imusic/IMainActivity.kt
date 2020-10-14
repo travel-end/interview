@@ -14,6 +14,7 @@ import android.os.Handler
 import android.os.IBinder
 import android.os.Message
 import android.util.Log
+import android.view.View
 import android.view.animation.LinearInterpolator
 import android.widget.ImageView
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -23,6 +24,7 @@ import com.journey.interview.R
 import com.journey.interview.customizeview.progressbar.DigistProgressBar
 import com.journey.interview.customizeview.swipecaptcha.core.GlideUtil
 import com.journey.interview.imusic.act.IPlayActivity
+import com.journey.interview.imusic.global.Bus
 import com.journey.interview.imusic.global.IMusicBus
 import com.journey.interview.imusic.model.Song
 import com.journey.interview.imusic.service.IMusicPlayService
@@ -43,8 +45,8 @@ class IMainActivity : BaseLifeCycleActivity<IMainViewModel>() {
     private var isExistService: Boolean = false// 服务是否存活
     private var mFlag: Boolean = false// 用作暂停的标记
     private lateinit var mPlayBtn: ImageView
-    private var mMediaPlayer: MediaPlayer? = null
-    private var mTime: Int? = null // 记录暂停的时间
+    private var mMediaPlayer: MediaPlayer?=null
+//    private var mTime: Int? = null // 记录暂停的时间
     private var isSeek: Boolean = false// 标记是否在暂停的时候拖动进度条
     private var isChange: Boolean = false
     private var mCurrentTime: Long? = null
@@ -58,6 +60,9 @@ class IMainActivity : BaseLifeCycleActivity<IMainViewModel>() {
 
         override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
             mPlayServiceBinder = service as IMusicPlayService.PlayStatusBinder
+            if (isExistService) {
+                startProgressBar()
+            }
         }
     }
 
@@ -98,10 +103,14 @@ class IMainActivity : BaseLifeCycleActivity<IMainViewModel>() {
 
         }
 
+        // 保證播放音乐状态退出程序后 再次进入 仍然继续播放音乐（或者暂停状态退出程序 进入后仍然保持之前的状态）
         if (isServiceRunning(IMusicPlayService::class.java.name)) {
-            bottom_player.btn_player.isSelected = true
-            rotationAnim.start()
-            isExistService = true
+            val playStatus = mSong?.playStatus
+            if (playStatus==null) {//如果当前是处于播放的状态
+                bottom_player.btn_player.isSelected = true
+                rotationAnim.start()
+                isExistService = true
+            }
         }
         // 处理服务
         initService()
@@ -109,11 +118,13 @@ class IMainActivity : BaseLifeCycleActivity<IMainViewModel>() {
 
     override fun initData() {
         super.initData()
+        mMediaPlayer = mPlayServiceBinder?.mediaPlayer
+        /* 点击播放/点击暂停*/
         bottom_player.main_rv_play.setOnClickListener {
-            mMediaPlayer = mPlayServiceBinder?.mediaPlayer
+//            Log.e("JG","mMediaPlayer$mMediaPlayer")
             when {
                 mPlayServiceBinder?.isPlaying == true -> {
-                    mTime = mMediaPlayer?.currentPosition
+//                    mTime = mMediaPlayer?.currentPosition// 记录暂停的时间
                     mPlayServiceBinder?.pause()
                     mFlag = true
                 }
@@ -122,14 +133,17 @@ class IMainActivity : BaseLifeCycleActivity<IMainViewModel>() {
                     mFlag = false
                 }
                 else -> {//退出程序重新打开后的情况
+                    Log.e("JG","上一次的播放进度:$mCurrentTime")
                     if (SongUtil.getSong()?.isOnline == true) {
-                        mPlayServiceBinder?.playOnline()
+                        mPlayServiceBinder?.playOnline(((mCurrentTime?:0) * 1000).toInt())
+//                        mPlayServiceBinder?.resume()
                     } else {
                         mPlayServiceBinder?.play(SongUtil.getSong()?.listType)
                     }
-                    mMediaPlayer = mPlayServiceBinder?.mediaPlayer
-                    val currentTime = (mSong?.currentTime)!! * 1000
-                    mMediaPlayer?.seekTo(currentTime.toInt())
+                    // todo 这里有个bug  playOnline后会reset mediaPlayer对象  seekTo方法应该是不生效的
+//                    mMediaPlayer = mPlayServiceBinder?.mediaPlayer// 这个mediaPlayer对象需要重新获取  之前的由于程序退出后已经被销毁
+//                    val currentTime = mCurrentTime!! * 1000
+//                    mMediaPlayer?.seekTo(currentTime.toInt())
                 }
             }
         }
@@ -189,30 +203,23 @@ class IMainActivity : BaseLifeCycleActivity<IMainViewModel>() {
     override fun dataObserve() {
         super.dataObserve()
         // 播放歌曲被改变
-        IMusicBus.observePlayStatusChange(this) {
-            when (it) {
-                Constant.SONG_PAUSE -> {
-                    bottom_player.btn_player.isSelected = false
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                        rotationAnim.pause()
-                    }
-                }
-                Constant.SONG_RESUME -> {
-                    bottom_player.btn_player.isSelected = true
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                        rotationAnim.resume()
-                    }
-//                    mCurrentTime = mPlayServiceBinder?.currentTime
-                    startProgressBar()
-                }
+        Bus.observe<Int>(Constant.SONG_STATUS_CHANGE,this) {
+//            Log.e("JG","--->坚挺到播放歌曲的改变")
+            when(it) {
                 Constant.SONG_CHANGE -> {
-                    Log.e("JG", "---->SONG_CHANGE")
+                    Log.e("JG", "---->切歌")
                     mSong = SongUtil.getSong()
                     mSong?.let { s ->
                         bottom_player.player_song_name.text = s.songName
                         bottom_player.player_song_author.text = s.singer
-                        progressBar.progress = 0
-                        progressBar.max = mSong?.duration ?: 100
+//                        progressBar.progress = 0
+                        val duration = mSong?.duration
+                        if (duration == null || duration == 0) {
+                            progressBar.visibility = View.GONE
+                        } else {
+                            progressBar.visibility = View.VISIBLE
+                            progressBar.max = mSong?.duration!!
+                        }
                         bottom_player.btn_player.isSelected = true
                         rotationAnim.start()
 //                        mCurrentTime = mPlayServiceBinder?.currentTime
@@ -224,7 +231,7 @@ class IMainActivity : BaseLifeCycleActivity<IMainViewModel>() {
                                 bottom_player.player_song_icon
                             )
                         } else {// 在线播放
-                            Log.e("JG", "封面图片url:${s.imgUrl}")
+//                            Log.e("JG", "封面图片url:${s.imgUrl}")
                             GlideUtil.loadImg(
                                 this@IMainActivity,
                                 s.imgUrl ?: "",
@@ -234,8 +241,37 @@ class IMainActivity : BaseLifeCycleActivity<IMainViewModel>() {
                         }
                     }
                 }
+                Constant.SONG_PAUSE -> {
+                    Log.e("JG", "---->暂停")
+                    bottom_player.btn_player.isSelected = false
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                        rotationAnim.pause()
+                    }
+                }
+                Constant.SONG_RESUME -> {
+                    Log.e("JG", "---->播放")
+                    bottom_player.btn_player.isSelected = true
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                        rotationAnim.resume()
+                    }
+                    startProgressBar()
+                }
             }
         }
+
+//        IMusicBus.observePlayStatusChange(this) {
+//            when (it) {
+//                Constant.SONG_PAUSE -> {
+//
+//                }
+//                Constant.SONG_RESUME -> {
+//
+//                }
+//                Constant.SONG_CHANGE -> {
+//
+//                }
+//            }
+//        }
     }
 
     private val rotationAnim by lazy {
@@ -262,7 +298,7 @@ class IMainActivity : BaseLifeCycleActivity<IMainViewModel>() {
             if (mPlayServiceBinder != null) {
                 if (mPlayServiceBinder!!.isPlaying) {
 //                    Log.e("JG", "progress: ${mPlayServiceBinder!!.currentTime.toInt()}")
-                    progressBar.progress = mPlayServiceBinder!!.currentTime.toInt()
+                    progressBar.progress = mPlayServiceBinder!!.currentTime.toInt() // 显示当前的播放进度（mediaPlayer的currentPosition）
                     startProgressBar()
                 }
             }
@@ -283,6 +319,9 @@ class IMainActivity : BaseLifeCycleActivity<IMainViewModel>() {
         val song = SongUtil.getSong()
         // 保存歌曲播放时长位置
         song?.currentTime = mPlayServiceBinder?.currentTime ?: 0L
+        if (mFlag) {// 暂停的状态
+            song?.playStatus = Constant.SONG_PAUSE
+        }
         SongUtil.saveSong(song)
         progressBarHandler.removeMessages(1)
         progressBarHandler.removeCallbacksAndMessages(null)

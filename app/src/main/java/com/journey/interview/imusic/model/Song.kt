@@ -4,11 +4,8 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import java.io.Serializable
 
-/**
- * Created by 残渊 on 2018/10/19.
- */
 @Entity
-data class Song(
+ class Song(
     @PrimaryKey(autoGenerate = true)
     val id: Long = 0,
     var songId //歌曲id
@@ -19,17 +16,17 @@ data class Song(
     : String? = null,
     var singer //歌手
     : String? = null,
-    var duration //总时长
+    var duration //总时长（秒）
     : Int = 0,
     var songName //歌曲名字
     : String? = null,
-    var url //歌曲url
+    var url //歌曲播放地址url
     : String? = null,
     var currentTime //歌曲播放时长位置
     : Long = 0,
     var position //在音乐列表的位置
     : Int = 0,
-    var imgUrl //歌曲照片
+    var imgUrl //封面专辑照片
     : String? = null,
     var isOnline //是否为网络歌曲
     : Boolean = false,
@@ -37,6 +34,11 @@ data class Song(
     : Int = 0,
     var isDownload //是否为下载的歌曲
     : Boolean = false,
-    var albumName:String?=null
+    var albumName:String?=null,
+    var playStatus:Int?=null
 
-) : Serializable
+) :Serializable {
+    companion object {
+        private const val serialVersionUID = 1L
+    }
+}

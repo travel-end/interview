@@ -7,11 +7,11 @@ import com.journey.interview.imusic.model.DownloadEvent
 
 /**
  * @By Journey 2020/9/27
- * @Description
+ * @Description 这个不能用啊  发送了一次就取消不了！！！  咋改？？？
  */
 object IMusicBus {
 
-    val musicEvent = InterviewApp.instance.getGlobalViewModel(IMusicEventViewModel::class.java)
+    private val musicEvent = InterviewApp.instance.getGlobalViewModel(IMusicEventViewModel::class.java)
 
     /**
      * 播放状态的改变

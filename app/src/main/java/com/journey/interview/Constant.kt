@@ -80,9 +80,10 @@ object Constant {
     const val PLAY_RANDOM = 1// 随机播放
     const val PLAY_SINGER = 2//单曲循环
     // 播放状态
+    const val SONG_STATUS_CHANGE = "song_status_change"
     const val SONG_PLAY = 0
     const val SONG_PAUSE = 1
-    const val SONG_RESUME = 2
+    const val SONG_RESUME = 2// ->song start
     const val SONG_CHANGE = 3
     const val SONG_COMPLETE = 4
     // 播放列表

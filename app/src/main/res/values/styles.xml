@@ -77,7 +77,7 @@
 <!--        <item name="progress_text_size">10sp</item>-->
 <!--        <item name="progress_text_color">#0491ff</item>-->
         <item name="progress_text_visibility">invisible</item>
-        <item name="progress_reached_bar_height">1dp</item>
-        <item name="progress_unreached_bar_height">1dp</item>
+        <item name="progress_reached_bar_height">1.5dp</item>
+        <item name="progress_unreached_bar_height">1.5dp</item>
     </style>
 </resources>

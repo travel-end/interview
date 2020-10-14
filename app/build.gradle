@@ -87,4 +87,5 @@ dependencies {
     implementation 'com.gyf.immersionbar:immersionbar:3.0.0'
     implementation 'com.gyf.immersionbar:immersionbar-ktx:3.0.0'
 //    implementation 'me.wcy:lrcview:2.2'
+    implementation 'com.jeremyliao:live-event-bus-x:1.5.7'
 }
