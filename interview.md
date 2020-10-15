@@ -7,6 +7,12 @@ fun makeDir(path:String) = path.let{File(it)}.also{it.mkdirs()}
 #### DSL
 
 
+#### 实用的库
+LayoutManagerDemo:https://github.com/BeauteousJade/LayoutManagerDemo
+表格布局（RecyclerView实现）:https://github.com/mCyp/Orient-Ui
+
+
+
 ###关于kotlin中的内部类和嵌套类
 在Kotlin中的内部类也是指在一个类的内部声明另一个类，但是和Java中的规则有些差异。
 在Kotlin中的内部类和Java中的内部类相似，都会持有一个外部类的引用，但是在Kotlin中
