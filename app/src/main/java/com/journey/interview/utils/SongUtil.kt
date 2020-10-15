@@ -18,24 +18,30 @@ import kotlin.concurrent.thread
  * @Description
  */
 object SongUtil {
-
+    /**
+     * 将一个对象写入流中 对象必须实现Serializable接口
+     */
     fun saveSong(song: Song?) {
         try {
-            val file =
-                File(InterviewApp.instance.getExternalFilesDir("imusic")?.absolutePath?:"")
-            if (!file.exists()) {
-                file.mkdirs()
+            if (song != null) {
+                val file =
+                    File(InterviewApp.instance.getExternalFilesDir("imusic")?.absolutePath?:"")
+                if (!file.exists()) {
+                    file.mkdirs()
+                }
+                //写对象流的对象
+                val songFile = File(file, "song.txt")
+                val oos =
+                    ObjectOutputStream(FileOutputStream(songFile))
+                oos.writeObject(song) //将Person对象p写入到oos中
+                oos.close() //关闭文件流
             }
-            //写对象流的对象
-            val userFile = File(file, "song.txt")
-            val oos =
-                ObjectOutputStream(FileOutputStream(userFile))
-            oos.writeObject(song) //将Person对象p写入到oos中
-            oos.close() //关闭文件流
         } catch (e: FileNotFoundException) {
             e.printStackTrace()
+            Log.e("JG","写入对象error!")
         } catch (e: IOException) {
             e.printStackTrace()
+            Log.e("JG","写入对象error!")
         }
     }
 
@@ -49,11 +55,14 @@ object SongUtil {
             return ois.readObject() as Song //返回对象
         } catch (e: FileNotFoundException) {
             e.printStackTrace()
+            Log.e("JG","读取对象error!")
             return null
         } catch (e: IOException) {
+            Log.e("JG","读取对象error!")
             e.printStackTrace()
             return null
         } catch (e: ClassNotFoundException) {
+            Log.e("JG","读取对象error!")
             e.printStackTrace()
             return null
         }

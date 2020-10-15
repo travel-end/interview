@@ -100,21 +100,22 @@ class IPlayActivity : BaseLifeCycleActivity<IPlayViewModel>() {
 
             mIsOnline = SongUtil.getSong()?.isOnline ?: false
 //            Log.e("JG", "是否是网络歌曲--->$mIsOnline")
-            if (mIsOnline) {
+            if (mIsOnline) {// 是网络歌曲
                 val coverImg = SongUtil.getSong()?.imgUrl
 //                Log.e("JG", "IPlayActivity--->coverImg:$coverImg")
-                getSongCoverImg(coverImg)
+                setSongCoverImg(coverImg)// 设置网络歌曲封面（封面图片路径为网络路径）
                 if (mPlayStatus == Constant.SONG_PLAY) {
                     mDiscView.play()
                     play_bottom_controller.iv_play.isSelected = true
                     updateSeekBarProgress()
                 }
             } else {
-                mSeekBar.secondaryProgress = mSong?.duration?.toInt() ?: 0
-                setLocalCoverImg(mSong?.singer ?: "")
+                mSeekBar.secondaryProgress = mSong?.duration?: 0
+                setLocalCoverImg(mSong?.singer ?: "")// 设置本地歌曲封面
             }
-            play_bottom_controller.tv_total_time.text =
-                StringUtils.formatTime(mSong?.duration?.toLong() ?: 0)
+//            // todo 本地歌曲的duration不对
+//            play_bottom_controller.tv_total_time.text =
+//                StringUtils.formatTime(mSong?.duration?.toLong() ?: 0)
             // 缓存进度条
             mPlayStatusBinder?.mediaPlayer?.setOnBufferingUpdateListener { mp, percent ->
                 mSeekBar.secondaryProgress = percent * mSeekBar.progress
@@ -159,7 +160,7 @@ class IPlayActivity : BaseLifeCycleActivity<IPlayViewModel>() {
             window.enterTransition = Slide()
             window.exitTransition = Slide()
         }
-        mPlayStatus = intent?.getIntExtra(Constant.PLAY_STATUS, 2)
+        mPlayStatus = intent?.getIntExtra(Constant.PLAY_STATUS, 2)//播放状态
         Log.e("JG", "--->mPlayStatus: $mPlayStatus")
 
         mDiscView = disc_view as DiscView
@@ -177,41 +178,42 @@ class IPlayActivity : BaseLifeCycleActivity<IPlayViewModel>() {
         bindService(downloadIntent, mDownloadConnection, Context.BIND_AUTO_CREATE)
 
         mSong = SongUtil.getSong() // 初始化当前播放歌曲
-        // 界面ui
+
+        // 绘制界面ui
         mSong?.let { song ->
-            mListType = song.listType
+            mListType = song.listType// 歌曲类型
             play_tv_song_singer.text = song.singer
             play_tv_song_name.text = song.songName
             Log.e("JG", "当前播放进度：${song.currentTime}")
             Log.e("JG", "当前播放总时长：${mSong?.duration?.toLong()}")//263593
-            mTvCurrentTime.text = StringUtils.formatTime(song.currentTime)
+            mTvCurrentTime.text = StringUtils.formatTime(song.currentTime)//当前进度TextView
             play_bottom_controller.tv_total_time.text =
-                StringUtils.formatTime(mSong?.duration?.toLong() ?: 0)
-            mSeekBar.max = song.duration
+                StringUtils.formatTime(mSong?.duration?.toLong() ?: 0)// 总时长TextView
+            mSeekBar.max = song.duration// 进度条总长度（单位 s）
             val time = if (song.currentTime < 1L) {
                 0
             } else {
                 song.currentTime.toInt()
             }
             mSeekBar.progress = time
-
             initPlayMode()
         }
         initCoverLrc() // 初始化歌词设置
-        initAnim()
+        initAnim()//初始化动画（唱碟的透明度动画）
     }
 
 
     override fun initData() {
         super.initData()
-        mSong?.songId?.let {
-            mViewModel.queryIsMyLoveSong(it)
-        }
-        if (mPlayStatus == Constant.SONG_PLAY) {
-            mDiscView.play()
-            play_bottom_controller.iv_play.isSelected = true
-            updateSeekBarProgress()
-        }
+//        mSong?.songId?.let {
+//            mViewModel.queryIsMyLoveSong(it)
+//        }
+//        if (mPlayStatus == Constant.SONG_PLAY) {
+//            mDiscView.play()
+//            play_bottom_controller.iv_play.isSelected = true
+//            updateSeekBarProgress()
+//        }
+
         iv_back.setOnClickListener { finish() }
         // 进度条监听
         mSeekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
@@ -228,12 +230,13 @@ class IPlayActivity : BaseLifeCycleActivity<IPlayViewModel>() {
             // 进度条停止拖动的时候调用
             override fun onStopTrackingTouch(seekBar: SeekBar?) {
                 val progress = seekBar?.progress?.toLong() ?: 0
+                Log.e("JG","滑动至：${seekBar?.progress ?: 0}")
                 if (mLrcView.hasLrc()) {
                     mLrcView.updateTime(progress*1000)
                 }
                 if (mPlayStatusBinder?.isPlaying == true) {
                     mMediaPlayer = mPlayStatusBinder?.mediaPlayer
-                    mMediaPlayer?.seekTo(seekBar?.progress ?: 0 * 1000)
+                    mMediaPlayer?.seekTo((seekBar?.progress ?: 0) * 1000)
                     updateSeekBarProgress()
                 } else {
                     mPauseTime = seekBar?.progress
@@ -258,9 +261,9 @@ class IPlayActivity : BaseLifeCycleActivity<IPlayViewModel>() {
                 mFlag -> {
                     mPlayStatusBinder?.resume()
                     mFlag = false
-                    if (mIsSeek) {
+                    if (mIsSeek) {// 在暂停的时候拖动了进度条
                         Log.d("JG", "拖动至时间onClick: $mPauseTime")
-                        mMediaPlayer?.seekTo(mPauseTime ?: 0 * 1000)
+                        mMediaPlayer?.seekTo((mPauseTime ?: 0) * 1000)
                         mIsSeek = false
                     }
                     mDiscView.play()
@@ -340,8 +343,6 @@ class IPlayActivity : BaseLifeCycleActivity<IPlayViewModel>() {
                 }
             }
         })
-
-
 
         // 音量
         mVolumeSeekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
@@ -432,7 +433,7 @@ class IPlayActivity : BaseLifeCycleActivity<IPlayViewModel>() {
         })
 
         mViewModel.localSongImg.observe(this, Observer {
-            getSongCoverImg(it)
+            setSongCoverImg(it)
         })
 
         mViewModel.localSongId.observe(this, Observer {
@@ -519,7 +520,7 @@ class IPlayActivity : BaseLifeCycleActivity<IPlayViewModel>() {
         }
     }
 
-    private fun getSongCoverImg(cover: String?) {
+    private fun setSongCoverImg(cover: String?) {
         Glide.with(this)
             .load(cover ?: "")
             .apply(RequestOptions.placeholderOf(R.drawable.icon1))

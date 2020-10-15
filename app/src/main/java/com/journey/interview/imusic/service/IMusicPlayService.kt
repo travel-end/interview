@@ -15,6 +15,7 @@ import com.journey.interview.Constant
 import com.journey.interview.R
 import com.journey.interview.imusic.IMainActivity
 import com.journey.interview.imusic.download.IMusicDownloadUtil
+import com.journey.interview.imusic.global.Bus
 import com.journey.interview.imusic.global.IMusicBus
 import com.journey.interview.imusic.model.*
 import com.journey.interview.imusic.room.IMusicRoomHelper
@@ -114,8 +115,9 @@ class IMusicPlayService : Service() {
         Log.e("JG","--->IMusicPlayService onBind")
         // 音乐播放完毕的时候调用
         mMediaPlayer.setOnCompletionListener { mp ->
-            IMusicBus.sendPlayStatusChangeEvent(Constant.SONG_PAUSE)
-            IMusicBus.sendPlayStatusChangeEvent(Constant.SONG_COMPLETE)
+//            IMusicBus.sendPlayStatusChangeEvent(Constant.SONG_PAUSE)
+//            IMusicBus.sendPlayStatusChangeEvent(Constant.SONG_COMPLETE)
+            Bus.post(Constant.SONG_STATUS_CHANGE,Constant.SONG_PAUSE)
             mCurrent = SongUtil.getSong()?.position // 当前歌曲在列表中的位置  如第一首 为：0
             if (mListType != null) {
                 when (mListType) {
@@ -137,16 +139,18 @@ class IMusicPlayService : Service() {
                     }
                 }
             }
-        }
-        // 播放的可能是除了网络歌曲之外的其他模式
-        if (mListType != 0 && mListType != null) {
-            mPlayStatusBinder.play(mListType!!)
-        } else {
-            mPlayStatusBinder.stop()
+
+            if (mListType != 0 && mListType != null) {
+                mPlayStatusBinder.play(mListType!!)
+            } else {
+                // todo 如果播放的是网络歌曲继续播放搜索的下一首
+                mPlayStatusBinder.stop()
+            }
         }
         /**
          * MediaPlayer切歌进入setOnCompletionListener的问题
          * 因为直接切歌会发生错误，所以增加错误监听器。返回true。就不会回调onCompletion方法了。
+         * todo // 处理播放出错的逻辑
          */
         mMediaPlayer.setOnErrorListener { _, _, _ -> true }
         return mPlayStatusBinder
@@ -241,24 +245,38 @@ class IMusicPlayService : Service() {
         }
 
         // 播放搜索歌曲
-        fun playOnline() {
+        fun playOnline(restartTime:Int?=null) {
             try {
                 val song = SongUtil.getSong()
                 mMediaPlayer.run {
                     reset()
                     setDataSource(song?.url ?: "")
-                    prepare()
-                    this@IMusicPlayService.mIsPlaying = true
-                    saveToHistorySong()
-                    start()
-                    IMusicBus.sendPlayStatusChangeEvent(Constant.SONG_CHANGE)
-                    // 改变通知栏歌曲
-                    notificationManager.notify(
-                        NOTIFICATION_ID,
-                        getNotification("${song?.songName} - ${song?.singer}")
-                    )
+//                    prepare()
+                    //通过异步的方式装载媒体流
+                    prepareAsync()
+                    //装载完毕
+                    setOnPreparedListener {
+                        this@IMusicPlayService.mIsPlaying = true
+                        saveToHistorySong()
+                        if (restartTime != null) {
+                            it?.seekTo(restartTime)
+                        }
+                        it.start()
+//                    start()
+                        // todo 发送网络歌曲改编事件
+
+                        // 播放歌曲改变
+//                        IMusicBus.sendPlayStatusChangeEvent(Constant.SONG_CHANGE)// 在[IMainActivity中监听]
+                        Bus.post(Constant.SONG_STATUS_CHANGE,Constant.SONG_CHANGE)
+                        // 改变通知栏歌曲
+                        notificationManager.notify(
+                            NOTIFICATION_ID,
+                            getNotification("${song?.songName} - ${song?.singer}")
+                        )
+                    }
                 }
             } catch (e: Exception) {
+                Log.e("JG","播放网络歌曲出错！！--->${e.message}")
             }
         }
 
@@ -267,7 +285,8 @@ class IMusicPlayService : Service() {
                 mIsPlaying = false
                 mMediaPlayer.pause()
                 mIsPause = true
-                IMusicBus.sendPlayStatusChangeEvent(Constant.SONG_PAUSE)
+//                IMusicBus.sendPlayStatusChangeEvent(Constant.SONG_PAUSE)
+                Bus.post(Constant.SONG_STATUS_CHANGE,Constant.SONG_PAUSE)
             }
         }
 
@@ -276,7 +295,8 @@ class IMusicPlayService : Service() {
                 mMediaPlayer.start()
                 mIsPlaying = true
                 mIsPause = false
-                IMusicBus.sendPlayStatusChangeEvent(Constant.SONG_RESUME)
+//                IMusicBus.sendPlayStatusChangeEvent(Constant.SONG_RESUME)
+                Bus.post(Constant.SONG_STATUS_CHANGE,Constant.SONG_RESUME)
             }
         }
 

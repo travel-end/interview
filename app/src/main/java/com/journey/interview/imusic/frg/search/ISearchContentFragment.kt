@@ -92,15 +92,18 @@ class ISearchContentFragment :BaseLifeCycleFragment<ISearchContentViewModel>(){
                                     setText(R.id.tv_song_lyric,data.albumname)
                                 }
                                 itemClicked(View.OnClickListener {
+                                    // 组装搜索到的歌曲的有效信息
                                     val song= Song().apply {
-                                        songId = data.songmid
-                                        singer = sinGer
-                                        songName = data.songname
+                                        songId = data.songmid //004DrG5A2nm7q2
+                                        singer = sinGer// 鸾音社
+                                        songName = data.songname// 夜来寒雨晓来风
+                                        //http://y.gtimg.cn/music/photo_new/T002R180x180M000004UvnL62KXhCQ.jpg
                                         imgUrl = "${Constant.ALBUM_PIC}${data.albummid}${Constant.JPG}"
-                                        duration = data.interval
+                                        duration = data.interval//187  (秒)
                                         isOnline = true
-                                        mediaId = data.strMediaMid
-                                        albumName = data.albumname
+                                        mediaId = data.strMediaMid//004DrG5A2nm7q2
+                                        albumName = data.albumname//夜来寒雨晓来风
+                                        // 是否已经下载过了（初次搜索为false）
                                         isDownload = IMusicDownloadUtil.isExistOfDownloadSong(data.songmid?:"")//003IHI2x3RbXLS
                                     }
                                     mViewModel.getSongUrl(song)
@@ -170,7 +173,7 @@ class ISearchContentFragment :BaseLifeCycleFragment<ISearchContentViewModel>(){
                 val url = it.entries.find {entry->
                     entry.key == "url"
                 }?.value as String
-                song.url = url
+                song.url = url// 播放地址
                 SongUtil.saveSong(song)
                 // 开始播放音乐
                 mPlayStatusBinder?.playOnline()

@@ -259,3 +259,18 @@ MediaPlayer.setOnCompletionListener()，它会在MediaPlayer播放完毕被回�
 8.8                 })
 ``
 @link https://blog.csdn.net/world_kun/article/details/79788250
+
+####需求池
+1、添加tab诗词部分添加图片诗词（带评论） 参考开眼视频 发现tab
+2、首页下面四个菜单 分别为唐诗 宋词 诗经 其他朝代的诗词
+3、最下面的四个菜单 提供四个歌单入口  每日推荐  精品歌单等
+4、最下面滑动为
+
+
+####优化的点
+1、todo 如果播放的是网络歌曲继续播放搜索的下一首 playService 144行
+2、// 处理播放出错的逻辑
+3、是否需要通知栏 以及通知栏的样式
+4、IMainActivity退出程序后，如何保持是退出之前的同一个mediaPlayer对象？ IMainActivity 135行
+这样子的话重新播放音乐就不会重新装载了（装载需要时间   或者把这个时间放在activity的onResume方法中麻痹用户？？）
+5、处理初次进入页面没有歌曲的情况（在Application中查询本地歌曲 如果有 用第一条歌曲   如果一条都没有，自己推荐一条）
