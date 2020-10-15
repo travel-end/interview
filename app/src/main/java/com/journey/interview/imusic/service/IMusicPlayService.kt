@@ -115,8 +115,8 @@ class IMusicPlayService : Service() {
         Log.e("JG","--->IMusicPlayService onBind")
         // 音乐播放完毕的时候调用
         mMediaPlayer.setOnCompletionListener { mp ->
-//            IMusicBus.sendPlayStatusChangeEvent(Constant.SONG_PAUSE)
 //            IMusicBus.sendPlayStatusChangeEvent(Constant.SONG_COMPLETE)
+            Log.e("JG","--->歌曲播放完毕")
             Bus.post(Constant.SONG_STATUS_CHANGE,Constant.SONG_PAUSE)
             mCurrent = SongUtil.getSong()?.position // 当前歌曲在列表中的位置  如第一首 为：0
             if (mListType != null) {
@@ -266,7 +266,7 @@ class IMusicPlayService : Service() {
                         // todo 发送网络歌曲改编事件
 
                         // 播放歌曲改变
-//                        IMusicBus.sendPlayStatusChangeEvent(Constant.SONG_CHANGE)// 在[IMainActivity中监听]
+//                      // 在[IMainActivity中监听]
                         Bus.post(Constant.SONG_STATUS_CHANGE,Constant.SONG_CHANGE)
                         // 改变通知栏歌曲
                         notificationManager.notify(
@@ -285,7 +285,6 @@ class IMusicPlayService : Service() {
                 mIsPlaying = false
                 mMediaPlayer.pause()
                 mIsPause = true
-//                IMusicBus.sendPlayStatusChangeEvent(Constant.SONG_PAUSE)
                 Bus.post(Constant.SONG_STATUS_CHANGE,Constant.SONG_PAUSE)
             }
         }
@@ -295,7 +294,6 @@ class IMusicPlayService : Service() {
                 mMediaPlayer.start()
                 mIsPlaying = true
                 mIsPause = false
-//                IMusicBus.sendPlayStatusChangeEvent(Constant.SONG_RESUME)
                 Bus.post(Constant.SONG_STATUS_CHANGE,Constant.SONG_RESUME)
             }
         }
@@ -322,9 +320,9 @@ class IMusicPlayService : Service() {
             mMediaPlayer.stop()
             try {
                 //  在调用stop后如果需要再次通过start进行播放,需要之前调用prepare函数
-                mMediaPlayer.prepare()
+//                mMediaPlayer.prepare()
             } catch (e: Exception) {
-
+                e.printStackTrace()
             }
         }
 

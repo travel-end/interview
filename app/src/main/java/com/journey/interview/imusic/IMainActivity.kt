@@ -60,6 +60,7 @@ class IMainActivity : BaseLifeCycleActivity<IMainViewModel>() {
 
         override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
             mPlayServiceBinder = service as IMusicPlayService.PlayStatusBinder
+            Log.e("JG","mPlayServiceBinder$mPlayServiceBinder")
             if (isExistService) {
                 startProgressBar()
             }
@@ -106,7 +107,7 @@ class IMainActivity : BaseLifeCycleActivity<IMainViewModel>() {
         // 保證播放音乐状态退出程序后 再次进入 仍然继续播放音乐（或者暂停状态退出程序 进入后仍然保持之前的状态）
         if (isServiceRunning(IMusicPlayService::class.java.name)) {
             val playStatus = mSong?.playStatus
-            if (playStatus==null) {//如果当前是处于播放的状态
+            if (playStatus!=null && playStatus==Constant.SONG_PLAY) {//如果当前是处于播放的状态
                 bottom_player.btn_player.isSelected = true
                 rotationAnim.start()
                 isExistService = true
@@ -132,11 +133,11 @@ class IMainActivity : BaseLifeCycleActivity<IMainViewModel>() {
                     mPlayServiceBinder?.resume()
                     mFlag = false
                 }
-                else -> {//退出程序重新打开后的情况
+                else -> {//退出程序重新打开后的情况（此时处于暂停）
                     Log.e("JG","上一次的播放进度:$mCurrentTime")
                     if (SongUtil.getSong()?.isOnline == true) {
-                        mPlayServiceBinder?.playOnline(((mCurrentTime?:0) * 1000).toInt())
-//                        mPlayServiceBinder?.resume()
+//                        mPlayServiceBinder?.playOnline(((mCurrentTime?:0) * 1000).toInt())
+                        mPlayServiceBinder?.resume()
                     } else {
                         mPlayServiceBinder?.play(SongUtil.getSong()?.listType)
                     }
@@ -158,12 +159,13 @@ class IMainActivity : BaseLifeCycleActivity<IMainViewModel>() {
                         val currenttime = mPlayServiceBinder?.currentTime ?: 0
 //                        Log.e("JG","当前播放进度：$currenttime")
                         song2?.currentTime = currenttime
-                        SongUtil.saveSong(song2)
-                        playIntent.putExtra(Constant.PLAY_STATUS, Constant.SONG_PLAY)
+                        SongUtil.saveSong(song2)// 传递当前的播放进度
+                        playIntent.putExtra(Constant.PLAY_STATUS, Constant.SONG_PLAY)// 传递当前的播放状态
                     } else {// 暂停
                         val song3 = SongUtil.getSong()
                         Log.e("JG", "暂停播放进度：${progressBar.progress.toLong()}")
                         song3?.currentTime = progressBar.progress.toLong()
+                        playIntent.putExtra(Constant.PLAY_STATUS, Constant.SONG_PAUSE)
                         SongUtil.saveSong(song3)
                     }
                     if (SongUtil.getSong()?.imgUrl != null) {
@@ -258,20 +260,6 @@ class IMainActivity : BaseLifeCycleActivity<IMainViewModel>() {
                 }
             }
         }
-
-//        IMusicBus.observePlayStatusChange(this) {
-//            when (it) {
-//                Constant.SONG_PAUSE -> {
-//
-//                }
-//                Constant.SONG_RESUME -> {
-//
-//                }
-//                Constant.SONG_CHANGE -> {
-//
-//                }
-//            }
-//        }
     }
 
     private val rotationAnim by lazy {
@@ -284,9 +272,6 @@ class IMainActivity : BaseLifeCycleActivity<IMainViewModel>() {
     }
 
     private fun startProgressBar() {
-//        progressBar.visibility = View.VISIBLE
-//        progressBarThread = Thread(ProgressBarRunnable())
-//        progressBarThread?.start()
         progressBarHandler.removeMessages(1)
         progressBarHandler.sendEmptyMessageDelayed(1, 1000)
     }
@@ -321,6 +306,8 @@ class IMainActivity : BaseLifeCycleActivity<IMainViewModel>() {
         song?.currentTime = mPlayServiceBinder?.currentTime ?: 0L
         if (mFlag) {// 暂停的状态
             song?.playStatus = Constant.SONG_PAUSE
+        } else {
+            song?.playStatus = Constant.SONG_PLAY
         }
         SongUtil.saveSong(song)
         progressBarHandler.removeMessages(1)

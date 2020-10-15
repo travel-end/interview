@@ -93,7 +93,9 @@ class IPlayActivity : BaseLifeCycleActivity<IPlayViewModel>() {
         // 播放
         override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
             Log.e("JG", "--->onServiceConnected")
+            //这里的Binder对象和IMainActivity中的Binder对象是同一个
             mPlayStatusBinder = service as IMusicPlayService.PlayStatusBinder
+//            Log.e("JG","IPlayActivity mPlayServiceBinder$mPlayStatusBinder")
             // 播放模式
             mPlayMode = mViewModel.getPlayMode()
             mPlayStatusBinder?.setPlayMode(mPlayMode)
@@ -109,7 +111,7 @@ class IPlayActivity : BaseLifeCycleActivity<IPlayViewModel>() {
                     play_bottom_controller.iv_play.isSelected = true
                     updateSeekBarProgress()
                 }
-            } else {
+            } else {// 播放不是网络歌曲
                 mSeekBar.secondaryProgress = mSong?.duration?: 0
                 setLocalCoverImg(mSong?.singer ?: "")// 设置本地歌曲封面
             }
@@ -160,7 +162,8 @@ class IPlayActivity : BaseLifeCycleActivity<IPlayViewModel>() {
             window.enterTransition = Slide()
             window.exitTransition = Slide()
         }
-        mPlayStatus = intent?.getIntExtra(Constant.PLAY_STATUS, 2)//播放状态
+        //当前播放状态
+        mPlayStatus = intent?.getIntExtra(Constant.PLAY_STATUS, 2)
         Log.e("JG", "--->mPlayStatus: $mPlayStatus")
 
         mDiscView = disc_view as DiscView
@@ -271,10 +274,12 @@ class IPlayActivity : BaseLifeCycleActivity<IPlayViewModel>() {
                     updateSeekBarProgress()
                 }
                 else -> {
+                    val restartTime = ((mSong?.currentTime ?: 0) * 1000).toInt()
                     if (mIsOnline) {
-                        mPlayStatusBinder?.playOnline()
+                        mPlayStatusBinder?.playOnline(restartTime)
+//                        mPlayStatusBinder?.resume()
                     }
-                    mMediaPlayer?.seekTo(((mSong?.currentTime ?: 0) * 1000).toInt())
+//                    mMediaPlayer?.seekTo(restartTime)
                     mDiscView.play()
                     it?.isSelected = true
                     updateSeekBarProgress()
@@ -326,11 +331,12 @@ class IPlayActivity : BaseLifeCycleActivity<IPlayViewModel>() {
                         mLrcView.loadLrc(lrc)
                     }
                 } else {
-                    Log.e("JG", "--->查询在线歌词")
                     if (hasLrc) {
                         switchCoverLrc(false)
                     } else {
+                        Log.e("JG", "--->查询在线歌词")
                         val songId = mSong?.songId
+                        mLrcView.setLabel("小i努力查找中 ヾ(◍°∇°◍)ﾉﾞ ")
                         switchCoverLrc(false)
                         if (!songId.isNullOrEmpty()) {
                             mViewModel.getOnlineSongLrc(
@@ -401,10 +407,17 @@ class IPlayActivity : BaseLifeCycleActivity<IPlayViewModel>() {
         mViewModel.songLrc.observe(this, Observer {
             if (it != null) {
                 hasLrc = true
+                mLrcView.setLabel("")
                 mLrcView.loadLrc(it.lyric)
+//                if (mSong?.currentTime != null && mSong?.currentTime!= 0L) {
+//                    val currentTime = (mSong?.currentTime?:0) *1000
+//                    if (mLrcView.hasLrc()) {
+//                        mLrcView.updateTime(currentTime)
+//                    }
+//                }
             } else {
                 hasLrc = false
-//                mLrcView.setLabel("没有发现歌词o(π﹏π)o")
+                mLrcView.setLabel("没有发现歌词o(π﹏π)o")
                 Log.e("JG", "查询歌词为null")
             }
         })
@@ -440,12 +453,12 @@ class IPlayActivity : BaseLifeCycleActivity<IPlayViewModel>() {
             mSong?.qqId = it
             SongUtil.saveSong(mSong)
         })
-        IMusicBus.observePlayStatusChange(this,{
-            if (it == Constant.SONG_COMPLETE) {
-                Log.e("JG","--->歌曲播放完毕")
-                mLrcView.updateTime(0)
-            }
-        })
+//        IMusicBus.observePlayStatusChange(this,{
+//            if (it == Constant.SONG_COMPLETE) {
+//                Log.e("JG","--->歌曲播放完毕")
+//                mLrcView.updateTime(0)
+//            }
+//        })
     }
 
     private fun getLrcError(content: String?) {
@@ -458,8 +471,12 @@ class IPlayActivity : BaseLifeCycleActivity<IPlayViewModel>() {
         // true:支持手动拖动   回调：滚动至某处，并点击播放按钮时回调
         mLrcView.setDraggable(true
         ) { _, time ->
+            //滚动至某处并点击
             mMediaPlayer?.seekTo(time.toInt())
             if (mPlayStatusBinder?.isPlaying == false) {
+                mPlayStatusBinder?.resume()
+                updateSeekBarProgress()
+                play_bottom_controller.iv_play.isSelected = true
             }
             true
         }
@@ -523,8 +540,8 @@ class IPlayActivity : BaseLifeCycleActivity<IPlayViewModel>() {
     private fun setSongCoverImg(cover: String?) {
         Glide.with(this)
             .load(cover ?: "")
-            .apply(RequestOptions.placeholderOf(R.drawable.icon1))
-            .apply(RequestOptions.errorOf(R.drawable.icon2))
+            .apply(RequestOptions.placeholderOf(R.drawable.default_disc))
+            .apply(RequestOptions.errorOf(R.drawable.disc_error))
             .into(object : SimpleTarget<Drawable>() {
                 override fun onResourceReady(
                     resource: Drawable,
@@ -533,8 +550,9 @@ class IPlayActivity : BaseLifeCycleActivity<IPlayViewModel>() {
                     mCoverBitmap = (resource as BitmapDrawable).bitmap
                     // 如果是本地音乐
                     if (!mIsOnline) {
-                        // 保存图片到本地
-                        SongUtil.saveImgToNative(mCoverBitmap, mViewModel.getSingerName() ?: "")
+                        // 保存图片到本地(如果是本地音乐 则是下载下来的 已经包含了imgUrl的)
+                        val result = SongUtil.saveImgToNative(mCoverBitmap, mViewModel.getSingerName() ?: "imusic")
+                        Log.e("JG","图片保存至本地：$result")
                         // 将封面地址保存到数据库中
                         val localSong = LocalSong()
                         localSong.pic =
@@ -621,6 +639,14 @@ class IPlayActivity : BaseLifeCycleActivity<IPlayViewModel>() {
         stopUpdateSeekBarProgress()
         updateSeekBarHandler.removeCallbacksAndMessages(null)
         unregisterReceiver(mVolumeReceiver)
+        val song = SongUtil.getSong()
+        // 记录退出当前页面时歌曲的播放状态（暂停/播放）
+        if (mFlag) {// 暂停的状态
+            song?.playStatus = Constant.SONG_PAUSE
+        } else {
+            song?.playStatus = Constant.SONG_PLAY
+        }
+        SongUtil.saveSong(song)
         hasLrc = false
     }
 
@@ -641,6 +667,7 @@ class IPlayActivity : BaseLifeCycleActivity<IPlayViewModel>() {
                     target: Target<Drawable>?,
                     isFirstResource: Boolean
                 ): Boolean {
+                    // 如果加载本地的歌曲封面出错
                     if (mSong?.songName != null) {
                         mViewModel.getLocalSongImg(
                             mViewModel.getSingerName() ?: "",
@@ -667,8 +694,8 @@ class IPlayActivity : BaseLifeCycleActivity<IPlayViewModel>() {
                     return false
                 }
             })
-            .apply(RequestOptions.placeholderOf(R.drawable.icon1))
-            .apply(RequestOptions.errorOf(R.drawable.icon2))
+            .apply(RequestOptions.placeholderOf(R.drawable.default_disc))
+            .apply(RequestOptions.errorOf(R.drawable.disc_error))
             .into(object : SimpleTarget<Drawable>() {
                 override fun onResourceReady(
                     resource: Drawable,

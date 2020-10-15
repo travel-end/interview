@@ -274,3 +274,4 @@ MediaPlayer.setOnCompletionListener()，它会在MediaPlayer播放完毕被回�
 4、IMainActivity退出程序后，如何保持是退出之前的同一个mediaPlayer对象？ IMainActivity 135行
 这样子的话重新播放音乐就不会重新装载了（装载需要时间   或者把这个时间放在activity的onResume方法中麻痹用户？？）
 5、处理初次进入页面没有歌曲的情况（在Application中查询本地歌曲 如果有 用第一条歌曲   如果一条都没有，自己推荐一条）
+6、播放界面顶部的songName改为访网易云音乐那样的滚动

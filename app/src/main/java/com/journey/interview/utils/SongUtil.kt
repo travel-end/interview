@@ -69,27 +69,32 @@ object SongUtil {
     }
 
     fun saveImgToNative(bitmap: Bitmap?,singer:String):Boolean {
-        val file = File(Constant.STORAGE_IMG_FILE)
-        if (!file.exists()) {
-            file.mkdirs()
-        }
-        val singerImgFile = File(file,"$singer.jpg")
-        var fos :FileOutputStream?=null
-        try {
-            fos = FileOutputStream(singerImgFile)
-            bitmap?.compress(Bitmap.CompressFormat.JPEG,100,fos)
-            fos.flush()
-            return true
-        } catch (e:FileNotFoundException) {
-            e.printStackTrace()
-            Log.e("JG","saveImgToNative:fileNotFound")
-        } catch (e:IOException) {
-            e.printStackTrace()
-        } finally {
+        if (bitmap != null) {
+            val file = File(Constant.STORAGE_IMG_FILE)
+            if (!file.exists()) {
+                file.mkdirs()
+            }
+            val singerImgFile = File(file,"$singer.jpg")
+            var fos :FileOutputStream?=null
             try {
-                fos?.close()
+                fos = FileOutputStream(singerImgFile)
+                bitmap.compress(Bitmap.CompressFormat.JPEG,100,fos)
+                fos.flush()
+                return true
+            } catch (e:FileNotFoundException) {
+                e.printStackTrace()
+//                Log.e("JG","保存至本地:fileNotFound")
+                return false
             } catch (e:IOException) {
                 e.printStackTrace()
+                return false
+//                Log.e("JG","saveImgToNative:fileNotFound")
+            } finally {
+                try {
+                    fos?.close()
+                } catch (e:IOException) {
+                    e.printStackTrace()
+                }
             }
         }
         return false
