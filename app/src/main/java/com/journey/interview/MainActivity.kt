@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.journey.interview.anim.AnimDslActivity
 import com.journey.interview.customizeview.CustomizeViewActivity
 import com.journey.interview.imusic.act.IWelcomeActivity
+import com.journey.interview.imusic.util.AssetsUtil
 import com.journey.interview.recyclerview.demo.EfficientAdapterActivity
 import com.journey.interview.test.FastKotlinActivity
 import com.journey.interview.weatherapp.ui.WeatherActivity
@@ -38,6 +39,8 @@ class MainActivity : AppCompatActivity() {
 //        testSystemFunction.setOnClickListener {
 //            startActivity(Intent(this,ScreenActivity::class.java))
 //        }
+        AssetsUtil.readAssetsFile("pat.txt")
+
     }
 
 }
