@@ -258,11 +258,10 @@ class IMusicPlayService : Service() {
                     setOnPreparedListener {
                         this@IMusicPlayService.mIsPlaying = true
                         saveToHistorySong()
-                        if (restartTime != null) {
+                        if (restartTime != null && restartTime !=0) {
                             it?.seekTo(restartTime)
                         }
                         it.start()
-//                    start()
                         // todo 发送网络歌曲改编事件
 
                         // 播放歌曲改变

@@ -33,7 +33,7 @@
                 android:layout_gravity="center_vertical"
                 android:layout_marginStart="@dimen/dp_20"
                 android:text="@string/login_now"
-                android:textColor="@color/colorBlack2"
+                android:textColor="@color/colorTextLight"
                 android:textSize="18sp" />
 
             <ImageView
@@ -61,7 +61,7 @@
                 android:text="@string/music_local"
                 android:gravity="center"
                 android:drawablePadding="@dimen/dp_4"
-                app:drawableTopCompat="@drawable/ic_love_selected" />
+                app:drawableTopCompat="@drawable/ic_yingtao2" />
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -69,7 +69,7 @@
                 android:text="@string/music_yigou"
                 android:gravity="center"
                 android:drawablePadding="@dimen/dp_4"
-                app:drawableTopCompat="@drawable/ic_love_selected" />
+                app:drawableTopCompat="@drawable/ic_chengzi" />
             <TextView
                 android:id="@+id/me_tv_history"
                 android:layout_width="0dp"
@@ -78,7 +78,7 @@
                 android:gravity="center"
                 android:text="@string/music_recisent"
                 android:drawablePadding="@dimen/dp_4"
-                app:drawableTopCompat="@drawable/ic_love_selected" />
+                app:drawableTopCompat="@drawable/ic_pg" />
             <TextView
                 android:id="@+id/me_tv_download"
                 android:layout_width="0dp"
@@ -87,7 +87,7 @@
                 android:gravity="center"
                 android:text="@string/music_download"
                 android:drawablePadding="@dimen/dp_4"
-                app:drawableTopCompat="@drawable/ic_love_selected" />
+                app:drawableTopCompat="@drawable/ic_cz" />
 
         </LinearLayout>
     <FrameLayout
@@ -99,14 +99,20 @@
         android:padding="@dimen/dp_16"
         android:background="@drawable/shape_bg_me_item"
         android:orientation="horizontal">
-        <ImageView
+        <FrameLayout
             android:layout_width="@dimen/dp_52"
             android:layout_height="@dimen/dp_52"
-            android:src="@drawable/icon1" />
+            android:background="@drawable/shape_app_blue_bg">
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_love_blue" />
+        </FrameLayout>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/colorBlack2"
+            android:textColor="@color/colorTextLight"
             android:textSize="16sp"
             android:layout_marginStart="@dimen/dp_65"
             android:layout_marginTop="@dimen/dp_4"
@@ -128,7 +134,7 @@
             android:layout_marginStart="@dimen/dp_20"
             android:layout_marginTop="@dimen/dp_20"
             android:textSize="20sp"
-            android:textColor="@color/colorBlack2" />
+            android:textColor="@color/colorTextLight" />
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -159,7 +165,7 @@
                 <ImageView
                     android:layout_width="@dimen/dp_28"
                     android:layout_height="@dimen/dp_28"
-                    android:src="@drawable/ic_add"
+                    android:src="@drawable/ic_round_add"
                     apps:tint="@color/colorGray"
                     android:layout_marginEnd="@dimen/dp_30"
                     android:layout_gravity="end" />
@@ -181,7 +187,7 @@
             android:layout_marginStart="@dimen/dp_20"
             android:layout_marginTop="@dimen/dp_20"
             android:textSize="20sp"
-            android:textColor="@color/colorBlack2" />
+            android:textColor="@color/colorTextLight" />
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

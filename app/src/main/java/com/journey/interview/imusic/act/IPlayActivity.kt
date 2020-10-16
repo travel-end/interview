@@ -149,7 +149,6 @@ class IPlayActivity : BaseLifeCycleActivity<IPlayViewModel>() {
             .transparentBar()
             .fullScreen(true)
             .init()
-
     }
 
     override fun layoutResId() = R.layout.imusic_act_play
@@ -336,7 +335,7 @@ class IPlayActivity : BaseLifeCycleActivity<IPlayViewModel>() {
                     } else {
                         Log.e("JG", "--->查询在线歌词")
                         val songId = mSong?.songId
-                        mLrcView.setLabel("小i努力查找中 ヾ(◍°∇°◍)ﾉﾞ ")
+                        mLrcView.setLabel("小i努力查找中… ヾ(◍°∇°◍)ﾉﾞ ")
                         switchCoverLrc(false)
                         if (!songId.isNullOrEmpty()) {
                             mViewModel.getOnlineSongLrc(

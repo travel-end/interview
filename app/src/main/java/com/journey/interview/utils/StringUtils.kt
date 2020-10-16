@@ -1,6 +1,7 @@
 package com.journey.interview.utils
 
 import android.text.TextUtils
+import com.journey.interview.imusic.model.ListBean
 import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*
@@ -84,6 +85,22 @@ object StringUtils {
             sin = s[0]
         }
         return sin.trim()
+    }
+
+    fun getSinger(data: ListBean):String? {
+        val singerList = data.singer
+        singerList?.let {
+            if (it.isNotEmpty()) {
+                val singer = StringBuilder(it[0].name?:"")
+                if (it.size > 1) {
+                    for (bean in it) {
+                        singer.append("、").append(bean.name)
+                    }
+                }
+                return singer.toString()
+            }
+        }
+        return null
     }
 
     fun formatSize(size:Long):String {

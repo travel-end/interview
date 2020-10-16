@@ -39,7 +39,7 @@ class MainActivity : AppCompatActivity() {
 //        testSystemFunction.setOnClickListener {
 //            startActivity(Intent(this,ScreenActivity::class.java))
 //        }
-        AssetsUtil.readAssetsFile("pat.txt")
+//        AssetsUtil.readAssetsFile("first_song.json")
 
     }
 

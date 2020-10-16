@@ -18,22 +18,33 @@ import android.view.View
 import android.view.animation.LinearInterpolator
 import android.widget.ImageView
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.lifecycle.Observer
 import com.google.android.material.shape.ShapeAppearanceModel
+import com.google.gson.Gson
 import com.journey.interview.Constant
 import com.journey.interview.R
 import com.journey.interview.customizeview.progressbar.DigistProgressBar
 import com.journey.interview.customizeview.swipecaptcha.core.GlideUtil
 import com.journey.interview.imusic.act.IPlayActivity
+import com.journey.interview.imusic.download.IMusicDownloadUtil
 import com.journey.interview.imusic.global.Bus
 import com.journey.interview.imusic.global.IMusicBus
+import com.journey.interview.imusic.model.ListBean
 import com.journey.interview.imusic.model.Song
+import com.journey.interview.imusic.room.IMusicRoomHelper
 import com.journey.interview.imusic.service.IMusicPlayService
+import com.journey.interview.imusic.util.AssetsUtil
 import com.journey.interview.imusic.vm.IMainViewModel
 import com.journey.interview.utils.SongUtil
+import com.journey.interview.utils.StringUtils
 import com.journey.interview.utils.isServiceRunning
 import com.journey.interview.weatherapp.base.BaseLifeCycleActivity
 import kotlinx.android.synthetic.main.imusic_act_main.*
 import kotlinx.android.synthetic.main.imusic_main_player.view.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 /**
  * @By Journey 2020/9/25
@@ -41,6 +52,7 @@ import kotlinx.android.synthetic.main.imusic_main_player.view.*
  */
 class IMainActivity : BaseLifeCycleActivity<IMainViewModel>() {
     private var mSong: Song? = null
+    private var mFirstSong:Song?=null
     private var mPlayServiceBinder: IMusicPlayService.PlayStatusBinder? = null
     private var isExistService: Boolean = false// 服务是否存活
     private var mFlag: Boolean = false// 用作暂停的标记
@@ -76,32 +88,13 @@ class IMainActivity : BaseLifeCycleActivity<IMainViewModel>() {
                 .build()
         progressBar = bottom_player.play_progress_bar
         mSong = SongUtil.getSong()
-        mSong?.let {
-            bottom_player.player_song_name.text = it.songName
-            bottom_player.player_song_author.text = it.singer
-            mCurrentTime = it.currentTime// todo 保存当前的歌曲播放进度 在play页面展示
-            progressBar.max = mSong?.duration ?: 100
-            progressBar.progress = mSong?.currentTime?.toInt() ?: 0
 
-            Log.e("JG", "播放进度：$mCurrentTime")
-            if (it.imgUrl == null) {
-                SongUtil.setLocalCoverImg(
-                    this@IMainActivity,
-                    it.singer ?: "",
-                    bottom_player.player_song_icon
-                )
-            } else {
-                GlideUtil.loadImg(
-                    this@IMainActivity,
-                    it.imgUrl ?: "",
-                    bottom_player.player_song_icon,
-                    R.drawable.icon1, null
-                )
-            }
+        mSong?.let {
+            setSongUi(it)
         }
         // 没有歌曲
         if (mSong == null) {
-
+            queryLocalSong()// 查询本地音乐
         }
 
         // 保證播放音乐状态退出程序后 再次进入 仍然继续播放音乐（或者暂停状态退出程序 进入后仍然保持之前的状态）
@@ -115,6 +108,76 @@ class IMainActivity : BaseLifeCycleActivity<IMainViewModel>() {
         }
         // 处理服务
         initService()
+    }
+
+    private fun queryLocalSong() {
+        GlobalScope.launch {
+            val result = withContext(Dispatchers.IO) {
+                IMusicRoomHelper.getAllLocalSongs()
+            }
+            // 如果有本地音乐  则使用本地音乐的第一首歌作为首次见面
+            if (!result.isNullOrEmpty()) {
+                val firstLocalSong = result[0]
+                val song  = Song()
+                song.songName = firstLocalSong.name
+                song.singer = firstLocalSong.singer
+                song.url = firstLocalSong.url
+                song.duration = firstLocalSong.duration?.toInt()?:0
+                song.position = 0
+                song.isOnline = false
+                song.songId = firstLocalSong.songId
+                song.listType = Constant.LIST_TYPE_LOCAL
+                mSong = song
+                SongUtil.saveSong(mSong)
+                setSongUi(song)
+            } else {// 本地音乐也没有  使用json文件中推荐的歌曲
+                val firstSong = AssetsUtil.readAssetsJson("first_song.json")
+                firstSong?.let {
+                    val s = Gson().fromJson(it,ListBean::class.java)
+                    val song= Song().apply {
+                        songId = s.songmid //004DrG5A2nm7q2
+                        singer = StringUtils.getSinger(s)// 鸾音社
+                        songName = s.songname// 夜来寒雨晓来风
+                        //http://y.gtimg.cn/music/photo_new/T002R180x180M000004UvnL62KXhCQ.jpg
+                        imgUrl = "${Constant.ALBUM_PIC}${s.albummid}${Constant.JPG}"
+                        duration = s.interval//187  (秒)
+                        isOnline = true
+                        mediaId = s.strMediaMid//004DrG5A2nm7q2
+                        albumName = s.albumname//夜来寒雨晓来风
+                        // 是否已经下载过了（初次搜索为false）
+                        isDownload = IMusicDownloadUtil.isExistOfDownloadSong(s.songmid?:"")//003IHI2x3RbXLS
+                    }
+                    mFirstSong = song
+                    withContext(Dispatchers.Main) {
+                        setSongUi(song)
+                    }
+//                    mViewModel.getSongUrl(song)
+                }
+            }
+        }
+    }
+
+    private fun setSongUi(song: Song) {
+        bottom_player.player_song_name.text = song.songName
+        bottom_player.player_song_author.text = song.singer
+        mCurrentTime = song.currentTime// todo 保存当前的歌曲播放进度 在play页面展示
+        progressBar.max = song.duration ?: 100
+        progressBar.progress = song.currentTime.toInt() ?: 0
+        Log.e("JG", "播放进度：$mCurrentTime")
+        if (song.imgUrl == null) {
+            SongUtil.setLocalCoverImg(
+                this@IMainActivity,
+                song.singer ?: "",
+                bottom_player.player_song_icon
+            )
+        } else {
+            GlideUtil.loadImg(
+                this@IMainActivity,
+                song.imgUrl ?: "",
+                bottom_player.player_song_icon,
+                R.drawable.error_icon, R.drawable.error_icon,null
+            )
+        }
     }
 
     override fun initData() {
@@ -135,12 +198,19 @@ class IMainActivity : BaseLifeCycleActivity<IMainViewModel>() {
                 }
                 else -> {//退出程序重新打开后的情况（此时处于暂停）
                     Log.e("JG","上一次的播放进度:$mCurrentTime")
-                    if (SongUtil.getSong()?.isOnline == true) {
-//                        mPlayServiceBinder?.playOnline(((mCurrentTime?:0) * 1000).toInt())
-                        mPlayServiceBinder?.resume()
+                    val song = SongUtil.getSong()
+                    if (song != null) {
+                        if (song.isOnline) {
+                            // todo
+                            mPlayServiceBinder?.playOnline(((mCurrentTime?:0) * 1000).toInt())
+//                        mPlayServiceBinder?.resume()
+                        } else {
+                            mPlayServiceBinder?.play(SongUtil.getSong()?.listType)
+                        }
                     } else {
-                        mPlayServiceBinder?.play(SongUtil.getSong()?.listType)
+                        mViewModel.getSongUrl(mFirstSong!!)
                     }
+
                     // todo 这里有个bug  playOnline后会reset mediaPlayer对象  seekTo方法应该是不生效的
 //                    mMediaPlayer = mPlayServiceBinder?.mediaPlayer// 这个mediaPlayer对象需要重新获取  之前的由于程序退出后已经被销毁
 //                    val currentTime = mCurrentTime!! * 1000
@@ -209,7 +279,7 @@ class IMainActivity : BaseLifeCycleActivity<IMainViewModel>() {
 //            Log.e("JG","--->坚挺到播放歌曲的改变")
             when(it) {
                 Constant.SONG_CHANGE -> {
-                    Log.e("JG", "---->切歌")
+                    Log.e("JG", "---->播放完整曲目")
                     mSong = SongUtil.getSong()
                     mSong?.let { s ->
                         bottom_player.player_song_name.text = s.songName
@@ -238,7 +308,7 @@ class IMainActivity : BaseLifeCycleActivity<IMainViewModel>() {
                                 this@IMainActivity,
                                 s.imgUrl ?: "",
                                 bottom_player.player_song_icon,
-                                R.drawable.icon1, null
+                                R.drawable.error_icon, R.drawable.error_icon,null
                             )
                         }
                     }
@@ -260,6 +330,20 @@ class IMainActivity : BaseLifeCycleActivity<IMainViewModel>() {
                 }
             }
         }
+        mViewModel.songUrlResult.observe(this,Observer{
+            it?.let {
+                val song = it.entries.find {entry->
+                    entry.key == "song"
+                }?.value as Song
+                val url = it.entries.find {entry->
+                    entry.key == "url"
+                }?.value as String
+                song.url = url// 播放地址
+                SongUtil.saveSong(song)
+                // 开始播放音乐
+                mPlayServiceBinder?.playOnline()
+            }
+        })
     }
 
     private val rotationAnim by lazy {

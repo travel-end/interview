@@ -19,10 +19,12 @@ object GlideUtil {
         context: Context,
         url: String,
         imageView: ImageView,
+        placeHolder:Int=0,
         error:Int=0,
         onGlideLoadReady: OnGlideLoadReady?
     ) {
         val options = RequestOptions()
+            .placeholder(placeHolder)
             .error(error)
             .priority(Priority.HIGH)
         Glide.with(context)

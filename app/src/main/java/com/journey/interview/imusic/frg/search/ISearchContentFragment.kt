@@ -120,7 +120,7 @@ class ISearchContentFragment :BaseLifeCycleFragment<ISearchContentViewModel>(){
                     addItem(R.layout.imusic_item_search_album) {
                         bindViewHolder { data, position, holder ->
                             val iv = itemView?.findViewById<ImageView>(R.id.iv_search_album_icon)
-                            GlideUtil.loadImg(requireContext(),data?.albumPic?:"",iv!!,R.drawable.ic_default,null)
+                            GlideUtil.loadImg(requireContext(),data?.albumPic?:"",iv!!,R.drawable.ic_default,R.drawable.ic_default,null)
                             setText(R.id.tv_search_album_name,data?.albumName)
                             setText(R.id.tv_search_album_singer,data?.singerName)
                             setText(R.id.tv_search_album_date,data?.publicTime)

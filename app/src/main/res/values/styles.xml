@@ -73,7 +73,7 @@
 <!--        <item name="progress_max">100</item>-->
         <item name="progress_current">0</item>
         <item name="progress_unreached_color">@color/grayLight</item>
-        <item name="progress_reached_color">@color/material_blue_dark</item>
+        <item name="progress_reached_color">@color/colorPrimary</item>
 <!--        <item name="progress_text_size">10sp</item>-->
 <!--        <item name="progress_text_color">#0491ff</item>-->
         <item name="progress_text_visibility">invisible</item>
