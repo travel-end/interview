@@ -17,7 +17,7 @@
         android:layout_height="@dimen/dp_40"
         android:layout_marginTop="@dimen/dp_2"
         android:layout_marginStart="@dimen/dp_10"
-        android:src="@drawable/icon2"
+        android:src="@drawable/error_icon"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"/>

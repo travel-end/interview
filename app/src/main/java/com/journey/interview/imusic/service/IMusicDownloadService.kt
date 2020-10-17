@@ -12,9 +12,10 @@ import android.widget.Toast
 import androidx.core.app.NotificationCompat
 import com.journey.interview.Constant
 import com.journey.interview.R
-import com.journey.interview.imusic.IMainActivity
+import com.journey.interview.imusic.act.IMainActivity
 import com.journey.interview.imusic.download.IMusicDownloadListener
 import com.journey.interview.imusic.download.IMusicDownloadTask
+import com.journey.interview.imusic.global.Bus
 import com.journey.interview.imusic.global.IMusicBus
 import com.journey.interview.imusic.model.DownloadEvent
 import com.journey.interview.imusic.model.DownloadSong
@@ -52,12 +53,19 @@ class IMusicDownloadService : Service() {
                             IMusicRoomHelper.saveToDownloadSong(historyDownloadSong)
                         }
                         withContext(Dispatchers.Main) {
-                            IMusicBus.sendDownloadSongStatusChange(
-                                DownloadEvent(
-                                    downloadStatus = Constant.DOWNLOAD_PAUSED,
-                                    downloadSong = historyDownloadSong
-                                )
-                            )
+//                            IMusicBus.sendDownloadSongStatusChange(
+//                                DownloadEvent(
+//                                    downloadStatus = Constant.DOWNLOAD_PAUSED,
+//                                    downloadSong = historyDownloadSong
+//                                )
+//                            )
+//                            Bus.post(
+//                                Constant.DOWNLOAD_EVENT,
+//                                DownloadEvent(
+//                                    downloadStatus = Constant.DOWNLOAD_PAUSED,
+//                                    downloadSong = historyDownloadSong
+//                                )
+
                             downloadQueue.offer(historyDownloadSong)
                         }
                     } else {

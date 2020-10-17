@@ -13,7 +13,7 @@ import android.widget.Toast
 import androidx.core.app.NotificationCompat
 import com.journey.interview.Constant
 import com.journey.interview.R
-import com.journey.interview.imusic.IMainActivity
+import com.journey.interview.imusic.act.IMainActivity
 import com.journey.interview.imusic.download.IMusicDownloadUtil
 import com.journey.interview.imusic.global.Bus
 import com.journey.interview.imusic.global.IMusicBus

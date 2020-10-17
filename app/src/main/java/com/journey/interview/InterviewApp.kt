@@ -39,6 +39,7 @@ class InterviewApp : MultiDexApplication(), ViewModelStoreOwner {
         GlobalScope.launch {
             withContext(Dispatchers.IO) {
                 val localSongList = PhoneUtil.getLocalSong()
+                Log.e("JG","--->InterviewApp 本地音乐：$localSongList")
                 if (!localSongList.isNullOrEmpty()) {
                     IMusicRoomHelper.saveLocalSong(localSongList)
                 }

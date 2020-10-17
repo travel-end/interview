@@ -89,21 +89,27 @@ object IMusicRoomHelper {
         var result: Long? = null
         for (song in localSongs) {
 //            val s = localSongDao.queryLocalSongsBySongId(song.songId?:"")
-            localSongDao.deleteLocalSongs(song)
-//            if (s == null || s.size==0) {
-                val localSong = LocalSong().apply {
-                    name = song.name
-                    singer = song.singer
-                    url = song.url
-                    songId = song.songId
-                    duration = song.duration
-                }
-                result = localSongDao.insertLocalSong(localSong)
+//            Log.e("JG","根据id查询：$s")
+//            if (s.isEmpty()) {
+                result = localSongDao.insertLocalSong(song)
 //            }
         }
         return result
     }
+    suspend fun saveLocalSong(localSong:LocalSong):Long?{
+        return localSongDao.insertLocalSong(localSong)
+    }
 
+    suspend fun deleteLocalSong(localSong: LocalSong) :Int?{
+        return localSongDao.deleteLocalSongs(localSong)
+    }
+
+    suspend fun deleteAllLocalSong():Int?{
+        return localSongDao.deleteAllLocalSong()
+    }
+    suspend fun queryLocalSongsBySongId(songId: String?):MutableList<LocalSong>? {
+        return localSongDao.queryLocalSongsBySongId(songId?:"")
+    }
 
     suspend fun getAllLocalSongs(): MutableList<LocalSong>? {
         return localSongDao.queryAllLocalSongs()

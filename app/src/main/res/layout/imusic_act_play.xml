@@ -125,7 +125,7 @@
                 android:layout_height="@dimen/dp_36"
                 android:orientation="horizontal"
                 android:gravity="center_vertical"
-                android:layout_marginStart="@dimen/dp_52"
+                android:layout_marginStart="@dimen/dp_46"
                 android:layout_marginEnd="@dimen/dp_52"
                 android:layout_marginBottom="@dimen/dp_28"
                 android:layout_gravity="bottom">

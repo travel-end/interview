@@ -1,28 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.scwang.smart.refresh.layout.SmartRefreshLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/refresh_layout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
-    <TextView
-        android:id="@+id/local_tv_songs"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/dp_10"
-        android:background="@drawable/bg_text"
-        android:paddingStart="@dimen/dp_10"
-        android:paddingEnd="@dimen/dp_10"
-        android:paddingTop="2dp"
-        android:paddingBottom="2dp"
-        android:layout_gravity="center_horizontal"
-        android:text="搜索本地歌曲"
-        android:visibility="visible"
-        android:textColor="@color/red"
-        android:textSize="13sp" />
+    android:layout_height="match_parent">
+<!--    <FrameLayout-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="match_parent">-->
+        <include
+            android:id="@+id/include_local_empty_view"
+            layout="@layout/imusic_empty_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginBottom="@dimen/dp_58"
+            android:visibility="gone"/>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_local_songs"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
-</LinearLayout>
+        <TextView
+            android:id="@+id/local_tv_search_song"
+            android:layout_width="120dp"
+            android:layout_height="@dimen/dp_30"
+            android:background="@drawable/bg_text_gray"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:text="搜索本地歌曲"
+            android:visibility="gone"
+            android:layout_marginTop="@dimen/dp_80"
+            android:textColor="@color/grey"
+            android:textSize="14sp" />
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_local_songs"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+<!--    </FrameLayout>-->
+
+
+</com.scwang.smart.refresh.layout.SmartRefreshLayout>

@@ -94,6 +94,7 @@ object Constant {
     const val LIST_TYPE_DOWNLOAD=5//下载列表
 
     const val PLAY_STATUS = "play_status"
+    const val FIRST_SONG = "first_song"
 
     // 网络与非网络歌曲
     const val SONG_ONLINE = 0
@@ -103,6 +104,7 @@ object Constant {
     const val HISTORY_MAX_SIZE = 100
 
     // 正在下載歌曲列表的狀態
+    const val DOWNLOAD_EVENT = "download_event"
     const val DOWNLOAD_PAUSED = 0
     const val DOWNLOAD_WAIT = 1
     const val DOWNLOAD_ING = 2
@@ -119,5 +121,6 @@ object Constant {
 
     // 普通事件传递
     const val EVENT_REFRESH_LOCAL_SONG = 0
+    const val EVENT_APP = "event_app"
 
 }

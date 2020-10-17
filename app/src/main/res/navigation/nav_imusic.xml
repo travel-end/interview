@@ -59,7 +59,7 @@
     <fragment
         android:id="@+id/iLocalSongVpFragment"
         android:name="com.journey.interview.imusic.frg.local.ILocalSongVpFragment"
-        tools:layout="@layout/imusic_frg_local">
+        tools:layout="@layout/imusic_act_local_song">
 
     </fragment>
     <fragment

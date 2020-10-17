@@ -22,15 +22,15 @@
             android:textSize="18sp"
             android:layout_gravity="center_vertical"
             android:layout_marginStart="@dimen/dp_54" />
-        <TextView
-            android:id="@+id/local_tv_refresh"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="@dimen/sp_16"
-            android:textColor="@color/colorGrayDark"
-            android:layout_gravity="center_vertical|end"
-            android:layout_marginEnd="@dimen/dp_16"
-            android:text="@string/refresh" />
+<!--        <TextView-->
+<!--            android:id="@+id/local_tv_refresh"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:textSize="@dimen/sp_16"-->
+<!--            android:textColor="@color/colorGrayDark"-->
+<!--            android:layout_gravity="center_vertical|end"-->
+<!--            android:layout_marginEnd="@dimen/dp_16"-->
+<!--            android:text="@string/refresh" />-->
 
 
     </FrameLayout>
@@ -40,9 +40,9 @@
         android:layout_height="@dimen/dp_44"
         app:tl_textBold="SELECT"
         app:tl_tab_space_equal="true"
-        app:tl_textSelectColor="@color/red"
-        app:tl_textUnselectColor="@color/colorBlack2"
-        app:tl_indicator_color="@color/red"
+        app:tl_textSelectColor="@color/colorPrimary"
+        app:tl_textUnselectColor="@color/colorTextLight"
+        app:tl_indicator_color="@color/colorPrimary"
         app:tl_indicator_width_equal_title="true"
         app:tl_indicator_width="@dimen/dp_34"
         app:tl_textsize="16sp" />

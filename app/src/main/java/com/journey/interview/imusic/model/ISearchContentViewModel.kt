@@ -54,7 +54,7 @@ class ISearchContentViewModel:BaseViewModel() {
 
     val searchAlbumResult :MutableLiveData<Album> = MutableLiveData()
 
-    val songUrlResult :MutableLiveData<Map<String,Any>> = MutableLiveData()
+//    val songUrlResult :MutableLiveData<Map<String,Any>> = MutableLiveData()
 
     fun searchSong(searchContent:String,page:Int) {
         loadState.value = State(StateType.LOADING)
@@ -83,47 +83,47 @@ class ISearchContentViewModel:BaseViewModel() {
         }
     }
 
-    fun getSongUrl(song: Song) {
-        val songUrl = "${Constant.SONG_URL_DATA_LEFT}${song.songId}${Constant.SONG_URL_DATA_RIGHT}"
-        Log.e("JG","songUrl: $songUrl")
-        viewModelScope.launch {
-            runCatching {
-                withContext(Dispatchers.IO) {
-                    songUrlApiService.getSongUrl(songUrl)
-                }
-            }.onSuccess {
-                if (it.code == 0) {
-                    val sipList = it.req_0?.data?.sip
-                    var sip=""
-                    if (sipList != null) {
-                        if (sipList.isNotEmpty()) {
-                            sip = sipList[0]
-                        }
-                    }
-                    val purlList = it.req_0?.data?.midurlinfo
-                    var pUrl:String?=""
-                    if (purlList != null) {
-                        if (purlList.isNotEmpty()) {
-                            pUrl=purlList[0].purl
-                        }
-                    }
-                    if (pUrl.isNullOrEmpty()) {
-                        loadState.value = State(StateType.EMPTY,"该歌曲暂时没有版权，搜搜其它歌曲吧")
-                    } else {
-                        val pair="song" to song
-                        val pair2 = "url" to "$sip$pUrl"
-                        val map = mapOf(pair,pair2)
-//                        Log.e("JG","获取播放地址成功 sip&pUrl: ${pair2.second}")
-                        songUrlResult.value = map
-                    }
-                } else {
-                    loadState.value = State(StateType.EMPTY,"${it.code} :获取不到歌曲播放地址")
-                }
-            }.onFailure {
-                handlerException(it,loadState)
-            }
-        }
-    }
+//    fun getSongUrl(song: Song) {
+//        val songUrl = "${Constant.SONG_URL_DATA_LEFT}${song.songId}${Constant.SONG_URL_DATA_RIGHT}"
+//        Log.e("JG","songUrl: $songUrl")
+//        viewModelScope.launch {
+//            runCatching {
+//                withContext(Dispatchers.IO) {
+//                    songUrlApiService.getSongUrl(songUrl)
+//                }
+//            }.onSuccess {
+//                if (it.code == 0) {
+//                    val sipList = it.req_0?.data?.sip
+//                    var sip=""
+//                    if (sipList != null) {
+//                        if (sipList.isNotEmpty()) {
+//                            sip = sipList[0]
+//                        }
+//                    }
+//                    val purlList = it.req_0?.data?.midurlinfo
+//                    var pUrl:String?=""
+//                    if (purlList != null) {
+//                        if (purlList.isNotEmpty()) {
+//                            pUrl=purlList[0].purl
+//                        }
+//                    }
+//                    if (pUrl.isNullOrEmpty()) {
+//                        loadState.value = State(StateType.EMPTY,"该歌曲暂时没有版权，搜搜其它歌曲吧")
+//                    } else {
+//                        val pair="song" to song
+//                        val pair2 = "url" to "$sip$pUrl"
+//                        val map = mapOf(pair,pair2)
+////                        Log.e("JG","获取播放地址成功 sip&pUrl: ${pair2.second}")
+//                        songUrlResult.value = map
+//                    }
+//                } else {
+//                    loadState.value = State(StateType.EMPTY,"${it.code} :获取不到歌曲播放地址")
+//                }
+//            }.onFailure {
+//                handlerException(it,loadState)
+//            }
+//        }
+//    }
 
 
     // 歌手可能不止一个

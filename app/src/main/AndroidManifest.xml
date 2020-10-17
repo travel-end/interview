@@ -101,7 +101,7 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.Transparent" />
         <activity
-            android:name=".imusic.IMainActivity"
+            android:name=".imusic.act.IMainActivity"
             android:launchMode="singleTask"
             android:theme="@style/material_style"
             android:windowSoftInputMode="adjustPan|stateHidden" />

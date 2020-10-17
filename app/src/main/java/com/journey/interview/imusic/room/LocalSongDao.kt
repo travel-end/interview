@@ -29,7 +29,7 @@ interface LocalSongDao {
 
     @Transaction
     @Query("SELECT * FROM localsong WHERE songId= (:songId) ORDER BY id DESC")
-    suspend fun queryLocalSongsBySongId(songId:String):MutableList<LocalSong>?
+    suspend fun queryLocalSongsBySongId(songId:String):MutableList<LocalSong>
 
     /**
      * 更新数据
@@ -37,4 +37,13 @@ interface LocalSongDao {
     @Transaction
     @Update(entity = LocalSong::class)
     suspend fun updateLocalSong(localSong: LocalSong):Int?
+
+    @Transaction
+    @Query("DELETE FROM localsong WHERE songId=(:songId)")
+    suspend fun deleteLocalSongBySongId(songId: String): Int?
+
+    @Transaction
+    @Query("DELETE FROM localsong")
+    suspend fun deleteAllLocalSong(): Int?
 }
+

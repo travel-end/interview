@@ -33,7 +33,6 @@ abstract class BaseFragment : Fragment() {
         initViewModel()
         initView()
         initData()
-//        initStatusBarColor()
     }
 
     open fun reLoad() = initData()
@@ -47,30 +46,30 @@ abstract class BaseFragment : Fragment() {
     open fun initViewModel() {
     }
 
-    open fun initStatusBarColor() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                requireActivity().window.statusBarColor = ContextCompat.getColor(
-                    requireActivity(),
-                    R.color.always_white_text
-                )
-            }
-        }
-        if (if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                ColorUtils.calculateLuminance(requireContext().getColor(R.color.always_white_text)) >= 0.5
-            } else {
-                TODO("VERSION.SDK_INT < M")
-            }
-        ) {
-            // 设置状态栏中字体的颜色为黑色
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                requireActivity().window.decorView.systemUiVisibility =
-                    View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
-            }
-        } else {
-            // 跟随系统
-            requireActivity().window.decorView.systemUiVisibility =
-                View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-        }
-    }
+//    open fun initStatusBarColor() {
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+//            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+//                requireActivity().window.statusBarColor = ContextCompat.getColor(
+//                    requireActivity(),
+//                    R.color.always_white_text
+//                )
+//            }
+//        }
+//        if (if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+//                ColorUtils.calculateLuminance(requireContext().getColor(R.color.always_white_text)) >= 0.5
+//            } else {
+//                TODO("VERSION.SDK_INT < M")
+//            }
+//        ) {
+//            // 设置状态栏中字体的颜色为黑色
+//            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+//                requireActivity().window.decorView.systemUiVisibility =
+//                    View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
+//            }
+//        } else {
+//            // 跟随系统
+//            requireActivity().window.decorView.systemUiVisibility =
+//                View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+//        }
+//    }
 }

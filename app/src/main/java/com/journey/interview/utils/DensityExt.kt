@@ -34,4 +34,6 @@ fun String.logE() {
 
 fun Int.getString() = InterviewApp.instance.resources.getString(this)
 
+fun Int.getColor() = InterviewApp.instance.resources.getColor(this)
+
 // 将px值转换成dp值

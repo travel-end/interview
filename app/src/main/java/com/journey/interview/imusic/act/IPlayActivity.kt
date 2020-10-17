@@ -83,7 +83,6 @@ class IPlayActivity : BaseLifeCycleActivity<IPlayViewModel>() {
     private var mAudioManager: AudioManager? = null
     private var mPlayMode: Int = Constant.PLAY_ORDER
     private var mListType: Int? = null
-
     private var hasLrc:Boolean = false
 
     private val mPlayConnection = object : ServiceConnection {

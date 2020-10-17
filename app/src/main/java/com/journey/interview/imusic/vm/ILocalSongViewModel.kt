@@ -7,12 +7,17 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.journey.interview.Constant
 import com.journey.interview.InterviewApp
+import com.journey.interview.R
 import com.journey.interview.imusic.download.IMusicDownloadUtil
 import com.journey.interview.imusic.model.LocalSong
 import com.journey.interview.imusic.room.IMusicRoomHelper
+import com.journey.interview.utils.getString
 import com.journey.interview.utils.ofMap
 import com.journey.interview.utils.print
 import com.journey.interview.weatherapp.base.BaseViewModel
+import com.journey.interview.weatherapp.state.EmptyState
+import com.journey.interview.weatherapp.state.State
+import com.journey.interview.weatherapp.state.StateType
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -73,7 +78,7 @@ class ILocalSongViewModel:BaseViewModel() {
             }
             cursor?.close()
 
-            // 加上下载的歌曲
+            // 加上下载的所有歌曲
             val downloadedSongs = IMusicDownloadUtil.getSongFromFile(Constant.STORAGE_SONG_FILE)
             downloadedSongs?.let {
                 for (song in it) {
@@ -92,16 +97,21 @@ class ILocalSongViewModel:BaseViewModel() {
         return null
     }
 
+    /**
+     * 检索本地音乐
+     */
     fun getLocalSongs() {
         val songList = initLocalMp3Info()
         Log.e("JG","检索本地音乐：$songList")
         if (songList != null) {
             if (songList.isNotEmpty()) {
                 viewModelScope.launch {
+                    withContext(Dispatchers.IO) {
+                        IMusicRoomHelper.deleteAllLocalSong()
+                    }
                     val result = withContext(Dispatchers.IO) {
                         IMusicRoomHelper.saveLocalSong(songList)
                     }
-                    Log.e("JG","存储本地音乐：$result")
                     if (result != null) {
                         localSongResult.value = songList
                     }
@@ -114,13 +124,22 @@ class ILocalSongViewModel:BaseViewModel() {
         }
     }
 
+    /**
+     * 查询数据库中本地音乐
+     */
     fun getSavedLocalSongs() {
         viewModelScope.launch {
             val result = withContext(Dispatchers.IO) {
                 IMusicRoomHelper.getAllLocalSongs()
             }
             Log.e("JG","查询本地音乐：$result ${result?.size}")
-            localSaveResult.value = result
+            if (result.isNullOrEmpty()) {
+                localSaveResult.value=null
+                emptyState.value = EmptyState(message = R.string.no_local_song.getString())
+            } else {
+                localSaveResult.value = result
+            }
+
         }
     }
 }

@@ -1,4 +1,4 @@
-package com.journey.interview.imusic
+package com.journey.interview.imusic.act
 
 import android.animation.ObjectAnimator
 import android.animation.ValueAnimator
@@ -25,10 +25,8 @@ import com.journey.interview.Constant
 import com.journey.interview.R
 import com.journey.interview.customizeview.progressbar.DigistProgressBar
 import com.journey.interview.customizeview.swipecaptcha.core.GlideUtil
-import com.journey.interview.imusic.act.IPlayActivity
 import com.journey.interview.imusic.download.IMusicDownloadUtil
 import com.journey.interview.imusic.global.Bus
-import com.journey.interview.imusic.global.IMusicBus
 import com.journey.interview.imusic.model.ListBean
 import com.journey.interview.imusic.model.Song
 import com.journey.interview.imusic.room.IMusicRoomHelper
@@ -65,6 +63,7 @@ class IMainActivity : BaseLifeCycleActivity<IMainViewModel>() {
     private lateinit var progressBar: DigistProgressBar
     private var progressBarThread: Thread? = null
     override fun layoutResId() = R.layout.imusic_act_main
+    private var isGoPlay:Boolean = false
 
     private val playConnection = object : ServiceConnection {
         override fun onServiceDisconnected(name: ComponentName?) {
@@ -89,11 +88,9 @@ class IMainActivity : BaseLifeCycleActivity<IMainViewModel>() {
         progressBar = bottom_player.play_progress_bar
         mSong = SongUtil.getSong()
 
-        mSong?.let {
-            setSongUi(it)
-        }
-        // 没有歌曲
-        if (mSong == null) {
+        if (mSong != null) {
+            setSongUi(mSong!!)
+        } else {
             queryLocalSong()// 查询本地音乐
         }
 
@@ -151,6 +148,7 @@ class IMainActivity : BaseLifeCycleActivity<IMainViewModel>() {
                     withContext(Dispatchers.Main) {
                         setSongUi(song)
                     }
+//                    SongUtil.saveSong(song)
 //                    mViewModel.getSongUrl(song)
                 }
             }
@@ -198,19 +196,19 @@ class IMainActivity : BaseLifeCycleActivity<IMainViewModel>() {
                 }
                 else -> {//退出程序重新打开后的情况（此时处于暂停）
                     Log.e("JG","上一次的播放进度:$mCurrentTime")
-                    val song = SongUtil.getSong()
-                    if (song != null) {
-                        if (song.isOnline) {
-                            // todo
-                            mPlayServiceBinder?.playOnline(((mCurrentTime?:0) * 1000).toInt())
+                        val song = SongUtil.getSong()
+                        if (song != null) {
+                            if (song.isOnline) {
+                                // todo
+                                mPlayServiceBinder?.playOnline(((mCurrentTime?:0) * 1000).toInt())
 //                        mPlayServiceBinder?.resume()
+                            } else {
+                                mPlayServiceBinder?.play(SongUtil.getSong()?.listType)
+                            }
                         } else {
-                            mPlayServiceBinder?.play(SongUtil.getSong()?.listType)
+                            isGoPlay =false
+                            mViewModel.getSongUrl(mFirstSong!!)
                         }
-                    } else {
-                        mViewModel.getSongUrl(mFirstSong!!)
-                    }
-
                     // todo 这里有个bug  playOnline后会reset mediaPlayer对象  seekTo方法应该是不生效的
 //                    mMediaPlayer = mPlayServiceBinder?.mediaPlayer// 这个mediaPlayer对象需要重新获取  之前的由于程序退出后已经被销毁
 //                    val currentTime = mCurrentTime!! * 1000
@@ -220,9 +218,9 @@ class IMainActivity : BaseLifeCycleActivity<IMainViewModel>() {
         }
         findViewById<ConstraintLayout>(R.id.bottom_player).setOnClickListener {
             val song = SongUtil.getSong()
+            val playIntent = Intent(this, IPlayActivity::class.java)
             if (song != null) {
                 if (song.songName != null) {
-                    val playIntent = Intent(this, IPlayActivity::class.java)
                     // 正在播放
                     if (mPlayServiceBinder?.isPlaying == true) {
                         val song2 = SongUtil.getSong()
@@ -241,7 +239,6 @@ class IMainActivity : BaseLifeCycleActivity<IMainViewModel>() {
                     if (SongUtil.getSong()?.imgUrl != null) {
                         playIntent.putExtra("online", true)
                     }
-
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                         startActivity(
                             playIntent,
@@ -252,8 +249,10 @@ class IMainActivity : BaseLifeCycleActivity<IMainViewModel>() {
                         startActivity(playIntent)
                     }
                 }
+            } else {
+                isGoPlay =true
+                mViewModel.getSongUrl(mFirstSong!!)
             }
-
         }
     }
 
@@ -340,8 +339,22 @@ class IMainActivity : BaseLifeCycleActivity<IMainViewModel>() {
                 }?.value as String
                 song.url = url// 播放地址
                 SongUtil.saveSong(song)
-                // 开始播放音乐
-                mPlayServiceBinder?.playOnline()
+                if (isGoPlay) {
+                    val playIntent = Intent(this, IPlayActivity::class.java)
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                        startActivity(
+                            playIntent,
+                            ActivityOptions.makeSceneTransitionAnimation(this@IMainActivity)
+                                .toBundle()
+                        )
+                    } else {
+                        startActivity(playIntent)
+                    }
+                } else {
+                    // 开始播放音乐
+                    mPlayServiceBinder?.playOnline()
+                }
+
             }
         })
     }
