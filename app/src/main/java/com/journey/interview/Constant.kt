@@ -92,6 +92,7 @@ object Constant {
     const val LIST_TYPE_LOVE=3//我的收藏列表
     const val LIST_TYPE_HISTORY=4//最近播放列表
     const val LIST_TYPE_DOWNLOAD=5//下载列表
+    const val EVENT_LIST_TYPE = "event_list_type"
 
     const val PLAY_STATUS = "play_status"
     const val FIRST_SONG = "first_song"
@@ -105,6 +106,7 @@ object Constant {
 
     // 正在下載歌曲列表的狀態
     const val DOWNLOAD_EVENT = "download_event"
+    const val DOWNLOAD_RESULT = "download_result"
     const val DOWNLOAD_PAUSED = 0
     const val DOWNLOAD_WAIT = 1
     const val DOWNLOAD_ING = 2

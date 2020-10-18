@@ -48,7 +48,6 @@ class IDownloadedFragment:BaseFragment() {
         super.initView()
         val playIntent = Intent(requireActivity(),IMusicPlayService::class.java)
         requireActivity().bindService(playIntent,playConnection,Context.BIND_AUTO_CREATE)
-
         downloadedSongs = orderList(IMusicDownloadUtil.getSongFromFile(Constant.STORAGE_SONG_FILE))
         val rv= mRootView.findViewById<RecyclerView>(R.id.downloaded_rv)
         if (downloadedSongs != null && downloadedSongs?.isNotEmpty()==true) {

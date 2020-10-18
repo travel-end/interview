@@ -154,12 +154,13 @@ object IMusicRoomHelper {
     }
 
     suspend fun saveToDownloadSong(downloadSong: DownloadSong): Long? {
-        val song = downloadSongDao.queryDownloadSongBySongId(downloadSong.songId ?: "")
-        return if (song != null && song.size > 0) {
-            null
-        } else {
-            downloadSongDao.insertDownloadSong(downloadSong)
-        }
+//        val song = downloadSongDao.queryDownloadSongBySongId(downloadSong.songId ?: "")
+//        return if (song != null && song.size > 0) {
+//            null
+//        } else {
+//
+//        }
+        return downloadSongDao.insertDownloadSong(downloadSong)
     }
 
     suspend fun queryAllDownloadSongs(): MutableList<DownloadSong>? {

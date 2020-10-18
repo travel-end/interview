@@ -28,7 +28,7 @@ class IMusicDownloadTask(private val listener:IMusicDownloadListener) :AsyncTask
                 var downloadedLength =0L
                 val downloadUrl = song.url
                 val downloadFile = File(Constant.STORAGE_SONG_FILE)
-                Log.e("JG","文件下载储存路径：${Constant.STORAGE_SONG_FILE}")
+//                Log.e("JG","文件下载储存路径：${Constant.STORAGE_SONG_FILE}")
                 if (!downloadFile.exists()) {
                     downloadFile.mkdirs()
                 }
@@ -44,6 +44,7 @@ class IMusicDownloadTask(private val listener:IMusicDownloadListener) :AsyncTask
                     downloadSong.songId?:"",
                     contentLength
                 )
+                Log.e("JG","下载详情：$fileName")
                 file = File(downloadFile,fileName)
                 if (file?.exists()==true) {
                     downloadedLength = file?.length()?:0

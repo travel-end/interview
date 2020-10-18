@@ -45,29 +45,24 @@ class IMusicDownloadService : Service() {
                     val result = withContext(Dispatchers.IO) {
                         IMusicRoomHelper.findDownloadSongBySongId(downloadSong.songId ?: "")
                     }
-                    Log.e("JG", "已下载歌曲查询结果：$result")
+                    Log.e("JG", "下载队列：$result")
                     if (result != null && result.size != 0) {
-                        val historyDownloadSong = result[0]
-                        historyDownloadSong.status = Constant.DOWNLOAD_WAIT
-                        withContext(Dispatchers.IO) {
-                            IMusicRoomHelper.saveToDownloadSong(historyDownloadSong)
-                        }
-                        withContext(Dispatchers.Main) {
-//                            IMusicBus.sendDownloadSongStatusChange(
-//                                DownloadEvent(
-//                                    downloadStatus = Constant.DOWNLOAD_PAUSED,
-//                                    downloadSong = historyDownloadSong
-//                                )
-//                            )
+//                        Toast.makeText(this@IMusicDownloadService, "已经加入下载队列", Toast.LENGTH_SHORT).show()
+//                        val historyDownloadSong = result[0]
+//                        historyDownloadSong.status = Constant.DOWNLOAD_WAIT
+//                        withContext(Dispatchers.IO) {
+//                            IMusicRoomHelper.saveToDownloadSong(historyDownloadSong)
+//                        }
+//                        withContext(Dispatchers.Main) {
 //                            Bus.post(
 //                                Constant.DOWNLOAD_EVENT,
 //                                DownloadEvent(
 //                                    downloadStatus = Constant.DOWNLOAD_PAUSED,
 //                                    downloadSong = historyDownloadSong
-//                                )
-
-                            downloadQueue.offer(historyDownloadSong)
-                        }
+//                                ))
+//
+//                            downloadQueue.offer(historyDownloadSong)
+//                        }
                     } else {
                         mPosition = withContext(Dispatchers.IO) {
                             IMusicRoomHelper.queryAllDownloadSongs()?.size ?: 0
@@ -76,16 +71,19 @@ class IMusicDownloadService : Service() {
                             downloadSong.position = mPosition
                             downloadSong.status = Constant.DOWNLOAD_WAIT
                             IMusicRoomHelper.saveToDownloadSong(downloadSong)
-                        }
+                        }// 插入一条下载记录
                         withContext(Dispatchers.Main) {
                             downloadQueue.offer(downloadSong)// 将歌曲放到等待队列中
                             // 发送全局消息 通知有一个新的下载任务（在正在下载页面会展示当前任务）
-                            IMusicBus.sendDownloadSongStatusChange(DownloadEvent(downloadStatus = Constant.TYPE_DOWNLOAD_ADD))
+//                            IMusicBus.sendDownloadSongStatusChange(DownloadEvent(downloadStatus = Constant.TYPE_DOWNLOAD_ADD))
+                            Bus.post(Constant.DOWNLOAD_EVENT, DownloadEvent(downloadStatus = Constant.TYPE_DOWNLOAD_ADD))
                         }
                     }
 
                     if (downloadTask != null) {
-//                        Toast.makeText(this@IMusicDownloadService, "已经加入下载队列", Toast.LENGTH_SHORT).show()
+                        withContext(Dispatchers.Main) {
+                            Toast.makeText(this@IMusicDownloadService, "已经加入下载队列", Toast.LENGTH_SHORT).show()
+                        }
                     } else {
 //                        start()
                         if (downloadTask == null && !downloadQueue.isEmpty()) {
@@ -99,7 +97,8 @@ class IMusicDownloadService : Service() {
                                     withContext(Dispatchers.Main) {
                                         val currentDownloadInfo = it[0]
                                         currentDownloadInfo.status = Constant.DOWNLOAD_READY
-                                        IMusicBus.sendDownloadSongStatusChange(
+                                        Bus.post(
+                                            Constant.DOWNLOAD_EVENT,
                                             DownloadEvent(
                                                 downloadStatus = Constant.TYPE_DOWNLOADING,
                                                 downloadSong = currentDownloadInfo
@@ -112,14 +111,13 @@ class IMusicDownloadService : Service() {
                                         downloadTask!!.execute(currentDownloadInfo)
                                         notificationManager.notify(
                                             1,
-                                            getNotification("正在下载: ${downloadingSong?.songName ?: ""}", 0)
+                                            getNotification("正在下载: ${downloadingSong?.songName ?: "imusic"}", 0)
                                         )
                                     }
                                 }
                             }
                         }
                     }
-
                 }
             } catch (e: Exception) {
                 Log.e("JG","error:${e.message}")
@@ -225,12 +223,14 @@ class IMusicDownloadService : Service() {
     private val listener = object : IMusicDownloadListener {
         override fun onProgress(downloadSong: DownloadSong) {
             downloadSong.status = Constant.DOWNLOAD_ING
-            IMusicBus.sendDownloadSongStatusChange(
+            Bus.post(
+                Constant.DOWNLOAD_EVENT,
                 DownloadEvent(
                     downloadStatus = Constant.DOWNLOAD_ING,
                     downloadSong = downloadSong
                 )
             )
+            Log.e("JG","下载进度：${downloadSong.progress}")
             if (downloadSong.progress != 100) {
                 notificationManager.notify(
                     1,
@@ -239,7 +239,7 @@ class IMusicDownloadService : Service() {
             } else {
                 if (downloadQueue.isEmpty()) {
                     Log.e("JG","download--->onProgress success")
-                    notificationManager.notify(1, getNotification("下载成功~", -1))
+                    notificationManager.notify(1, getNotification("全部歌曲下载已完成", -1))
                 }
             }
         }
@@ -252,7 +252,8 @@ class IMusicDownloadService : Service() {
             if (downloadQueue.isEmpty()) {
                 notificationManager.notify(1, getNotification("下载成功啦~", -1))
             }
-            IMusicBus.sendSongListNumChange(Constant.LIST_TYPE_DOWNLOAD)
+//            Bus.post(Constant.EVENT_LIST_TYPE,Constant.LIST_TYPE_DOWNLOAD)
+            Bus.post(Constant.DOWNLOAD_RESULT,Constant.TYPE_DOWNLOAD_SUCCESS)
         }
 
         override fun hasDownloaded() {
@@ -324,7 +325,7 @@ class IMusicDownloadService : Service() {
             val channel = NotificationChannel(id, name, NotificationManager.IMPORTANCE_LOW)
             notificationManager.createNotificationChannel(channel)
             val builder = Notification.Builder(this, id)
-                .setSmallIcon(R.drawable.icon1)
+                .setSmallIcon(R.drawable.ic_nht)
                 .setContentIntent(pi)
                 .setContentTitle(title)
             if (progress > 0) {
@@ -334,8 +335,8 @@ class IMusicDownloadService : Service() {
             return builder.build()
         } else {
             val builder = NotificationCompat.Builder(this, "default")
-                .setSmallIcon(R.drawable.icon1)
-                .setLargeIcon(BitmapFactory.decodeResource(resources, R.drawable.icon1))
+                .setSmallIcon(R.drawable.ic_nht)
+                .setLargeIcon(BitmapFactory.decodeResource(resources, R.drawable.ic_nht))
                 .setContentIntent(pi)
                 .setContentTitle(title)
             if (progress > 0) {

@@ -77,4 +77,6 @@
     <string name="lrc_empty">还没发现歌词￣へ￣</string>
     <string name="empty_common">空空如也 O v O </string>
     <string name="no_mv">~~~没有没有没有MV~~~</string>
+    <string name="local_no_need_download">~~本地歌曲，无需下载~~</string>
+    <string name="song_has_download">歌曲已经下载啦~~ (*^▽^*) </string>
 </resources>
