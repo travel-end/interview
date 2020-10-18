@@ -23,6 +23,41 @@ import com.journey.interview.imusic.room.IMusicRoomHelper
 import kotlinx.coroutines.*
 import java.util.*
 
+/**
+ * LinkedList：
+ *  与ArrayList相比，LinkedList的增删操作效率更高，而查改操作效率较低。
+    LinkedList 实现了List 接口，能对它进行列表操作。
+    LinkedList 实现了Deque 接口，即能将LinkedList当作双端队列使用。
+ 增加元素：
+public boolean add(E e)，链表末尾添加元素，返回是否成功；
+public void add(int index, E element)，向指定位置插入元素；
+public void addFirst(E e)，添加到第一个元素；
+public void addLast(E e)，添加到最后一个元素；
+public boolean offer(E e)，向链表末尾添加元素，返回是否成功；
+public boolean offerFirst(E e)，头部插入元素，返回是否成功；
+public boolean offerLast(E e)，尾部插入元素，返回是否成功；
+ 删除元素
+public void clear()，清空链表；
+public E removeFirst()，删除并返回第一个元素；
+public E removeLast()，删除并返回最后一个元素；
+public boolean remove(Object o)，删除某一元素，返回是否成功；
+public E remove(int index)，删除指定位置的元素；
+public E poll()，删除并返回第一个元素；
+public E remove()，删除并返回第一个元素；
+ 查找元素
+public boolean contains(Object o)，判断是否含有某一元素；
+public E get(int index)，返回指定位置的元素；
+public E getFirst(), 返回第一个元素；
+public E getLast()，返回最后一个元素；
+public int indexOf(Object o)，查找指定元素从前往后第一次出现的索引；
+public int lastIndexOf(Object o)，查找指定元素最后一次出现的索引；
+public E peek()，返回第一个元素；
+public E element()，返回第一个元素；
+public E peekFirst()，返回头部元素；
+public E peekLast()，返回尾部元素；
+
+
+ */
 class IMusicDownloadService : Service() {
     // 等待隊列
     private val downloadQueue = LinkedList<DownloadSong>()
@@ -32,6 +67,7 @@ class IMusicDownloadService : Service() {
     private var downloadUrl: String? = null
     private val downloadBinder = DownloadBinder()
     private var job: Job? = null
+
     override fun onBind(intent: Intent?): IBinder? {
         return downloadBinder
     }
