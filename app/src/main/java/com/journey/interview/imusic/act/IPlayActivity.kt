@@ -32,7 +32,6 @@ import com.gyf.immersionbar.ImmersionBar
 import com.journey.interview.Constant
 import com.journey.interview.R
 import com.journey.interview.customizeview.lrcview.LrcView
-import com.journey.interview.imusic.global.Bus
 import com.journey.interview.imusic.global.IMusicBus
 import com.journey.interview.imusic.model.DownloadSong
 import com.journey.interview.imusic.model.Song
@@ -84,7 +83,6 @@ class IPlayActivity : BaseLifeCycleActivity<IPlayViewModel>() {
     private var mPlayMode: Int = Constant.PLAY_ORDER
     private var mListType: Int? = null
     private var hasLrc:Boolean = false
-    private var hasDownloaded:Boolean = false
 
     private val mPlayConnection = object : ServiceConnection {
         override fun onServiceDisconnected(name: ComponentName?) {
@@ -391,14 +389,10 @@ class IPlayActivity : BaseLifeCycleActivity<IPlayViewModel>() {
             if (mListType==Constant.LIST_TYPE_LOCAL) {
                 Toast.makeText(this, R.string.local_no_need_download.getString(), Toast.LENGTH_SHORT).show()
             } else {
-                if (hasDownloaded) {
+                if (mSong?.isDownload == true) {
                     Toast.makeText(this, R.string.song_has_download.getString(), Toast.LENGTH_SHORT).show()
                 } else {
-                    if (mSong?.isDownload == true) {
-                        Toast.makeText(this, R.string.song_has_download.getString(), Toast.LENGTH_SHORT).show()
-                    } else {
-                        mDownloadBinder?.startDownload(getDownloadSong())
-                    }
+                    mDownloadBinder?.startDownload(getDownloadSong())
                 }
             }
 
@@ -471,11 +465,6 @@ class IPlayActivity : BaseLifeCycleActivity<IPlayViewModel>() {
             mSong?.qqId = it
             SongUtil.saveSong(mSong)
         })
-        Bus.observe<Int>(Constant.DOWNLOAD_RESULT,this) {
-            if (it == Constant.TYPE_DOWNLOAD_SUCCESS) {
-                hasDownloaded = true
-            }
-        }
 //        IMusicBus.observePlayStatusChange(this,{
 //            if (it == Constant.SONG_COMPLETE) {
 //                Log.e("JG","--->歌曲播放完毕")
