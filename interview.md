@@ -279,3 +279,8 @@ MediaPlayer.setOnCompletionListener()，它会在MediaPlayer播放完毕被回�
 5、处理初次进入页面没有歌曲的情况（在Application中查询本地歌曲 如果有 用第一条歌曲   如果一条都没有，自己推荐一条）
 6、播放界面顶部的songName改为访网易云音乐那样的滚动
 7、资源不够 UI来凑  UI 一定要好看！！！！！   添加自定义字体！
+8、item右滑删除功能 见玩安卓recyclerview
+9、首次进入 首页显示等待层 加载当前的推荐音乐
+
+####bug
+1、本地音乐，有些不能播放 但是目录下的文件是好的

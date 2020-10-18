@@ -47,7 +47,7 @@ object PhoneUtil {
                                 map3Info.apply {
                                     name = title.trim()
                                     singer = artist
-                                    this.duration = duration
+                                    this.duration = duration / 1000
                                     this.url = url
                                     songId = "$i"
                                 }

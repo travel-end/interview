@@ -91,7 +91,7 @@ class IMainActivity : BaseLifeCycleActivity<IMainViewModel>() {
         if (mSong != null) {
             setSongUi(mSong!!)
         } else {
-            queryLocalSong()// 查询本地音乐
+            setRecommendSong()// 查询本地音乐
         }
 
         // 保證播放音乐状态退出程序后 再次进入 仍然继续播放音乐（或者暂停状态退出程序 进入后仍然保持之前的状态）
@@ -107,54 +107,30 @@ class IMainActivity : BaseLifeCycleActivity<IMainViewModel>() {
         initService()
     }
 
-    private fun queryLocalSong() {
-        GlobalScope.launch {
-            val result = withContext(Dispatchers.IO) {
-                IMusicRoomHelper.getAllLocalSongs()
+    private fun setRecommendSong() {
+        // 使用json文件中推荐的歌曲
+        val firstSong = AssetsUtil.readAssetsJson("first_song.json")
+        firstSong?.let {
+            val s = Gson().fromJson(it,ListBean::class.java)
+            val song= Song().apply {
+                songId = s.songmid //004DrG5A2nm7q2
+                singer = StringUtils.getSinger(s)// 鸾音社
+                songName = s.songname// 夜来寒雨晓来风
+                //http://y.gtimg.cn/music/photo_new/T002R180x180M000004UvnL62KXhCQ.jpg
+                imgUrl = "${Constant.ALBUM_PIC}${s.albummid}${Constant.JPG}"
+                duration = s.interval//187  (秒)
+                isOnline = true
+                mediaId = s.strMediaMid//004DrG5A2nm7q2
+                albumName = s.albumname//夜来寒雨晓来风
+                // 是否已经下载过了（初次搜索为false）
+                isDownload = IMusicDownloadUtil.isExistOfDownloadSong(s.songmid?:"")//003IHI2x3RbXLS
             }
-            // 如果有本地音乐  则使用本地音乐的第一首歌作为首次见面
-            if (!result.isNullOrEmpty()) {
-                val firstLocalSong = result[0]
-                val song  = Song()
-                song.songName = firstLocalSong.name
-                song.singer = firstLocalSong.singer
-                song.url = firstLocalSong.url
-                song.duration = firstLocalSong.duration?.toInt()?:0
-                song.position = 0
-                song.isOnline = false
-                song.songId = firstLocalSong.songId
-                song.listType = Constant.LIST_TYPE_LOCAL
-                mSong = song
-                SongUtil.saveSong(mSong)
-                setSongUi(song)
-            } else {// 本地音乐也没有  使用json文件中推荐的歌曲
-                val firstSong = AssetsUtil.readAssetsJson("first_song.json")
-                firstSong?.let {
-                    val s = Gson().fromJson(it,ListBean::class.java)
-                    val song= Song().apply {
-                        songId = s.songmid //004DrG5A2nm7q2
-                        singer = StringUtils.getSinger(s)// 鸾音社
-                        songName = s.songname// 夜来寒雨晓来风
-                        //http://y.gtimg.cn/music/photo_new/T002R180x180M000004UvnL62KXhCQ.jpg
-                        imgUrl = "${Constant.ALBUM_PIC}${s.albummid}${Constant.JPG}"
-                        duration = s.interval//187  (秒)
-                        isOnline = true
-                        mediaId = s.strMediaMid//004DrG5A2nm7q2
-                        albumName = s.albumname//夜来寒雨晓来风
-                        // 是否已经下载过了（初次搜索为false）
-                        isDownload = IMusicDownloadUtil.isExistOfDownloadSong(s.songmid?:"")//003IHI2x3RbXLS
-                    }
-                    mFirstSong = song
-                    withContext(Dispatchers.Main) {
-                        setSongUi(song)
-                    }
+            mFirstSong = song
+            setSongUi(song)
 //                    SongUtil.saveSong(song)
 //                    mViewModel.getSongUrl(song)
-                }
-            }
         }
     }
-
     private fun setSongUi(song: Song) {
         bottom_player.player_song_name.text = song.songName
         bottom_player.player_song_author.text = song.singer
@@ -162,13 +138,13 @@ class IMainActivity : BaseLifeCycleActivity<IMainViewModel>() {
         progressBar.max = song.duration ?: 100
         progressBar.progress = song.currentTime.toInt() ?: 0
         Log.e("JG", "播放进度：$mCurrentTime")
-        if (song.imgUrl == null) {
+        if (song.imgUrl == null) {// 本地音乐
             SongUtil.setLocalCoverImg(
                 this@IMainActivity,
                 song.singer ?: "",
                 bottom_player.player_song_icon
             )
-        } else {
+        } else {// 网络音乐
             GlideUtil.loadImg(
                 this@IMainActivity,
                 song.imgUrl ?: "",
@@ -278,7 +254,7 @@ class IMainActivity : BaseLifeCycleActivity<IMainViewModel>() {
 //            Log.e("JG","--->坚挺到播放歌曲的改变")
             when(it) {
                 Constant.SONG_CHANGE -> {
-                    Log.e("JG", "---->播放完整曲目")
+                    Log.e("JG", "---->SONG_CHANGE")
                     mSong = SongUtil.getSong()
                     mSong?.let { s ->
                         bottom_player.player_song_name.text = s.songName
@@ -295,7 +271,7 @@ class IMainActivity : BaseLifeCycleActivity<IMainViewModel>() {
                         rotationAnim.start()
 //                        mCurrentTime = mPlayServiceBinder?.currentTime
                         startProgressBar()
-                        if (!s.isOnline) {
+                        if (!s.isOnline) {// 本地音乐
                             SongUtil.setLocalCoverImg(
                                 this@IMainActivity,
                                 s.singer ?: "",

@@ -111,8 +111,8 @@ object SongUtil {
         val imgUrl = "${Constant.STORAGE_IMG_FILE}$mS.jpg"
         Glide.with(context)
             .load(imgUrl)
-            .apply(RequestOptions.placeholderOf(R.drawable.icon1))
-            .apply(RequestOptions.errorOf(R.drawable.icon1))
+            .apply(RequestOptions.placeholderOf(R.drawable.default_disc))
+            .apply(RequestOptions.errorOf(R.drawable.default_disc))
             .into(v)
     }
 

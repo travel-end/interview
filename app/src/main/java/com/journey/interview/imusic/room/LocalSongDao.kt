@@ -45,5 +45,9 @@ interface LocalSongDao {
     @Transaction
     @Query("DELETE FROM localsong")
     suspend fun deleteAllLocalSong(): Int?
+
+    @Transaction
+    @Query("UPDATE localsong SET pic=(:pic) WHERE songId=(:songId)")
+    suspend fun updateLocalSongPicBySongId(pic:String,songId: String):Int?
 }
 

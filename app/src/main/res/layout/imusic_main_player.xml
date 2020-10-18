@@ -53,7 +53,7 @@
         android:layout_height="match_parent"
         android:layout_marginEnd="@dimen/dp_10"
         app:rv_centered="true"
-        app:rv_color="@color/colorTextPink"
+        app:rv_color="@color/colorPrimaryLight"
         app:rv_rippleDuration="240"
         app:layout_constraintEnd_toStartOf="@id/player_song_list"
         app:layout_constraintTop_toTopOf="parent"

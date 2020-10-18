@@ -163,7 +163,7 @@ class IMusicPlayService : Service() {
         }
 
         // 播放音乐
-        fun play(listType: Int?) {
+        fun play(listType: Int?,restartTime:Int?=null) {
             try {
                 this@IMusicPlayService.mListType = listType
                 if (mListType != null) {
@@ -194,7 +194,7 @@ class IMusicPlayService : Service() {
                         }
                     }
                 }
-                mCurrent = SongUtil.getSong()?.position
+                mCurrent = SongUtil.getSong()?.position// 当前播放歌曲在列表中的位置
                 Log.e("JG","mCurrent:$mCurrent")
                 // 把各项参数恢复到初始状态
                 mMediaPlayer.reset()
@@ -204,7 +204,7 @@ class IMusicPlayService : Service() {
                             val url = it[mCurrent?:0].url
                             if (!url.isNullOrEmpty()) {
                                 mMediaPlayer.setDataSource(url)
-                                startPlay()
+                                startPlay(restartTime)
                             }
                         }
                     }
@@ -212,8 +212,9 @@ class IMusicPlayService : Service() {
                         mLocalSongs?.let {
                             val url = it[mCurrent?:0].url
                             if (!url.isNullOrEmpty()) {
+//                                Log.e("JG","播放url:$url")
                                 mMediaPlayer.setDataSource(url)
-                                startPlay()
+                                startPlay(restartTime)
                             }
                         }
                     }
@@ -222,7 +223,7 @@ class IMusicPlayService : Service() {
                             val url = it[mCurrent?:0].url
                             if (!url.isNullOrEmpty()) {
                                 mMediaPlayer.setDataSource(url)
-                                startPlay()
+                                startPlay(restartTime)
                             }
                         }
                     }
@@ -231,7 +232,7 @@ class IMusicPlayService : Service() {
                             val url = it[mCurrent?:0].url
                             if (!url.isNullOrEmpty()) {
                                 mMediaPlayer.setDataSource(url)
-                                startPlay()
+                                startPlay(restartTime)
                             }
                         }
                     }
@@ -339,15 +340,23 @@ class IMusicPlayService : Service() {
     }
 
     @Throws(IOException::class)
-    private fun startPlay() {
-        mMediaPlayer.prepare()
-        this@IMusicPlayService.mIsPlaying = true
-        mMediaPlayer.start()
-        saveToHistorySong()
-        IMusicBus.sendPlayStatusChangeEvent(Constant.SONG_CHANGE)
-        val song = SongUtil.getSong()
-        notificationManager.notify(NOTIFICATION_ID,
-        getNotification("${song?.songName}-${song?.singer}"))
+    private fun startPlay(restartTime:Int?=null) {
+        mMediaPlayer.prepareAsync()
+        mMediaPlayer.setOnPreparedListener {
+            this@IMusicPlayService.mIsPlaying = true
+            if (restartTime != null && restartTime !=0) {
+                it?.seekTo(restartTime)
+            }
+            it.start()
+            saveToHistorySong()
+            Bus.post(Constant.SONG_STATUS_CHANGE,Constant.SONG_CHANGE)
+        }
+
+        // todo 这里后面再优化
+//        val song = SongUtil.getSong()
+
+//        notificationManager.notify(NOTIFICATION_ID,
+//        getNotification("${song?.songName}-${song?.singer}"))
     }
 
     private var job: Job? = null
@@ -549,8 +558,10 @@ class IMusicPlayService : Service() {
 
     override fun onDestroy() {
         Log.d("JG", "--->IMusicPlayService onDestroy")
-        mMediaPlayer.stop()
-        mMediaPlayer.release()
+        if (mMediaPlayer.isPlaying) {
+            mMediaPlayer.stop()
+            mMediaPlayer.release()
+        }
         stopForeground(true)
         if (job?.isCancelled == false) {
             job?.cancel()

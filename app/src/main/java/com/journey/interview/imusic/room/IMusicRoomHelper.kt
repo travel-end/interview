@@ -86,12 +86,12 @@ object IMusicRoomHelper {
 
     /* *****本地音乐********/
     suspend fun saveLocalSong(localSongs: MutableList<LocalSong>): Long? {
-        var result: Long? = null
-        for (song in localSongs) {
+        var result: Long? = null//i in localSongs.indices.reversed()
+        for (i in localSongs.indices.reversed()) {
 //            val s = localSongDao.queryLocalSongsBySongId(song.songId?:"")
 //            Log.e("JG","根据id查询：$s")
 //            if (s.isEmpty()) {
-                result = localSongDao.insertLocalSong(song)
+                result = localSongDao.insertLocalSong(localSongs[i])
 //            }
         }
         return result
@@ -109,6 +109,9 @@ object IMusicRoomHelper {
     }
     suspend fun queryLocalSongsBySongId(songId: String?):MutableList<LocalSong>? {
         return localSongDao.queryLocalSongsBySongId(songId?:"")
+    }
+    suspend fun updateLocalSongPicBySongId(pic:String,songId: String):Int?{
+        return localSongDao.updateLocalSongPicBySongId(pic,songId)
     }
 
     suspend fun getAllLocalSongs(): MutableList<LocalSong>? {

@@ -79,12 +79,13 @@ object StringUtils {
     }
 
     fun formatSinger(singer:String):String {
-        var sin:String=""
-        if (singer.contains("/")) {
-            val s = singer.split("/")
-            sin = s[0]
-        }
-        return sin.trim()
+        return if (singer.contains("/")) singer.split("/")[0] else singer.trim()
+
+//        var sin=singer
+//        if (singer.contains("/")) {
+//            sin = singer.split("/")[0]
+//        }
+//        return sin.trim()
     }
 
     fun getSinger(data: ListBean):String? {

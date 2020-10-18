@@ -70,7 +70,7 @@ object Constant {
         InterviewApp.instance.getExternalFilesDir("").toString() + "/imusic/lrc/"
 
 
-    const val SONG_ID_UNFIND = "unFind"
+    const val SONG_ID_UNFIND = "暂无歌词"
 
 
     // 播放顺序
@@ -122,5 +122,6 @@ object Constant {
     // 普通事件传递
     const val EVENT_REFRESH_LOCAL_SONG = 0
     const val EVENT_APP = "event_app"
+    const val FIRST_LAUNCH = "first_launch"
 
 }

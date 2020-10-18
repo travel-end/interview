@@ -66,7 +66,7 @@ class ILocalSongViewModel:BaseViewModel() {
                             map3Info.apply {
                                 name = title.trim()
                                 singer = artist
-                                this.duration = duration
+                                this.duration = duration / 1000
                                 this.url = url
                                 songId = "$i"
                             }
@@ -79,19 +79,20 @@ class ILocalSongViewModel:BaseViewModel() {
             cursor?.close()
 
             // 加上下载的所有歌曲
-            val downloadedSongs = IMusicDownloadUtil.getSongFromFile(Constant.STORAGE_SONG_FILE)
-            downloadedSongs?.let {
-                for (song in it) {
-                    val mp3Info =LocalSong().apply {
-                        name = song.name
-                        singer = song.singer
-                        this.duration = song.duration
-                        this.url = song.url
-                        songId = song.songId
-                    }
-                    songList.add(mp3Info)
-                }
-            }
+//            val downloadedSongs = IMusicDownloadUtil.getSongFromFile(Constant.STORAGE_SONG_FILE)
+//            Log.e("JG","downloadedSongs====$downloadedSongs")
+//            downloadedSongs?.let {
+//                for (song in it) {
+//                    val mp3Info =LocalSong().apply {
+//                        name = song.name
+//                        singer = song.singer
+//                        this.duration = song.duration
+//                        this.url = song.url
+//                        songId = song.songId
+//                    }
+//                    songList.add(mp3Info)
+//                }
+//            }
             return songList
         }
         return null

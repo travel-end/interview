@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.journey.interview.customizeview.ripple.MyRippleView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/dp_65"
+    android:layout_height="@dimen/dp_62"
     app:rv_centered="true"
-    app:rv_type="rectangle"
     app:rv_color="@color/colorPrimaryLight3"
     app:rv_rippleDuration="240"
     android:paddingTop="@dimen/dp_8"
@@ -14,12 +13,13 @@
 
     <ImageView
         android:id="@+id/iv_item_local_song_laba"
-        android:layout_width="@dimen/dp_18"
-        android:layout_height="@dimen/dp_16"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:layout_marginEnd="@dimen/dp_16"
-        android:visibility="visible"
+        android:visibility="gone"
         android:src="@drawable/ic_laba" />
+
     <TextView
         android:id="@+id/tv_item_local_song_name"
         android:layout_width="wrap_content"

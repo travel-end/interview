@@ -109,7 +109,7 @@ class ILocalFragment:BaseLifeCycleFragment<ILocalSongViewModel>() {
                                     songId = mp3Info.songId
                                     listType = Constant.LIST_TYPE_LOCAL
                                 }
-                                SongUtil.saveSong(song)
+                                SongUtil.saveSong(song)// 保存当前播放歌曲
                                 playBinder?.play(Constant.LIST_TYPE_LOCAL)
                             })
                         }
@@ -150,7 +150,7 @@ class ILocalFragment:BaseLifeCycleFragment<ILocalSongViewModel>() {
                 }
                 tvSearchSong.visibility = View.GONE
                 localSongsList.clear()
-                Toast.makeText(requireContext(),"找到了您手机上藏起来的${it.size}首音乐(*^_^*)",Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(),"找到了您手机上的${it.size}首音乐(*^_^*)",Toast.LENGTH_SHORT).show()
                 localSongsList.addAll(it)
                 mRvLocalSong.submitList(localSongsList)
             }

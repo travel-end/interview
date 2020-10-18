@@ -39,7 +39,7 @@ interface IMusicApiService {
     // 得到歌词需要添加Referer的表头
     @Headers("Referer:https://y.qq.com/portal/player.html")
     @GET("https://c.y.qq.com/lyric/fcgi-bin/fcg_query_lyric_new.fcg?format=json&nobase64=1")//根据qq音乐的mid获取歌词
-    suspend fun getOnlineSongLrc(@Query("songmid") songId:String): OnlineSongLrc
+    suspend fun getOnlineSongLrc(@Query("songmid") songId:String): OnlineSongLrc?
 
     /**
      * 得到歌手照片 主要用于本地音乐 http://music.163.com/api/search/get/web?s=刘瑞琦&type=100

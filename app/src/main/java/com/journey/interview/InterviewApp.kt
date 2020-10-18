@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModelStoreOwner
 import androidx.multidex.MultiDexApplication
 import com.journey.interview.imusic.room.IMusicRoomHelper
 import com.journey.interview.utils.PhoneUtil
+import com.journey.interview.utils.SpUtil
 import com.journey.interview.weatherapp.state.EmptyCallback
 import com.journey.interview.weatherapp.state.ErrorCallback
 import com.journey.interview.weatherapp.state.LoadingCallback
@@ -36,15 +37,7 @@ class InterviewApp : MultiDexApplication(), ViewModelStoreOwner {
         mViewModelStore = ViewModelStore()
 //        val intent = Intent(this,LockScreenService::class.java)
 //        startService(intent)
-        GlobalScope.launch {
-            withContext(Dispatchers.IO) {
-                val localSongList = PhoneUtil.getLocalSong()
-                Log.e("JG","--->InterviewApp 本地音乐：$localSongList")
-                if (!localSongList.isNullOrEmpty()) {
-                    IMusicRoomHelper.saveLocalSong(localSongList)
-                }
-            }
-        }
+
     }
 
     private fun initLoadSir() {

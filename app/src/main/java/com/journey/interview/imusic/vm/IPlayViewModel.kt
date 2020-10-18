@@ -44,11 +44,13 @@ class IPlayViewModel : BaseViewModel() {
                     iMusicApiService.getOnlineSongLrc(songId)
                 }
             }.onSuccess {
-                Log.e("JG","--->getOnlineSongLrc onSuccess")
-                songLrc.value = it
-                // 如果是本地音乐 则将歌词保存起来
-                if (songType == Constant.SONG_LOCAL) {
-                    SongUtil.saveLrcToNative(it.lyric, songName)
+                Log.e("JG","--->getOnlineSongLrc onSuccess:${it?.lyric}")
+                it?.let {
+                    // 如果是本地音乐 则将歌词保存起来
+                    if (songType == Constant.SONG_LOCAL) {
+                        SongUtil.saveLrcToNative(it.lyric, songName)
+                    }
+                    songLrc.value = it
                 }
             }.onFailure {
                 songLrc.value=null
@@ -126,9 +128,9 @@ class IPlayViewModel : BaseViewModel() {
         return null
     }
 
-    fun updateLocalSong(localSong: LocalSong) {
+    fun updateLocalSong(pic:String,songId: String) {
         ioRequest {
-            IMusicRoomHelper.updateLocalSong(localSong)
+            IMusicRoomHelper.updateLocalSongPicBySongId(pic,songId)
         }
     }
 
@@ -149,9 +151,11 @@ class IPlayViewModel : BaseViewModel() {
         var isFind: Boolean = false
         if (!listBeans.isNullOrEmpty()) {
             for (bean in listBeans) {
-                if (duration == bean.interval) {
-                    isFind = true
-                    songIdResult.value = bean.songmid
+                if (!isFind) {
+                    if (duration == bean.interval) {
+                        isFind = true
+                        songIdResult.value = bean.songmid
+                    }
                 }
             }
         }
@@ -162,12 +166,15 @@ class IPlayViewModel : BaseViewModel() {
     }
 
     private fun matchLrc(listBeans: List<ListBean>?, duration: Int) {
-        var isFind: Boolean = false
+        var isFind = false
         if (!listBeans.isNullOrEmpty()) {
             for (bean in listBeans) {
-                if (duration == bean.interval) {
-                    isFind = true
-                    localSongId.value = bean.songmid
+                if (!isFind) {
+                    if (duration == bean.interval) {
+                        isFind = true
+//                    Log.e("JG","匹配到歌曲---> ${bean.songmid}")
+                        localSongId.value = bean.songmid
+                    }
                 }
             }
         }
@@ -190,9 +197,11 @@ class IPlayViewModel : BaseViewModel() {
             val searchResult = withContext(Dispatchers.IO) {
                 iMusicApiService.search(songName, 1)
             }
+            // 匹配歌词
             if (searchResult.code == 0) {
                 matchLrc(searchResult.data?.song?.list, duration)
-            } else {
+            }
+            else {
                 lrcError.value = null
             }
         }
