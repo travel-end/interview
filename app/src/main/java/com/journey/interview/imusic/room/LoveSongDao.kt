@@ -37,4 +37,8 @@ interface LoveSongDao {
     @Transaction
     @Delete(entity = LoveSong::class)
     suspend fun deleteMyLove(loveSong: LoveSong):Int?
+
+    @Transaction
+    @Query("DELETE FROM lovesong WHERE songId=(:songId)")
+    suspend fun deleteLoveSongBySongId(songId: String):Int?
 }

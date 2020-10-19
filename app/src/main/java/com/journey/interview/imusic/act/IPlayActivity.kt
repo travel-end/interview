@@ -32,6 +32,7 @@ import com.gyf.immersionbar.ImmersionBar
 import com.journey.interview.Constant
 import com.journey.interview.R
 import com.journey.interview.customizeview.lrcview.LrcView
+import com.journey.interview.imusic.global.Bus
 import com.journey.interview.imusic.global.IMusicBus
 import com.journey.interview.imusic.model.DownloadSong
 import com.journey.interview.imusic.model.Song
@@ -99,7 +100,7 @@ class IPlayActivity : BaseLifeCycleActivity<IPlayViewModel>() {
             mPlayStatusBinder?.setPlayMode(mPlayMode)
 
             mIsOnline = SongUtil.getSong()?.isOnline ?: false
-//            Log.e("JG", "是否是网络歌曲--->$mIsOnline")
+            Log.e("JG", "是否是网络歌曲--->$mIsOnline")
             if (mIsOnline) {// 是网络歌曲
                 val coverImg = SongUtil.getSong()?.imgUrl
 //                Log.e("JG", "IPlayActivity--->coverImg:$coverImg")
@@ -113,7 +114,6 @@ class IPlayActivity : BaseLifeCycleActivity<IPlayViewModel>() {
                 mSeekBar.secondaryProgress = mSong?.duration?: 0
                 setLocalCoverImg(mSong?.singer ?: "imsuic")// 设置本地歌曲封面
             }
-//            // todo 本地歌曲的duration不对
 //            play_bottom_controller.tv_total_time.text =
 //                StringUtils.formatTime(mSong?.duration?.toLong() ?: 0)
 
@@ -187,7 +187,7 @@ class IPlayActivity : BaseLifeCycleActivity<IPlayViewModel>() {
             play_tv_song_singer.text = song.singer
             play_tv_song_name.text = song.songName
             Log.e("JG", "当前播放进度：${song.currentTime}")
-            Log.e("JG", "当前播放总时长：${mSong?.duration?.toLong()}")//263593
+//            Log.e("JG", "当前播放总时长：${mSong?.duration?.toLong()}")//263593
             mTvCurrentTime.text = StringUtils.formatTime(song.currentTime)//当前进度TextView
             play_bottom_controller.tv_total_time.text =
                 StringUtils.formatTime(mSong?.duration?.toLong() ?: 0)// 总时长TextView
@@ -434,13 +434,15 @@ class IPlayActivity : BaseLifeCycleActivity<IPlayViewModel>() {
         mViewModel.addLoveSongResult.observe(this, Observer {
             it?.let {
                 Log.e("JG", "喜欢成功")
-                IMusicBus.sendLoveSongChange(true)
+//                IMusicBus.sendLoveSongChange(true)
+                Bus.post(Constant.ADD_TO_LOVE,true)
             }
         })
         mViewModel.deleteLoveSongResult.observe(this, Observer {
             it?.let {
                 Log.e("JG", "刪除喜欢成功")
-                IMusicBus.sendLoveSongChange(true)
+//                IMusicBus.sendLoveSongChange(true)
+                Bus.post(Constant.ADD_TO_LOVE,false)
             }
         })
         mViewModel.queryIsMyLoveResult.observe(this, Observer {
@@ -636,6 +638,7 @@ class IPlayActivity : BaseLifeCycleActivity<IPlayViewModel>() {
             progress = 0
             songId = mSong?.songId
             url = mSong?.url
+            pic = mSong?.imgUrl
             songName = mSong?.songName
             duration = mSong?.duration
             albumName = mSong?.albumName

@@ -36,6 +36,7 @@ class IMusicPlayService : Service() {
     private var mLoveSongs: MutableList<LoveSong>? = null
     private var mHistorySongs: MutableList<HistorySong>? = null
 
+    private var playResult:Int = Constant.PLAY_SUCCESS
 
     companion object {
         const val NOTIFICATION_ID = 98
@@ -152,7 +153,12 @@ class IMusicPlayService : Service() {
          * 因为直接切歌会发生错误，所以增加错误监听器。返回true。就不会回调onCompletion方法了。
          * todo // 处理播放出错的逻辑
          */
-        mMediaPlayer.setOnErrorListener { _, _, _ -> true }
+        mMediaPlayer.setOnErrorListener { _, what, extra ->
+            Log.e("JG","--->setOnErrorListener:$what, $extra")
+            playResult = Constant.PLAY_FAILED
+            Toast.makeText(this@IMusicPlayService,R.string.play_error.getString(),Toast.LENGTH_SHORT).show()
+            true
+        }
         return mPlayStatusBinder
 
     }
@@ -163,7 +169,7 @@ class IMusicPlayService : Service() {
         }
 
         // 播放音乐
-        fun play(listType: Int?,restartTime:Int?=null) {
+        fun play(listType: Int?,restartTime:Int?=null) :Int{
             try {
                 this@IMusicPlayService.mListType = listType
                 if (mListType != null) {
@@ -171,6 +177,7 @@ class IMusicPlayService : Service() {
                         Constant.LIST_TYPE_DOWNLOAD -> {
                             mDownloadedSongs =
                                 orderDownloadList(IMusicDownloadUtil.getSongFromFile(Constant.STORAGE_SONG_FILE))
+                            Log.e("JG","play---> downloadSongs:$mDownloadedSongs")
                         }
                         Constant.LIST_TYPE_LOCAL->{
                             runBlocking {
@@ -241,8 +248,10 @@ class IMusicPlayService : Service() {
                 }
             } catch (e: Exception) {
                 Log.e("JG","play error:${e.message}")
+                playResult = Constant.PLAY_FAILED
                 Toast.makeText(this@IMusicPlayService,R.string.play_error.getString(),Toast.LENGTH_SHORT).show()
             }
+            return playResult
         }
 
         // 播放搜索歌曲
@@ -348,6 +357,7 @@ class IMusicPlayService : Service() {
                 it?.seekTo(restartTime)
             }
             it.start()
+            playResult = Constant.PLAY_SUCCESS
             saveToHistorySong()
             Bus.post(Constant.SONG_STATUS_CHANGE,Constant.SONG_CHANGE)
         }

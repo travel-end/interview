@@ -54,16 +54,16 @@ object IMusicRoomHelper {
     }
 
     suspend fun addToMyLoveSong(loveSong: LoveSong): Long? {
-        loveSong.songId?.let {
-            loveSongDao.queryIsMyLove(it)?.let { data ->
-                if (data.size > 0) {
-                    for (i in data) {
-                        val result = loveSongDao.deleteMyLove(i)
-                        Log.d("JG", "删除我的喜欢：$i")
-                    }
-                }
-            }
-        }
+//        loveSong.songId?.let {
+//            loveSongDao.queryIsMyLove(it)?.let { data ->
+//                if (data.size > 0) {
+//                    for (i in data) {
+//                        val result = loveSongDao.deleteMyLove(i)
+//                        Log.d("JG", "删除我的喜欢：$i")
+//                    }
+//                }
+//            }
+//        }
         return loveSongDao.insertToMyLove(loveSong)
     }
 
@@ -78,6 +78,9 @@ object IMusicRoomHelper {
 
     suspend fun deleteFromMyLoveSong(loveSong: LoveSong): Int? {
         return loveSongDao.deleteMyLove(loveSong)
+    }
+    suspend fun deleteLoveSongBySongId(songId: String):Int?{
+        return loveSongDao.deleteLoveSongBySongId(songId)
     }
 
     suspend fun getAllMyLoveSong(): MutableList<LoveSong>? {
@@ -169,5 +172,20 @@ object IMusicRoomHelper {
 
     suspend fun queryDownloadSongById(id: Long): MutableList<DownloadSong>? {
         return downloadSongDao.queryDownloadSongById(id)
+    }
+
+    suspend fun updateDownloadSongStatus(status:Int,songId: String):Int? {
+        return downloadSongDao.updateDownloadSongStatus(status,songId)
+    }
+
+    suspend fun findDownloadSongUpId(id: Long): MutableList<DownloadSong>? {
+        return downloadSongDao.findDownloadSongUpId(id)
+    }
+
+    suspend fun updateDownloadSongId(id: Long,songId: String):Int? {
+        return downloadSongDao.updateDownloadSongId(id,songId)
+    }
+    suspend fun deleteDownloadSong(downloadSong: DownloadSong):Int? {
+        return downloadSongDao.deleteDownloadSong(downloadSong)
     }
 }

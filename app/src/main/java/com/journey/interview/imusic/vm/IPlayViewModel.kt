@@ -75,6 +75,10 @@ class IPlayViewModel : BaseViewModel() {
                 isOnline = song.isOnline,
                 isDownload = song.isDownload
             )
+            withContext(Dispatchers.IO) {
+                IMusicRoomHelper.deleteLoveSongBySongId(loveSong.songId?:"")
+            }
+
             val result = withContext(Dispatchers.IO) {
                 IMusicRoomHelper.addToMyLoveSong(loveSong)
             }
@@ -96,8 +100,11 @@ class IPlayViewModel : BaseViewModel() {
                 isOnline = song.isOnline,
                 isDownload = song.isDownload
             )
+//            val result = withContext(Dispatchers.IO) {
+//                IMusicRoomHelper.deleteFromMyLoveSong(loveSong)
+//            }
             val result = withContext(Dispatchers.IO) {
-                IMusicRoomHelper.deleteFromMyLoveSong(loveSong)
+                IMusicRoomHelper.deleteLoveSongBySongId(song.songId?:"")
             }
             deleteLoveSongResult.value = result
         }

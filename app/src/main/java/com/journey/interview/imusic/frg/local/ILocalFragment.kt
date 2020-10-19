@@ -110,7 +110,10 @@ class ILocalFragment:BaseLifeCycleFragment<ILocalSongViewModel>() {
                                     listType = Constant.LIST_TYPE_LOCAL
                                 }
                                 SongUtil.saveSong(song)// 保存当前播放歌曲
-                                playBinder?.play(Constant.LIST_TYPE_LOCAL)
+                                val result = playBinder?.play(Constant.LIST_TYPE_LOCAL)
+//                                if (result != null && result==Constant.PLAY_SUCCESS) {
+//
+//                                }
                             })
                         }
                     }

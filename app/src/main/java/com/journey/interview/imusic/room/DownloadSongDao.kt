@@ -40,4 +40,15 @@ interface DownloadSongDao {
     @Query("SELECT * FROM downloadsong WHERE id > (:id)")
     suspend fun queryDownloadSongById(id:Long):MutableList<DownloadSong>?
 
+    @Transaction
+    @Query("UPDATE downloadsong SET status=(:status) WHERE songId=(:songId)")
+    suspend fun updateDownloadSongStatus(status:Int,songId: String):Int?
+
+    @Transaction
+    @Query("UPDATE downloadsong SET id=(:id) WHERE songId=(:songId)")
+    suspend fun updateDownloadSongId(id:Long,songId: String):Int?
+
+    @Transaction
+    @Query("SELECT * FROM downloadsong WHERE id>(:id)")
+    suspend fun findDownloadSongUpId(id: Long):MutableList<DownloadSong>?
 }

@@ -20,4 +20,6 @@ interface IMusicDownloadListener {
 
     // 取消
     fun onCancel()
+
+    fun onStart()
 }

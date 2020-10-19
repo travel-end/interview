@@ -83,22 +83,20 @@ class IMusicDownloadService : Service() {
                     }
                     Log.e("JG", "下载队列：$result")
                     if (result != null && result.size != 0) {
-//                        Toast.makeText(this@IMusicDownloadService, "已经加入下载队列", Toast.LENGTH_SHORT).show()
-//                        val historyDownloadSong = result[0]
-//                        historyDownloadSong.status = Constant.DOWNLOAD_WAIT
-//                        withContext(Dispatchers.IO) {
-//                            IMusicRoomHelper.saveToDownloadSong(historyDownloadSong)
-//                        }
-//                        withContext(Dispatchers.Main) {
-//                            Bus.post(
-//                                Constant.DOWNLOAD_EVENT,
-//                                DownloadEvent(
-//                                    downloadStatus = Constant.DOWNLOAD_PAUSED,
-//                                    downloadSong = historyDownloadSong
-//                                ))
-//
-//                            downloadQueue.offer(historyDownloadSong)
-//                        }
+                        val historyDownloadSong = result[0]
+                        historyDownloadSong.status = Constant.DOWNLOAD_WAIT
+                        withContext(Dispatchers.IO) {
+                            IMusicRoomHelper.updateDownloadSongStatus(Constant.DOWNLOAD_WAIT,historyDownloadSong.songId?:"")
+                        }
+                        withContext(Dispatchers.Main) {
+                            Bus.post(
+                                Constant.DOWNLOAD_EVENT,
+                                DownloadEvent(
+                                    downloadStatus = Constant.DOWNLOAD_PAUSED,
+                                    downloadSong = historyDownloadSong
+                                ))
+                            downloadQueue.offer(historyDownloadSong)
+                        }
                     } else {
                         mPosition = withContext(Dispatchers.IO) {
                             IMusicRoomHelper.queryAllDownloadSongs()?.size ?: 0
@@ -109,13 +107,11 @@ class IMusicDownloadService : Service() {
                             IMusicRoomHelper.saveToDownloadSong(downloadSong)
                         }// 插入一条下载记录
                         withContext(Dispatchers.Main) {
-                            downloadQueue.offer(downloadSong)// 将歌曲放到等待队列中
+                            downloadQueue.offer(downloadSong)// 将歌曲放到等待队列中（末尾）
                             // 发送全局消息 通知有一个新的下载任务（在正在下载页面会展示当前任务）
-//                            IMusicBus.sendDownloadSongStatusChange(DownloadEvent(downloadStatus = Constant.TYPE_DOWNLOAD_ADD))
                             Bus.post(Constant.DOWNLOAD_EVENT, DownloadEvent(downloadStatus = Constant.TYPE_DOWNLOAD_ADD))
                         }
                     }
-
                     if (downloadTask != null) {
                         withContext(Dispatchers.Main) {
                             Toast.makeText(this@IMusicDownloadService, "已经加入下载队列", Toast.LENGTH_SHORT).show()
@@ -123,7 +119,7 @@ class IMusicDownloadService : Service() {
                     } else {
 //                        start()
                         if (downloadTask == null && !downloadQueue.isEmpty()) {
-                            val downloadingSong = downloadQueue.peek()
+                            val downloadingSong = downloadQueue.peek()//返回第一个元素
                             Log.e("JG", "当前下载的歌曲详情：$downloadingSong")
                             val songList = withContext(Dispatchers.IO) {
                                 IMusicRoomHelper.findDownloadSongBySongId(downloadingSong?.songId ?: "")
@@ -141,9 +137,8 @@ class IMusicDownloadService : Service() {
                                             )
                                         )
                                         downloadUrl = currentDownloadInfo.url
-//                                        Log.e("JG", "下载路径：$downloadUrl")
                                         downloadTask = IMusicDownloadTask(listener)
-                                        Toast.makeText(this@IMusicDownloadService, "开始下载", Toast.LENGTH_SHORT).show()
+//                                        Toast.makeText(this@IMusicDownloadService, "开始下载", Toast.LENGTH_SHORT).show()
                                         downloadTask!!.execute(currentDownloadInfo)
                                         notificationManager.notify(
                                             1,
@@ -209,18 +204,17 @@ class IMusicDownloadService : Service() {
      * 暂停时更新列表歌曲状态
      */
     private fun updateDbOfPause(songId: String?) {
-        GlobalScope.launch {
+        runBlocking {
             val statusList = IMusicRoomHelper.findDownloadSongBySongId(songId ?: "")
             if (statusList != null) {
                 val downloadSong = statusList[0]
-                downloadSong.status = Constant.DOWNLOAD_PAUSED
-                IMusicRoomHelper.saveToDownloadSong(downloadSong)
+                IMusicRoomHelper.updateDownloadSongStatus(Constant.DOWNLOAD_PAUSED,downloadSong.songId?:"")
             }
         }
     }
 
     private fun start() {
-        Log.e("JG", "start")
+//        Log.e("JG", "start")
         if (downloadTask == null && !downloadQueue.isEmpty()) {
             val downloadSong = downloadQueue.peek()
             Log.e("JG", "当前下载的歌曲详情：$downloadSong")
@@ -257,6 +251,10 @@ class IMusicDownloadService : Service() {
     private val notificationManager get() = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
     private val listener = object : IMusicDownloadListener {
+        override fun onStart() {
+            Toast.makeText(this@IMusicDownloadService
+                ,"开始下载~",Toast.LENGTH_SHORT).show()
+        }
         override fun onProgress(downloadSong: DownloadSong) {
             downloadSong.status = Constant.DOWNLOAD_ING
             Bus.post(
@@ -283,30 +281,83 @@ class IMusicDownloadService : Service() {
         override fun onSuccess() {
             Log.e("JG","download--->onSuccess")
             downloadTask = null
-            val downloadSong = downloadQueue.poll()
+            val downloadSong = downloadQueue.poll()// 删除并返回第一个元素
+            operateDb(downloadSong)
+            start()
             stopForeground(true)
             if (downloadQueue.isEmpty()) {
                 notificationManager.notify(1, getNotification("下载成功啦~", -1))
             }
 //            Bus.post(Constant.EVENT_LIST_TYPE,Constant.LIST_TYPE_DOWNLOAD)
-            Bus.post(Constant.DOWNLOAD_RESULT,Constant.TYPE_DOWNLOAD_SUCCESS)
+//            Bus.post(Constant.DOWNLOAD_RESULT,Constant.TYPE_DOWNLOAD_SUCCESS)
+            Toast.makeText(this@IMusicDownloadService
+                ,"下载成功啦~",Toast.LENGTH_SHORT).show()
         }
 
         override fun hasDownloaded() {
+            downloadTask=null
+            Toast.makeText(this@IMusicDownloadService
+            ,"歌曲已下载",Toast.LENGTH_SHORT).show()
         }
 
         override fun onFailed() {
             downloadTask = null
             stopForeground(true)
             notificationManager.notify(1, getNotification("下载失败", -1))
+            Toast.makeText(this@IMusicDownloadService
+                ,"下载失败",Toast.LENGTH_SHORT).show()
         }
         override fun onPaused() {
+            downloadTask=null
+            val downloadSong = downloadQueue.poll()
+            updateDbOfPause(downloadSong?.songId?:"")
+            notificationManager.notify(1, getNotification("下载暂停~", -1))
+            start()
+            downloadSong?.status = Constant.DOWNLOAD_PAUSED
+            Toast.makeText(this@IMusicDownloadService
+                ,"下载暂停",Toast.LENGTH_SHORT).show()
+            Bus.post(Constant.DOWNLOAD_EVENT,DownloadEvent(
+                downloadStatus = Constant.TYPE_DOWNLOAD_PAUSED,
+                downloadSong = downloadSong
+            ))
         }
 
         override fun onCancel() {
+            downloadTask=null
+            stopForeground(true)
+            Toast.makeText(this@IMusicDownloadService
+                ,"下载已取消",Toast.LENGTH_SHORT).show()
         }
     }
     private var postJob:Job?=null
+
+    private fun operateDb(downloadSong: DownloadSong?) {
+        updateDb(downloadSong?.songId?:"")
+        deleteDb(downloadSong)
+    }
+
+    private fun updateDb(songId: String) {
+        runBlocking {
+                val songList = IMusicRoomHelper.findDownloadSongBySongId(songId)
+                songList?.let {
+                    val id = it[0].id
+                    val list = IMusicRoomHelper.findDownloadSongUpId(id?:0)
+                    if (!list.isNullOrEmpty()) {
+                        for (song in list) {
+                            IMusicRoomHelper.updateDownloadSongId(song.id?:0,song.songId?:"")
+                        }
+                    }
+                }
+        }
+    }
+
+    private fun deleteDb(downloadSong: DownloadSong?) {
+        runBlocking {
+            if (downloadSong != null) {
+                IMusicRoomHelper.deleteDownloadSong(downloadSong)
+            }
+        }
+    }
 
     /**
      * 通知正在下載界面

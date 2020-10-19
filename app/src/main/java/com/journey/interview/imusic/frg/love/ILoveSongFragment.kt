@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.appbar.AppBarLayout
 import com.journey.interview.Constant
 import com.journey.interview.R
+import com.journey.interview.imusic.global.Bus
 import com.journey.interview.imusic.global.IMusicBus
 import com.journey.interview.imusic.model.LoveSong
 import com.journey.interview.imusic.model.Song
@@ -184,8 +185,11 @@ class ILoveSongFragment:BaseLifeCycleFragment<ILoveSongViewModel>() {
                 }
             }
         })
-        IMusicBus.observeLoveSongChange(this) {
-                mViewModel.getAllMyLoveSong()
+//        IMusicBus.observeLoveSongChange(this) {
+//                mViewModel.getAllMyLoveSong()
+//        }
+        Bus.observe<Boolean>(Constant.ADD_TO_LOVE,this) {
+
         }
     }
     override fun onDestroy() {

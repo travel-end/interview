@@ -75,7 +75,6 @@ object Constant {
 
     // 播放顺序
     const val KEY_PLAY_MODE = "play_mode"
-    const val SP_NAME_PLAY_MODE = "sp_play_name"
     const val PLAY_ORDER = 0 // 顺序播放
     const val PLAY_RANDOM = 1// 随机播放
     const val PLAY_SINGER = 2//单曲循环
@@ -85,7 +84,6 @@ object Constant {
     const val SONG_PAUSE = 1
     const val SONG_RESUME = 2// ->song start
     const val SONG_CHANGE = 3
-    const val SONG_COMPLETE = 4
     // 播放列表
     const val LIST_TYPE_LOCAL=1//本地列表
     const val LIST_TYPE_ONLINE=2//专辑列表
@@ -95,7 +93,6 @@ object Constant {
     const val EVENT_LIST_TYPE = "event_list_type"
 
     const val PLAY_STATUS = "play_status"
-    const val FIRST_SONG = "first_song"
 
     // 网络与非网络歌曲
     const val SONG_ONLINE = 0
@@ -106,7 +103,6 @@ object Constant {
 
     // 正在下載歌曲列表的狀態
     const val DOWNLOAD_EVENT = "download_event"
-    const val DOWNLOAD_RESULT = "download_result"
     const val DOWNLOAD_PAUSED = 0
     const val DOWNLOAD_WAIT = 1
     const val DOWNLOAD_ING = 2
@@ -125,5 +121,10 @@ object Constant {
     const val EVENT_REFRESH_LOCAL_SONG = 0
     const val EVENT_APP = "event_app"
     const val FIRST_LAUNCH = "first_launch"
+
+    const val PLAY_SUCCESS = 1
+    const val PLAY_FAILED = 2
+
+    const val ADD_TO_LOVE = "add_to_love"
 
 }

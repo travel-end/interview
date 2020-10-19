@@ -54,7 +54,7 @@ class IMusicDownloadTask(private val listener:IMusicDownloadListener) :AsyncTask
                 } else if (contentLength == downloadedLength) {
                     return Constant.TYPE_DOWNLOADED
                 }
-
+                listener.onStart()
                 val client = OkHttpClient()
                 val request = Request.Builder()
                 //断点下载  指定从哪个字节开始下载

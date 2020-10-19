@@ -16,11 +16,9 @@ import com.journey.interview.imusic.download.IMusicDownloadUtil
 import com.journey.interview.imusic.model.Downloaded
 import com.journey.interview.imusic.model.Song
 import com.journey.interview.imusic.service.IMusicPlayService
-import com.journey.interview.recyclerview.core.addItem
-import com.journey.interview.recyclerview.core.itemClicked
-import com.journey.interview.recyclerview.core.setText
-import com.journey.interview.recyclerview.core.setup
+import com.journey.interview.recyclerview.core.*
 import com.journey.interview.utils.SongUtil
+import com.journey.interview.utils.getColor
 import com.journey.interview.weatherapp.base.BaseFragment
 
 /**
@@ -58,8 +56,15 @@ class IDownloadedFragment:BaseFragment() {
                         bindViewHolder { data, pos, holder ->
                             setText(R.id.tv_item_song_name,data?.name)
                             setText(R.id.tv_item_song_singer,data?.singer)
+                            setVisible(R.id.tv_item_download_ok,true)
                             if (data?.albumName != "") {
                                 setText(R.id.tv_item_song_album_name,"- ${data?.albumName}")
+                            }
+                            val selectItem = pos % 2
+                            if (selectItem == 0) {
+                                itemView?.setBackgroundColor(R.color.colorWhite_10.getColor())
+                            } else {
+                                itemView?.setBackgroundColor(R.color.colorPrimaryLight2.getColor())
                             }
                             val currentSongId = SongUtil.getSong()?.songId
                             if (currentSongId != null &&
@@ -70,8 +75,6 @@ class IDownloadedFragment:BaseFragment() {
                                 itemView?.findViewById<ImageView>(R.id.iv_item_song_laba)?.visibility = View.GONE
                             }
                             itemClicked(View.OnClickListener {
-//                            val rView = holder.itemView as MyRippleView
-//                            rView.setOnRippleCompleteListener {
                                 if (pos != mLastPosition) {
                                     notifyItemChanged(mLastPosition)
                                     mLastPosition = pos
