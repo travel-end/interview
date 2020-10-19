@@ -2,6 +2,8 @@
 ####also函数，返回调用者本身，如：
 fun makeDir(path:String) = path.let{File(it)}.also{it.mkdirs()}
 
+在kotlin中，list代表的是不可变集合（listOf），ArrayList是可变集合（mutableListOf）
+
 #### kotlin语法糖  
 
 #### DSL
