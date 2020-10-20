@@ -3,14 +3,12 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:gravity="center_horizontal"
-    android:layout_marginEnd="@dimen/dp_18"
-    android:layout_marginStart="@dimen/dp_18"
     android:orientation="vertical">
     <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/find_iv_menu_res"
-        android:layout_width="@dimen/dp_52"
-        android:layout_height="@dimen/dp_52"
-        android:background="@color/red"
+        android:layout_width="@dimen/dp_46"
+        android:layout_height="@dimen/dp_46"
+        android:background="@color/colorPrimary"
         android:tint="@color/colorWhite"
         android:src="@drawable/vector_drawable_ic_heavy_snow2" />
     <TextView

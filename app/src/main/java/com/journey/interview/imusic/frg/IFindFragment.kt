@@ -43,13 +43,13 @@ class IFindFragment : BaseLifeCycleFragment<IFindViewModel>() {
         initDataSource()
         find_rv.setup<Any> {
             withLayoutManager {
-                val lm = GridLayoutManager(requireContext(), 4)
+                val lm = GridLayoutManager(requireContext(), 5)
                 lm.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
                     override fun getSpanSize(position: Int): Int {
                         return when (adapter?.getItem(position)) {
                             is FindMenu -> 1
-                            is SongList -> 1
-                            else -> 4
+//                            is SongList -> 1
+                            else -> 5
                         }
                     }
                 }
@@ -62,11 +62,11 @@ class IFindFragment : BaseLifeCycleFragment<IFindViewModel>() {
                         val findTop = data as FindTop
                         val datas = findTop.banners
                         val rv = itemView?.findViewById<RecyclerView>(R.id.stack_find_rv_top)
-                        val emptyView = itemView?.findViewById<TextView>(R.id.empty)
+//                        val emptyView = itemView?.findViewById<TextView>(R.id.empty)
                         var index = 0
                         Log.e("JG","rv:$rv")
                         focusLayoutManager = FocusLayoutManager.Builder()
-                            .layerPadding(14f.toFloatPx())
+                            .layerPadding(50f.toFloatPx())
                             .normalViewGap(14f.toFloatPx())
                             .focusOrientation(FocusLayoutManager.FOCUS_LEFT)
                             .isAutoSelect(true)
@@ -74,9 +74,9 @@ class IFindFragment : BaseLifeCycleFragment<IFindViewModel>() {
                             .setOnFocusChangeListener { focusdPosition, lastFocusedPosition ->
                                 if (focusdPosition == datas.size - 1
                                     && (focusLayoutManager.focusOrientation == FocusLayoutManager.FOCUS_LEFT)) {
-                                    emptyView?.visibility = View.VISIBLE
+//                                    emptyView?.visibility = View.VISIBLE
                                 } else {
-                                    emptyView?.visibility = View.GONE
+//                                    emptyView?.visibility = View.GONE
                                 }
                             }
                             .build()
@@ -158,10 +158,10 @@ class IFindFragment : BaseLifeCycleFragment<IFindViewModel>() {
                     bindViewHolder { data, _, _ ->
                         val menuList = data as FindMenu
                         setText(R.id.find_tv_menu_name, menuList.menuName)
-                        val roundIv =
-                            itemView?.findViewById<ShapeableImageView>(R.id.find_iv_menu_res)
+                        val roundIv = itemView?.findViewById<ShapeableImageView>(R.id.find_iv_menu_res)
                         roundIv?.shapeAppearanceModel = ShapeAppearanceModel.Builder()
                             .setAllCornerSizes(ShapeAppearanceModel.PILL).build()
+                        roundIv?.setImageResource(menuList.iconRes)
 //                        itemView?.findViewById<RecyclerView>(R.id.find_rv_menu_list)?.setup<FindMenu> {
 //                            dataSource(menuList.list)
 //                            adapter {
@@ -190,50 +190,52 @@ class IFindFragment : BaseLifeCycleFragment<IFindViewModel>() {
                         setText(R.id.find_mb_second, title.titleSecond)
                     }
                 }
-//                addItem(R.layout.imusic_find_rv_song_list) {
-//                    isForViewType { data, _ -> data is SongListAll }
-//                    bindViewHolder { data, _, _ ->
-//                        val songListAll = data as SongListAll
-//                        itemView?.findViewById<RecyclerView>(R.id.find_rv_song_list)?.setup<SongList> {
-//                            dataSource(songListAll.allList)
-//                            adapter {
-//                                addItem(R.layout.imusic_find_item_ho_list) {
-//                                    bindViewHolder { data: SongList?, position: Int, holder: ViewHolderCreator<SongList> ->
-//                                        val songList = data as SongList
-//                                        setImageResource(R.id.find_iv_menu_icon,songList.songCover)
-//                                        setText(R.id.find_tv_volume,songList.volume)
-//                                        setText(R.id.find_tv_desc,songList.songDesc)
-//                                    }
-//                                }
-//                            }
-//                        }
-//
-//                    }
-//                }
 
-                addItem(R.layout.imusic_find_item_ho_list) {
-                    isForViewType { data, _ -> data is SongList }
+                addItem(R.layout.imusic_find_rv_song_list) {
+                    isForViewType { data, _ -> data is SongListAll }
                     bindViewHolder { data, _, _ ->
-                        val songList = data as SongList
-                        setImageResource(R.id.find_iv_menu_icon, songList.songCover)
-                        setText(R.id.find_tv_volume, songList.volume)
-                        setText(R.id.find_tv_desc, songList.songDesc)
-//                        itemView?.findViewById<RecyclerView>(R.id.find_rv_song_list)?.setup<SongList> {
-//                            dataSource(songListAll.allList)
-//                            adapter {
-//                                addItem(R.layout.imusic_find_item_ho_list) {
-//                                    bindViewHolder { data: SongList?, position: Int, holder: ViewHolderCreator<SongList> ->
-//                                        val songList = data as SongList
-//                                        setImageResource(R.id.find_iv_menu_icon,songList.songCover)
-//                                        setText(R.id.find_tv_volume,songList.volume)
-//                                        setText(R.id.find_tv_desc,songList.songDesc)
-//                                    }
-//                                }
-//                            }
-//                        }
+                        val songListAll = data as SongListAll
+                        itemView?.findViewById<RecyclerView>(R.id.find_rv_song_list)?.setup<SongList> {
+                            dataSource(songListAll.allList)
+                            adapter {
+                                addItem(R.layout.imusic_find_item_ho_list) {
+                                    bindViewHolder { data: SongList?, position: Int, holder: ViewHolderCreator<SongList> ->
+                                        val songList = data as SongList
+                                        setImageResource(R.id.find_iv_menu_icon,songList.songCover)
+                                        setText(R.id.find_tv_volume,songList.volume)
+                                        setText(R.id.find_tv_desc,songList.songDesc)
+                                    }
+                                }
+                            }
+                        }
 
                     }
                 }
+
+//                addItem(R.layout.imusic_find_item_ho_list) {
+//                    isForViewType { data, _ -> data is SongList }
+//                    bindViewHolder { data, _, _ ->
+//                        val songList = data as SongList
+//                        setImageResource(R.id.find_iv_menu_icon, songList.songCover)
+//                        setText(R.id.find_tv_volume, songList.volume)
+//                        setText(R.id.find_tv_desc, songList.songDesc)
+
+//                        itemView?.findViewById<RecyclerView>(R.id.find_rv_song_list)?.setup<SongList> {
+//                            dataSource(songListAll.allList)
+//                            adapter {
+//                                addItem(R.layout.imusic_find_item_ho_list) {
+//                                    bindViewHolder { data: SongList?, position: Int, holder: ViewHolderCreator<SongList> ->
+//                                        val songList = data as SongList
+//                                        setImageResource(R.id.find_iv_menu_icon,songList.songCover)
+//                                        setText(R.id.find_tv_volume,songList.volume)
+//                                        setText(R.id.find_tv_desc,songList.songDesc)
+//                                    }
+//                                }
+//                            }
+//                        }
+
+//                    }
+//                }
                 addItem(R.layout.imusic_find_item_title) {
                     isForViewType { data, _ -> data is FindTitle }
                     bindViewHolder { data, pos, _ ->
@@ -271,22 +273,25 @@ class IFindFragment : BaseLifeCycleFragment<IFindViewModel>() {
 //        findData.add(FindMenuList(menuList))
 
         findData.add(FindMenu(R.drawable.vector_drawable_ic_heavy_snow, "每日推荐"))
-        findData.add(FindMenu(R.drawable.vector_drawable_ic_heavy_snow, "私人FM"))
+        findData.add(FindMenu(R.drawable.vector_drawable_ic_light_snow, "私人FM"))
         findData.add(FindMenu(R.drawable.vector_drawable_ic_heavy_snow, "歌单"))
         findData.add(FindMenu(R.drawable.vector_drawable_ic_heavy_snow, "排行榜"))
+        findData.add(FindMenu(R.drawable.vector_drawable_ic_light_snow, "小雨"))
 
         findData.add(FindTitle("你的歌单精选站", "查看更多"))
 
-//        val songList = mutableListOf<SongList>()
-//        songList.add(SongList(R.drawable.icon1,"温柔英文歌-睡觉专用","1988万"))
-//        songList.add(SongList(R.drawable.icon1,"2020年Billboard公告牌音乐奖提名","14万"))
-//        songList.add(SongList(R.drawable.icon1,"写作业专用 清华自习室音乐 集中注意力写作业","1255万"))
-//        songList.add(SongList(R.drawable.icon1,"民谣不止安河桥","185万"))
-//        findData.add(SongListAll(songList))
-        findData.add(SongList(R.drawable.icon1, "温柔英文歌-睡觉专用", "1988万"))
-        findData.add(SongList(R.drawable.icon1, "2020年Billboard公告牌音乐奖提名", "14万"))
-        findData.add(SongList(R.drawable.icon1, "写作业专用 清华自习室音乐 集中注意力写作业", "1255万"))
-        findData.add(SongList(R.drawable.icon1, "民谣不止安河桥", "185万"))
+        val songList = mutableListOf<SongList>()
+        songList.add(SongList(R.drawable.icon2,"温柔英文歌-睡觉专用","1988万"))
+        songList.add(SongList(R.drawable.icon1,"2020年Billboard公告牌音乐奖提名","14万"))
+        songList.add(SongList(R.drawable.icon2,"写作业专用 清华自习室音乐 集中注意力写作业","1255万"))
+        songList.add(SongList(R.drawable.icon2,"民谣不止安河桥","185万"))
+        songList.add(SongList(R.drawable.icon1,"民谣不止安河桥","185万"))
+        findData.add(SongListAll(songList))
+
+//        findData.add(SongList(R.drawable.icon1, "温柔英文歌-睡觉专用", "1988万"))
+//        findData.add(SongList(R.drawable.icon1, "2020年Billboard公告牌音乐奖提名", "14万"))
+//        findData.add(SongList(R.drawable.icon1, "写作业专用 清华自习室音乐 集中注意力写作业", "1255万"))
+//        findData.add(SongList(R.drawable.icon1, "民谣不止安河桥", "185万"))
 
 
         findData.add(FindTitle("刮来一阵热情嘻哈风", "播放全部", true))
