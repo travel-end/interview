@@ -33,7 +33,6 @@ import com.journey.interview.Constant
 import com.journey.interview.R
 import com.journey.interview.customizeview.lrcview.LrcView
 import com.journey.interview.imusic.global.Bus
-import com.journey.interview.imusic.global.IMusicBus
 import com.journey.interview.imusic.model.DownloadSong
 import com.journey.interview.imusic.model.Song
 import com.journey.interview.imusic.service.IMusicDownloadService
@@ -274,14 +273,17 @@ class IPlayActivity : BaseLifeCycleActivity<IPlayViewModel>() {
                     updateSeekBarProgress()
                 }
                 else -> {
-                    val restartTime = ((mSong?.currentTime ?: 0) * 1000).toInt()
+                    val restartTime =mSong?.currentTime
                     if (mIsOnline) {
-                        mPlayStatusBinder?.playOnline(restartTime)
+                        mPlayStatusBinder?.playOnline(((restartTime?: 0) * 1000).toInt())
 //                        mPlayStatusBinder?.resume()
                     } else {
-                        mPlayStatusBinder?.play(mListType)
+                        if (restartTime != null && restartTime != 0L) {
+                            mPlayStatusBinder?.play(mListType,(restartTime* 1000).toInt())
+                        } else {
+                            mPlayStatusBinder?.play(mListType)
+                        }
                     }
-//                    mMediaPlayer?.seekTo(restartTime)
                     mDiscView.play()
                     it?.isSelected = true
                     updateSeekBarProgress()
@@ -467,12 +469,36 @@ class IPlayActivity : BaseLifeCycleActivity<IPlayViewModel>() {
             mSong?.qqId = it
             SongUtil.saveSong(mSong)
         })
-//        IMusicBus.observePlayStatusChange(this,{
-//            if (it == Constant.SONG_COMPLETE) {
-//                Log.e("JG","--->歌曲播放完毕")
-//                mLrcView.updateTime(0)
-//            }
-//        })
+        Bus.observe<Int>(Constant.SONG_STATUS_CHANGE,this) {
+            if (it ==  Constant.SONG_CHANGE) {
+                switchCoverLrc(true)
+                mSong = SongUtil.getSong()
+                mSong?.let {s->
+                    play_tv_song_singer.text = s.singer
+                    play_tv_song_name.text = s.songName
+                    play_bottom_controller.tv_total_time.text =
+                        StringUtils.formatTime(mSong?.duration?.toLong() ?: 0)// 总时长TextView
+                    mSeekBar.max = s.duration// 进度条总长度（单位 s）
+                    updateSeekBarProgress()
+//                    val time = if (s.currentTime < 1L) {
+//                        0
+//                    } else {
+//                        s.currentTime.toInt()
+//                    }
+//                    mSeekBar.progress = time
+                    // 缓存进度条
+                    mPlayStatusBinder?.mediaPlayer?.setOnBufferingUpdateListener { _, percent ->
+                        mSeekBar.secondaryProgress = percent * mSeekBar.progress
+                    }
+                    mViewModel.queryIsMyLoveSong(s.songId?:"")
+                    if (s.isOnline) {
+                        setSongCoverImg(s.imgUrl)
+                    } else {
+                        setLocalCoverImg(s.singer?:"")
+                    }
+                }
+            }
+        }
     }
 
     private fun getLrcError(content:String?) {
@@ -501,6 +527,12 @@ class IPlayActivity : BaseLifeCycleActivity<IPlayViewModel>() {
             switchCoverLrc(true)
             alphaAnim2?.start()
         }
+        mLrcView.setOnUpdateTimeListener {
+            it?.let {
+                Log.e("JG","当前歌词：$it")
+            }
+        }
+
         initVolume() // 初始化音量设置
         switchCoverLrc(true)
     }
@@ -553,6 +585,9 @@ class IPlayActivity : BaseLifeCycleActivity<IPlayViewModel>() {
         }
     }
 
+    /**
+     * 设置网络歌曲的音乐封面
+     */
     private fun setSongCoverImg(cover: String?) {
         Glide.with(this)
             .load(cover ?: "")

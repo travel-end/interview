@@ -71,6 +71,7 @@ public class LrcView extends View {
     private float mLrcPadding;
     private OnPlayClickListener mOnPlayClickListener;
     private OnTapListener mOnTapListener;
+    private OnUpdateTimeListener mOnUpdateTimeListener;
     private ValueAnimator mAnimator;
     private GestureDetector mGestureDetector;
     private Scroller mScroller;
@@ -111,6 +112,10 @@ public class LrcView extends View {
          * @param y    点击坐标y，相对于控件
          */
         void onTap(LrcView view, float x, float y);
+    }
+
+    public interface OnUpdateTimeListener {
+        void onUpdateTime(String itemText);
     }
 
     public LrcView(Context context) {
@@ -263,6 +268,14 @@ public class LrcView extends View {
     public void setOnTapListener(OnTapListener onTapListener) {
         mOnTapListener = onTapListener;
     }
+
+    /**
+     * 设置刷新歌词时监听每行的歌词内容
+     */
+    public void setOnUpdateTimeListener(OnUpdateTimeListener listener) {
+        mOnUpdateTimeListener = listener;
+    }
+
 
     /**
      * 设置歌词为空时屏幕中央显示的文字，如“暂无歌词”
@@ -496,8 +509,11 @@ public class LrcView extends View {
                 mLrcPaint.setColor(mNormalTextColor);
             }
             drawText(canvas, mLrcEntryList.get(i).getStaticLayout(), y);
+//            mOnUpdateTimeListener.onUpdateTime(mLrcEntryList.get(i).getText());
         }
     }
+
+
 
     /**
      * 画一行歌词

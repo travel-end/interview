@@ -179,7 +179,11 @@ class IMainActivity : BaseLifeCycleActivity<IMainViewModel>() {
                                 mPlayServiceBinder?.playOnline(((mCurrentTime?:0) * 1000).toInt())
 //                        mPlayServiceBinder?.resume()
                             } else {
-                                mPlayServiceBinder?.play(SongUtil.getSong()?.listType)
+                                if (mCurrentTime != null && mCurrentTime != 0L) {
+                                    mPlayServiceBinder?.play(SongUtil.getSong()?.listType,(mCurrentTime!!* 1000).toInt())
+                                } else {
+                                    mPlayServiceBinder?.play(SongUtil.getSong()?.listType)
+                                }
                             }
                         } else {
                             isGoPlay =false

@@ -90,6 +90,7 @@ object Constant {
     const val LIST_TYPE_LOVE=3//我的收藏列表
     const val LIST_TYPE_HISTORY=4//最近播放列表
     const val LIST_TYPE_DOWNLOAD=5//下载列表
+
     const val EVENT_LIST_TYPE = "event_list_type"
 
     const val PLAY_STATUS = "play_status"

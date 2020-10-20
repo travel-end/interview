@@ -17,7 +17,6 @@ import com.google.android.material.appbar.AppBarLayout
 import com.journey.interview.Constant
 import com.journey.interview.R
 import com.journey.interview.imusic.global.Bus
-import com.journey.interview.imusic.global.IMusicBus
 import com.journey.interview.imusic.model.LoveSong
 import com.journey.interview.imusic.model.Song
 import com.journey.interview.imusic.service.IMusicPlayService

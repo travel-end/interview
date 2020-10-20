@@ -16,7 +16,6 @@ import com.journey.interview.R
 import com.journey.interview.imusic.act.IMainActivity
 import com.journey.interview.imusic.download.IMusicDownloadUtil
 import com.journey.interview.imusic.global.Bus
-import com.journey.interview.imusic.global.IMusicBus
 import com.journey.interview.imusic.model.*
 import com.journey.interview.imusic.room.IMusicRoomHelper
 import com.journey.interview.utils.SongUtil
@@ -138,20 +137,25 @@ class IMusicPlayService : Service() {
                         mCurrent = getNextSongPosition(mCurrent?:0,mPlayMode,mHistorySongs?.size?:1)
                         saveHistorySong(mCurrent?:0)
                     }
+                    Constant.LIST_TYPE_ONLINE->{
+
+                    }
+                    else ->{
+
+                    }
                 }
             }
 
             if (mListType != 0 && mListType != null) {
                 mPlayStatusBinder.play(mListType!!)
             } else {
-                // todo 如果播放的是网络歌曲继续播放搜索的下一首
                 mPlayStatusBinder.stop()
             }
         }
         /**
          * MediaPlayer切歌进入setOnCompletionListener的问题
          * 因为直接切歌会发生错误，所以增加错误监听器。返回true。就不会回调onCompletion方法了。
-         * todo // 处理播放出错的逻辑
+         * todo // 处理播放出错的逻辑 切到下一首
          */
         mMediaPlayer.setOnErrorListener { _, what, extra ->
             Log.e("JG","--->setOnErrorListener:$what, $extra")
@@ -255,7 +259,7 @@ class IMusicPlayService : Service() {
         }
 
         // 播放搜索歌曲
-        fun playOnline(restartTime:Int?=null) {
+        fun playOnline(restartTime:Int?=null):Int {
             try {
                 val song = SongUtil.getSong()
                 mMediaPlayer.run {
@@ -272,7 +276,6 @@ class IMusicPlayService : Service() {
                             it?.seekTo(restartTime)
                         }
                         it.start()
-                        // todo 发送网络歌曲改编事件
 
                         // 播放歌曲改变
 //                      // 在[IMainActivity中监听]
@@ -286,7 +289,10 @@ class IMusicPlayService : Service() {
                 }
             } catch (e: Exception) {
                 Log.e("JG","播放网络歌曲出错！！--->${e.message}")
+                Toast.makeText(this@IMusicPlayService,"播放出错",Toast.LENGTH_SHORT).show()
+                playResult= Constant.PLAY_FAILED
             }
+            return playResult
         }
 
         fun pause() {
@@ -308,17 +314,61 @@ class IMusicPlayService : Service() {
         }
 
         fun next() {
-            IMusicBus.sendPlayStatusChangeEvent(Constant.SONG_RESUME)
+            Bus.post(Constant.SONG_STATUS_CHANGE,Constant.SONG_RESUME)// 通知首页播放
+            mCurrent = SongUtil.getSong()?.position
+            when(mListType) {
+                Constant.LIST_TYPE_LOCAL->{
+                    mCurrent = getNextSongPosition(mCurrent?:0,mPlayMode,mLocalSongs?.size?:1)
+                    saveLocalSong(mCurrent?:0)
+                }
+                Constant.LIST_TYPE_ONLINE->{
+                }
+                Constant.LIST_TYPE_LOVE->{
+                    mCurrent = getNextSongPosition(mCurrent?:0,mPlayMode,mLoveSongs?.size?:1)
+                    saveLoveSong(mCurrent?:0)
 
-            // 如果是网络歌曲 todo 播放网络 歌曲的另一首
+                }
+                Constant.LIST_TYPE_HISTORY->{
+                    mCurrent = getNextSongPosition(mCurrent?:0,mPlayMode,mHistorySongs?.size?:1)
+                    saveHistorySong(mCurrent?:0)
 
+                }
+                Constant.LIST_TYPE_DOWNLOAD->{
+                    mCurrent = getNextSongPosition(mCurrent?:0,mPlayMode,mDownloadedSongs?.size?:1)
+                    saveDownloadInfo(mCurrent?:0)
+                }
+                else->{}
+            }
             if (mListType != 0 && mListType != null) {
                 mPlayStatusBinder.play(mListType!!)
             }
         }
 
         fun last() {
-            IMusicBus.sendPlayStatusChangeEvent(Constant.SONG_RESUME)
+            Bus.post(Constant.SONG_STATUS_CHANGE,Constant.SONG_RESUME)// 通知首页播放
+            mCurrent = SongUtil.getSong()?.position
+            when(mListType) {
+                Constant.LIST_TYPE_LOCAL->{
+                    mCurrent = getLastSongPosition(mCurrent?:0,mPlayMode,mLocalSongs?.size?:1)
+                    saveLocalSong(mCurrent?:0)
+                }
+                Constant.LIST_TYPE_ONLINE->{
+                }
+                Constant.LIST_TYPE_LOVE->{
+                    mCurrent = getLastSongPosition(mCurrent?:0,mPlayMode,mLoveSongs?.size?:1)
+                    saveLoveSong(mCurrent?:0)
+
+                }
+                Constant.LIST_TYPE_HISTORY->{
+                    mCurrent = getLastSongPosition(mCurrent?:0,mPlayMode,mHistorySongs?.size?:1)
+                    saveHistorySong(mCurrent?:0)
+                }
+                Constant.LIST_TYPE_DOWNLOAD->{
+                    mCurrent = getLastSongPosition(mCurrent?:0,mPlayMode,mDownloadedSongs?.size?:1)
+                    saveDownloadInfo(mCurrent?:0)
+                }
+                else->{}
+            }
             if (mListType != 0 && mListType != null) {
                 mPlayStatusBinder.play(mListType!!)
             }
@@ -392,7 +442,7 @@ class IMusicPlayService : Service() {
                 if (saveResult != null) {
                     // 更新界面
                     withContext(Dispatchers.Main) {
-                        IMusicBus.sendSongListNumChange(Constant.LIST_TYPE_HISTORY)
+                        Bus.post(Constant.EVENT_LIST_TYPE,Constant.LIST_TYPE_HISTORY)
                         Log.e("JG", "保存最近播放曲目成功:  $saveResult")
                         // todo 如果最近播放的曲目>100 将第一个删除
                     }
@@ -508,6 +558,18 @@ class IMusicPlayService : Service() {
             else -> {
                 current
             }
+        }
+    }
+
+    private fun getLastSongPosition(current: Int,playMode: Int,len: Int):Int {
+        return when(playMode) {
+            Constant.PLAY_ORDER->{
+                if (current - 1 == -1) len - 1 else current - 1
+            }
+            Constant.PLAY_RANDOM->{
+                (current + (Math.random() * len).toInt()) % len
+            }
+            else->current
         }
     }
 
