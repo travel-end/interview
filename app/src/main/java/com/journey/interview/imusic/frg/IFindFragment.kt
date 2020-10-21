@@ -15,7 +15,6 @@ import com.google.android.material.imageview.ShapeableImageView
 import com.google.android.material.shape.ShapeAppearanceModel
 import com.journey.interview.R
 import com.journey.interview.customizeview.pager.FocusLayoutManager
-import com.journey.interview.customizeview.pager.StackLayoutManager
 import com.journey.interview.imusic.model.*
 import com.journey.interview.imusic.vm.IFindViewModel
 import com.journey.interview.recyclerview.core.*
@@ -31,6 +30,7 @@ import java.util.*
  */
 class IFindFragment : BaseLifeCycleFragment<IFindViewModel>() {
     private val findData: MutableList<Any> = ArrayList()
+    private lateinit var findRv:RecyclerView
     private lateinit var focusLayoutManager: FocusLayoutManager
     companion object {
         fun newInstance(): Fragment {
@@ -41,8 +41,9 @@ class IFindFragment : BaseLifeCycleFragment<IFindViewModel>() {
     override fun layoutResId() = R.layout.imusic_frg_find
     override fun initView() {
         super.initView()
+        findRv = find_rv
         initDataSource()
-        find_rv.setup<Any> {
+        findRv.setup<Any> {
             withLayoutManager {
                 val lm = GridLayoutManager(requireContext(), 5)
                 lm.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
@@ -56,7 +57,7 @@ class IFindFragment : BaseLifeCycleFragment<IFindViewModel>() {
                 }
                 return@withLayoutManager lm
             }
-            // 首页的5个选项
+            // 首页顶部banner
             adapter {
                 addItem(R.layout.imusic_find_item_top) {
                     isForViewType { data, _ -> data is FindTop }
@@ -68,11 +69,11 @@ class IFindFragment : BaseLifeCycleFragment<IFindViewModel>() {
                         var index = 0
 //                        Log.e("JG","rv:$rv")
                         focusLayoutManager = FocusLayoutManager.Builder()
-                            .layerPadding(50f.toFloatPx())
-                            .normalViewGap(14f.toFloatPx())
+                            .layerPadding(80f.toFloatPx())
+                            .normalViewGap(12f.toFloatPx())
                             .focusOrientation(FocusLayoutManager.FOCUS_LEFT)
                             .isAutoSelect(true)
-                            .maxLayerCount(3)
+                            .maxLayerCount(2)
                             .setOnFocusChangeListener { focusdPosition, lastFocusedPosition ->
                                 if (focusdPosition == datas.size - 1
                                     && (focusLayoutManager.focusOrientation == FocusLayoutManager.FOCUS_LEFT)) {
@@ -92,22 +93,22 @@ class IFindFragment : BaseLifeCycleFragment<IFindViewModel>() {
                                     if (focusLayoutManager.focusOrientation == FocusLayoutManager.FOCUS_LEFT || focusLayoutManager.focusOrientation == FocusLayoutManager.FOCUS_RIGHT) {
                                         val p = view?.layoutParams as ViewGroup.MarginLayoutParams
                                         p.apply {
-                                            topMargin = 25f.toIntPx(view.context)
-                                            bottomMargin = 25f.toIntPx(view.context)
+                                            topMargin = 20f.toIntPx(view.context)
+                                            bottomMargin = 20f.toIntPx(view.context)
                                             leftMargin = 0f.toIntPx(view.context)
                                             rightMargin = 0f.toIntPx(view.context)
-                                            width = 100f.toIntPx(view.context)
-                                            height = 150f.toIntPx(view.context)
+                                            width = 180f.toIntPx(view.context)
+                                            height = 110f.toIntPx(view.context)
                                         }
                                     } else {
                                         val p = view?.layoutParams as ViewGroup.MarginLayoutParams
                                         p.apply {
                                             topMargin = 0f.toIntPx(view.context)
                                             bottomMargin = 0f.toIntPx(view.context)
-                                            leftMargin = 25f.toIntPx(view.context)
-                                            rightMargin = 25f.toIntPx(view.context)
-                                            width = 150f.toIntPx(view.context)
-                                            height = 100f.toIntPx(view.context)
+                                            leftMargin = 20f.toIntPx(view.context)
+                                            rightMargin = 20f.toIntPx(view.context)
+                                            width = 180f.toIntPx(view.context)
+                                            height = 110f.toIntPx(view.context)
                                         }
                                     }
                                     view.tag = ++index
@@ -164,6 +165,9 @@ class IFindFragment : BaseLifeCycleFragment<IFindViewModel>() {
                         roundIv?.shapeAppearanceModel = ShapeAppearanceModel.Builder()
                             .setAllCornerSizes(ShapeAppearanceModel.PILL).build()
                         roundIv?.setImageResource(menuList.iconRes)
+                        itemClicked(View.OnClickListener {
+                            Log.e("JG","${menuList.menuName}")
+                        })
 //                        itemView?.findViewById<RecyclerView>(R.id.find_rv_menu_list)?.setup<FindMenu> {
 //                            dataSource(menuList.list)
 //                            adapter {
@@ -188,10 +192,13 @@ class IFindFragment : BaseLifeCycleFragment<IFindViewModel>() {
                         val title = data as FindTitle
                         setText(R.id.find_tv_title_main, title.titleMain)
                         setText(R.id.find_mb_second, title.titleSecond)
+                        clicked(R.id.find_mb_second,View.OnClickListener {
+                            Log.e("JG","--->查看更多")
+                        })
                     }
                 }
 
-                //首页歌单
+                /* 滚动歌单*/
                 addItem(R.layout.imusic_find_rv_song_list) {
                     isForViewType { data, _ -> data is SongListAll }
                     bindViewHolder { data, _, _ ->
@@ -210,6 +217,9 @@ class IFindFragment : BaseLifeCycleFragment<IFindViewModel>() {
                                         setImageResource(R.id.find_iv_menu_icon,songList.songCover)
                                         setText(R.id.find_tv_volume,songList.volume)
                                         setText(R.id.find_tv_desc,songList.songDesc)
+                                        itemClicked(View.OnClickListener {
+                                            Log.e("JG","${songList.songDesc}")
+                                        })
                                     }
                                 }
                             }
@@ -242,12 +252,53 @@ class IFindFragment : BaseLifeCycleFragment<IFindViewModel>() {
 
 //                    }
 //                }
-                addItem(R.layout.imusic_find_item_title) {
-                    isForViewType { data, _ -> data is FindTitle }
+
+                /* 换一批*/
+                addItem(R.layout.imusic_find_item_three_title) {
+                    isForViewType { data, _ -> data is ThreeFindTitle }
+                    bindViewHolder { data, _, _ ->
+                        val title = data as ThreeFindTitle
+                        setText(R.id.find_tv_title_three, title.titleMain)
+                        setText(R.id.find_change_second_three,title.titleSecond)
+                        clicked(R.id.find_change_second_three,View.OnClickListener {
+                            Log.e("JG","--->换一批")
+                            findRv.updateData(9,HomeReSong(R.drawable.icon6,"dd","dd","dd"),false)
+                            findRv.updateData(10,HomeReSong(R.drawable.icon6,"aaaaa","bbb","nnn"),false)
+                            findRv.updateData(11,HomeReSong(R.drawable.icon6,"fff","dd","ffff"),false)
+                        })
+                    }
+                }
+                /* 推荐歌曲*/
+                addItem(R.layout.imusic_find_three_song) {
+                    isForViewType { data, position -> data is HomeReSong }
+                    bindViewHolder { data, position, holder ->
+                        val item = data as HomeReSong
+                        setText(R.id.find_three_tv_name, item.songName)
+                        setText(R.id.three_find_tv_singer, item.songSinger)
+                        setText(R.id.three_tv_desc, item.desc)
+                        setImageResource(R.id.three_iv_cover,item.leftCover?:0)
+                    }
+                }
+
+                /* 听歌读诗*/
+                addItem(R.layout.imusic_find_title_poetry) {
+                    isForViewType { data, _ -> data is SpTitle }
                     bindViewHolder { data, pos, _ ->
-                        val title = data as FindTitle
-                        setText(R.id.find_tv_title_main, title.titleMain)
-                        setText(R.id.find_mb_second, title.titleSecond)
+                        val title = data as SpTitle
+                        setText(R.id.find_tv_poetry, title.title)
+                    }
+                }
+                /* 推荐诗歌*/
+                addItem(R.layout.imusic_find_song_poetry) {
+                    isForViewType { data, _ -> data is SongAndPoetry }
+                    bindViewHolder { data, position, holder ->
+                        val item =data as SongAndPoetry
+                        val leftIv = itemView?.findViewById<ShapeableImageView>(R.id.find_sp_iv_icon)
+                        leftIv?.shapeAppearanceModel = ShapeAppearanceModel.Builder()
+                            .setAllCornerSizes(ShapeAppearanceModel.PILL).build()
+                        setImageResource(R.id.find_sp_iv_icon,item.leftCover?:0)
+                        setText(R.id.find_sp_tv_title,item.poetryTitle)
+                        setText(R.id.find_tv_sp_author,item.poetryAuthor)
                     }
                 }
             }
@@ -257,16 +308,16 @@ class IFindFragment : BaseLifeCycleFragment<IFindViewModel>() {
 
     private fun initDataSource() {
         val topItem = mutableListOf<FindTopItem>()
-        topItem.add(FindTopItem(R.drawable.cover10, "zz"))
-        topItem.add(FindTopItem(R.drawable.ic_wel_bg, "dd"))
-        topItem.add(FindTopItem(R.drawable.cover10, "g"))
-        topItem.add(FindTopItem(R.drawable.ic_wel_bg, "gfd"))
-        topItem.add(FindTopItem(R.drawable.cover10, "jjj"))
-        topItem.add(FindTopItem(R.drawable.ic_wel_bg, "g"))
-        topItem.add(FindTopItem(R.drawable.cover10, "g"))
-        topItem.add(FindTopItem(R.drawable.ic_wel_bg, "gfd"))
-        topItem.add(FindTopItem(R.drawable.cover10, "jjj"))
-        topItem.add(FindTopItem(R.drawable.ic_wel_bg, "g"))
+        topItem.add(FindTopItem(R.drawable.cover5, "1zz"))
+        topItem.add(FindTopItem(R.drawable.cover9, "2d"))
+        topItem.add(FindTopItem(R.drawable.cover5, "3g"))
+        topItem.add(FindTopItem(R.drawable.cover9, "4gfd"))
+        topItem.add(FindTopItem(R.drawable.cover5, "5jjj"))
+//        topItem.add(FindTopItem(R.drawable.ic_wel_bg, "g"))
+//        topItem.add(FindTopItem(R.drawable.cover10, "g"))
+//        topItem.add(FindTopItem(R.drawable.ic_wel_bg, "gfd"))
+//        topItem.add(FindTopItem(R.drawable.cover10, "jjj"))
+//        topItem.add(FindTopItem(R.drawable.ic_wel_bg, "g"))
         findData.add(FindTop(banners = topItem))
 
 //        val menuList = mutableListOf<FindMenu>()
@@ -295,32 +346,29 @@ class IFindFragment : BaseLifeCycleFragment<IFindViewModel>() {
         songList.add(SongList(R.drawable.icon1,"民谣不止安河桥","185万"))
         findData.add(SongListAll(songList))
 
-//        findData.add(SongList(R.drawable.icon1, "温柔英文歌-睡觉专用", "1988万"))
-//        findData.add(SongList(R.drawable.icon1, "2020年Billboard公告牌音乐奖提名", "14万"))
-//        findData.add(SongList(R.drawable.icon1, "写作业专用 清华自习室音乐 集中注意力写作业", "1255万"))
-//        findData.add(SongList(R.drawable.icon1, "民谣不止安河桥", "185万"))
+        findData.add(ThreeFindTitle("节奏空 嘻哈说唱", "换一批"))
+        findData.add(HomeReSong(R.drawable.icon5, "小雨","作业","星辰大海"))
+        findData.add(HomeReSong(R.drawable.icon2, "五行五杀","星晨","星辰大海"))
+        findData.add(HomeReSong(R.drawable.icon5, "小雨","作业","星辰大海"))
 
 
-        findData.add(FindTitle("刮来一阵热情嘻哈风", "播放全部", true))
 
-//        val recommendSongList = mutableListOf<RecommendSong>()
-//        recommendSongList.add(RecommendSong())
+        findData.add(SpTitle("诗＆歌"))
+
+
+
+        findData.add(SongAndPoetry(leftCover = R.drawable.icon1,poetryTitle = "都说你眼中开倾世桃花却如何一夕桃花雨下",poetryAuthor = "上邪"))
+        findData.add(SongAndPoetry(leftCover = R.drawable.icon2,poetryTitle = "都说你眼中开倾世桃花却如何一夕桃花雨下",poetryAuthor = "上邪"))
+        findData.add(SongAndPoetry(leftCover = R.drawable.icon1,poetryTitle = "江湖夜雨",poetryAuthor = "黄庭坚"))
+        findData.add(SongAndPoetry(leftCover = R.drawable.icon2,poetryTitle = "都说你眼中开倾世桃花却如何一夕桃花雨下",poetryAuthor = "上邪"))
+        findData.add(SongAndPoetry(leftCover = R.drawable.icon1,poetryTitle = "一蓑烟雨任平生",poetryAuthor = "苏轼"))
+        findData.add(SongAndPoetry(leftCover = R.drawable.icon2,poetryTitle = "都说你眼中开倾世桃花却如何一夕桃花雨下",poetryAuthor = "上邪"))
+        findData.add(SongAndPoetry(leftCover = R.drawable.icon1,poetryTitle = "谁画中与你天涯",poetryAuthor = "雨露深谷"))
+
+
+
     }
 
-//    private fun initBannerPager(bannerPager:ScrollBannerPager?) {
-//        for (i in 0..4) {
-//            val cover = BannerPagerCover(requireContext())
-//            cover.setBannerCover(R.drawable.pic11)
-//            cover.setText("遇见你 山河已秋")
-//            bannerPager?.addView(cover)
-//            val lp = cover.layoutParams as ScrollBannerPager.ScrollBannerLayoutParams
-//            lp.from = i
-//            lp.to = i
-//            lp.index = i
-////            bannerList.add(cover)
-//        }
-
-//    }
 
     inner class TopViewHolder(@NonNull itemView: View) :
         RecyclerView.ViewHolder(itemView) {
@@ -356,10 +404,5 @@ class IFindFragment : BaseLifeCycleFragment<IFindViewModel>() {
                 }
             }
         }
-    }
-
-
-    private fun initLayoutManager() {
-
     }
 }

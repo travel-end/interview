@@ -10,7 +10,9 @@
     <color name="colorBlack">#333333</color>
     <color name="colorBlack2">#000000</color>
     <color name="colorTextLight">#191818</color>
+    <color name="colorTextLight2">#2B2929</color>
     <color name="colorGray">#ACABAB</color>
+    <color name="colorGrayNormal">#CAC9C9</color>
     <color name="colorWhite">#FFFFFF</color>
     <color name="colorWhite_10">#06999999</color>
     <color name="colorTextPink">#ff6daf</color>

@@ -16,9 +16,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
-        android:layout_marginEnd="@dimen/dp_16"
+        android:layout_marginEnd="12dp"
         android:visibility="gone"
-        android:src="@drawable/ic_laba" />
+        android:src="@drawable/shape_horn" />
 
     <TextView
         android:id="@+id/tv_item_local_song_name"

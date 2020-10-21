@@ -7,17 +7,17 @@
     android:layout_marginStart="@dimen/dp_14"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <TextView
-        android:id="@+id/find_tv_title_main"
+        android:id="@+id/find_tv_title_three"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        tools:text="懂你的精选歌单"
+        tools:text="嘻嘻哈哈"
         android:textStyle="bold"
         android:textColor="@color/colorBlack"
         android:layout_gravity="center_vertical"
         android:textSize="18sp" />
 
     <TextView
-        android:id="@+id/find_mb_second"
+        android:id="@+id/find_change_second_three"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="14sp"
@@ -28,7 +28,7 @@
         android:layout_marginTop="2dp"
         android:textColor="@color/colorGrayDark"
         android:background="@drawable/bg_text_gray_dark"
-        tools:text="查看更多"
+        tools:text="换一批"
         android:layout_gravity="center_vertical|end"
         />
 
