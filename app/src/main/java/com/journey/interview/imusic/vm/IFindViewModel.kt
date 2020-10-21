@@ -7,4 +7,6 @@ import com.journey.interview.weatherapp.base.BaseViewModel
  * @Description
  */
 class IFindViewModel:BaseViewModel() {
+
+
 }

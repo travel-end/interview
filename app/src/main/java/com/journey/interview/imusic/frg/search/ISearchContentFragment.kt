@@ -151,7 +151,10 @@ class ISearchContentFragment :BaseLifeCycleFragment<ISearchContentViewModel>(){
                     val songList = song.list
                     songList?.let {list->
                         if (list.isNotEmpty()) {
+                            hideError()
+                            rl_search_view_title.visibility = View.VISIBLE
                             rv_search_song.submitList(songList.toMutableList())
+                            rv_search_song.visibility = View.VISIBLE
                         }
                     }
                 }
@@ -161,6 +164,7 @@ class ISearchContentFragment :BaseLifeCycleFragment<ISearchContentViewModel>(){
             it?.let {
                 val albumList = it.data?.album?.list
                 if (!albumList.isNullOrEmpty()) {
+                    hideError()
                     rv_search_song.submitList(albumList.toMutableList())
                 }
             }

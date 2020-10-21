@@ -8,6 +8,7 @@ import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
 import com.journey.interview.R
+import com.journey.interview.utils.getString
 import com.journey.interview.weatherapp.state.*
 
 /**
@@ -16,9 +17,11 @@ import com.journey.interview.weatherapp.state.*
  */
 abstract class BaseLifeCycleActivity<VM:BaseViewModel>:BaseActivity<VM>() {
     private var emptyView: LinearLayout?=null
+    private var errorView:LinearLayout?=null
     override fun initView() {
         mViewModel.loadState.observe(this,stateObserver)
         mViewModel.emptyState.observe(this, emptyObserver)
+        mViewModel.errorState.observe(this,errorObserver)
         dataObserve()
     }
 
@@ -34,12 +37,22 @@ abstract class BaseLifeCycleActivity<VM:BaseViewModel>:BaseActivity<VM>() {
 
     }
 
-    open fun showError(msg:String) {
+    open fun showError(errorRes:Int,msg: String,showErrorView:Boolean) {
+        dismissLoading()
+        if (showErrorView) {
+            if (errorView == null) {
+                errorView = findViewById(R.id.ll_error_view)
+            }
+            val errorIv:ImageView? = errorView?.findViewById(R.id.error_resource)
+            errorIv?.setImageResource(errorRes)
+        }
         if (msg.isNotEmpty()) {
             Toast.makeText(this, msg, Toast.LENGTH_SHORT).show()
         }
     }
+
     open fun showEmpty() {
+
     }
 
     open fun showEmpty(resource:Int,msg:String) {
@@ -61,8 +74,6 @@ abstract class BaseLifeCycleActivity<VM:BaseViewModel>:BaseActivity<VM>() {
                 when (it.code) {
                     StateType.SUCCESS -> showSuccess()
                     StateType.LOADING -> showLoading()
-                    StateType.ERROR -> showError("网络出现问题啦")
-                    StateType.NETWORK_ERROR -> showError("网络出现问题啦")
                     StateType.EMPTY -> showEmpty()
                     StateType.DISMISSING->dismissLoading()
                 }
@@ -76,5 +87,11 @@ abstract class BaseLifeCycleActivity<VM:BaseViewModel>:BaseActivity<VM>() {
             }
         }
     }
-
+    private val errorObserver by lazy {
+        Observer<ErrorState> {
+            it?.let {error->
+                showError(error.resource,error.message,error.showErrorIcon)
+            }
+        }
+    }
 }

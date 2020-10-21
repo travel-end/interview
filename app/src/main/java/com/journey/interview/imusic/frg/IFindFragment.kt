@@ -9,6 +9,7 @@ import android.widget.TextView
 import androidx.annotation.NonNull
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.imageview.ShapeableImageView
 import com.google.android.material.shape.ShapeAppearanceModel
@@ -55,6 +56,7 @@ class IFindFragment : BaseLifeCycleFragment<IFindViewModel>() {
                 }
                 return@withLayoutManager lm
             }
+            // 首页的5个选项
             adapter {
                 addItem(R.layout.imusic_find_item_top) {
                     isForViewType { data, _ -> data is FindTop }
@@ -64,7 +66,7 @@ class IFindFragment : BaseLifeCycleFragment<IFindViewModel>() {
                         val rv = itemView?.findViewById<RecyclerView>(R.id.stack_find_rv_top)
 //                        val emptyView = itemView?.findViewById<TextView>(R.id.empty)
                         var index = 0
-                        Log.e("JG","rv:$rv")
+//                        Log.e("JG","rv:$rv")
                         focusLayoutManager = FocusLayoutManager.Builder()
                             .layerPadding(50f.toFloatPx())
                             .normalViewGap(14f.toFloatPx())
@@ -180,8 +182,6 @@ class IFindFragment : BaseLifeCycleFragment<IFindViewModel>() {
                     }
                 }
 
-
-
                 addItem(R.layout.imusic_find_item_title) {
                     isForViewType { data, _ -> data is FindTitle }
                     bindViewHolder { data, pos, _ ->
@@ -191,11 +191,17 @@ class IFindFragment : BaseLifeCycleFragment<IFindViewModel>() {
                     }
                 }
 
+                //首页歌单
                 addItem(R.layout.imusic_find_rv_song_list) {
                     isForViewType { data, _ -> data is SongListAll }
                     bindViewHolder { data, _, _ ->
                         val songListAll = data as SongListAll
-                        itemView?.findViewById<RecyclerView>(R.id.find_rv_song_list)?.setup<SongList> {
+                        val songRv = itemView?.findViewById<RecyclerView>(R.id.find_rv_song_list)
+                        // item吸附效果
+                        songRv?.onFlingListener=null
+                        val snapHelper = PagerSnapHelper()
+                        snapHelper.attachToRecyclerView(songRv)
+                        songRv?.setup<SongList> {
                             dataSource(songListAll.allList)
                             adapter {
                                 addItem(R.layout.imusic_find_item_ho_list) {
@@ -282,6 +288,7 @@ class IFindFragment : BaseLifeCycleFragment<IFindViewModel>() {
 
         val songList = mutableListOf<SongList>()
         songList.add(SongList(R.drawable.icon2,"温柔英文歌-睡觉专用","1988万"))
+        songList.add(SongList(R.drawable.icon2,"KTV必点：有没有一首歌","255万"))
         songList.add(SongList(R.drawable.icon1,"2020年Billboard公告牌音乐奖提名","14万"))
         songList.add(SongList(R.drawable.icon2,"写作业专用 清华自习室音乐 集中注意力写作业","1255万"))
         songList.add(SongList(R.drawable.icon2,"民谣不止安河桥","185万"))

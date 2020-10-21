@@ -79,4 +79,8 @@
     <string name="no_mv">~~~没有没有没有MV~~~</string>
     <string name="local_no_need_download">~~本地歌曲，无需下载~~</string>
     <string name="song_has_download">歌曲已经下载啦~~ (*^▽^*) </string>
+    <string name="net_work_error">当前网络出错了o(╥﹏╥)o</string>
+    <string name="try_net_work">请连接网络后点击屏幕重试</string>
+    <string name="error_donot_know">未知错误~~</string>
+    <string name="request_error">请求出错</string>
 </resources>

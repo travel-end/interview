@@ -7,6 +7,7 @@ import com.journey.interview.Constant
 import com.journey.interview.utils.ofMap
 import com.journey.interview.utils.print
 import com.journey.interview.weatherapp.base.BaseViewModel
+import com.journey.interview.weatherapp.state.ErrorState
 import com.journey.interview.weatherapp.state.State
 import com.journey.interview.weatherapp.state.StateType
 import kotlinx.coroutines.Dispatchers
@@ -49,37 +50,47 @@ import kotlinx.coroutines.withContext
  * switchX=0, t=1, tag=11, type=0, ver=0,
  * singer=[SingerBean(id=2684565, mid=003oe0Gi4LoOZ3, name=鸾音社, name_hilight=鸾音社)])
  */
-class ISearchContentViewModel:BaseViewModel() {
-    val searchResult:MutableLiveData<SearchSong> = MutableLiveData()
+class ISearchContentViewModel : BaseViewModel() {
+    val searchResult: MutableLiveData<SearchSong> = MutableLiveData()
 
-    val searchAlbumResult :MutableLiveData<Album> = MutableLiveData()
+    val searchAlbumResult: MutableLiveData<Album> = MutableLiveData()
 
 //    val songUrlResult :MutableLiveData<Map<String,Any>> = MutableLiveData()
 
-    fun searchSong(searchContent:String,page:Int) {
+    fun searchSong(searchContent: String, page: Int) {
         loadState.value = State(StateType.LOADING)
         viewModelScope.launch {
-            val result =  withContext(Dispatchers.IO) {
-                iMusicApiService.search(searchContent,page)
+            runCatching {
+                withContext(Dispatchers.IO) {
+                    iMusicApiService.search(searchContent, page)
+                }
+            }.onSuccess {
+                val songList = it.data?.song?.list
+                Log.e("JG", "关键词搜索结果：${songList}")
+                Log.e("JG", "关键词搜索结果第一条：${songList!![0]}")
+//                it.ofMap()?.print().let { Log.e("JG", "关键词搜索结果：$it") }
+                searchResult.value = it
+            }.onFailure {
+                handlerException(it, ErrorState(showErrorIcon = true))
             }
-//            result.ofMap()?.print().let { Log.e("JG","关键词搜索结果：$it") }
-            val songList = result.data?.song?.list
-            Log.e("JG","关键词搜索结果：${songList}")
-            Log.e("JG","关键词搜索结果第一条：${songList!![0]}")
             loadState.value = State(StateType.DISMISSING)
-            searchResult.value= result
         }
     }
 
-    fun searchAlbum(searchContent: String, offSet:Int) {
+    fun searchAlbum(searchContent: String, offSet: Int) {
         loadState.value = State(StateType.LOADING)
         viewModelScope.launch {
-            val result =  withContext(Dispatchers.IO) {
-                iMusicApiService.searchAlbum(searchContent,offSet)
+            runCatching {
+                withContext(Dispatchers.IO) {
+                    iMusicApiService.searchAlbum(searchContent, offSet)
+                }
+            }.onSuccess {
+//                it.ofMap()?.print().let {s-> Log.e("JG", "searchAlbumResult：$s") }
+                searchAlbumResult.value = it
+            }.onFailure {
+                handlerException(it,ErrorState(showErrorIcon = true))
             }
-            result.ofMap()?.print().let { Log.e("JG","searchAlbumResult：$it") }
             loadState.value = State(StateType.DISMISSING)
-            searchAlbumResult.value= result
         }
     }
 
@@ -127,14 +138,14 @@ class ISearchContentViewModel:BaseViewModel() {
 
 
     // 歌手可能不止一个
-    fun getSinger(data:ListBean):String? {
+    fun getSinger(data: ListBean): String? {
         val singerList = data.singer
         singerList?.let {
             if (it.isNotEmpty()) {
-                val singer = StringBuilder(it[0].name?:"")
+                val singer = StringBuilder(it[0].name ?: "")
                 if (it.size > 1) {
-                    for (bean in it) {
-                        singer.append("、").append(bean.name)
+                    for (i in 0 until it.size-1) {
+                        singer.append("、").append(it[i+1])
                     }
                 }
                 return singer.toString()

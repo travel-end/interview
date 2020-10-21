@@ -6,9 +6,7 @@ package com.journey.interview.weatherapp.state
  */
 enum class StateType {
     SUCCESS,
-    ERROR,
     EMPTY,
-    NETWORK_ERROR,
     LOADING,
     DISMISSING
 }

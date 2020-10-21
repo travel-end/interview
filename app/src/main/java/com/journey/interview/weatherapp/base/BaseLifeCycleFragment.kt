@@ -6,15 +6,15 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
-import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.journey.interview.R
 import com.journey.interview.utils.getClass
 import com.journey.interview.utils.getString
-import com.journey.interview.weatherapp.state.*
-import com.kingja.loadsir.callback.SuccessCallback
-import kotlinx.android.synthetic.main.imusic_loading_view.*
+import com.journey.interview.weatherapp.state.EmptyState
+import com.journey.interview.weatherapp.state.ErrorState
+import com.journey.interview.weatherapp.state.State
+import com.journey.interview.weatherapp.state.StateType
 
 /**
  * @By Journey 2020/9/15
@@ -24,6 +24,7 @@ abstract class BaseLifeCycleFragment<VM : BaseViewModel> : BaseFragment() {
     protected lateinit var mViewModel: VM
     private var loadingView: LinearLayout? = null
     private var emptyView:LinearLayout?=null
+    private var errorView:LinearLayout?=null
     override fun initView() {
         if (emptyView == null) {
             emptyView = mRootView.findViewById(R.id.include_local_empty_view)
@@ -31,15 +32,24 @@ abstract class BaseLifeCycleFragment<VM : BaseViewModel> : BaseFragment() {
         if (loadingView == null) {
             loadingView = mRootView.findViewById(R.id.ll_loading_view)
         }
+        if (errorView == null) {
+            errorView = mRootView.findViewById(R.id.ll_error_view)
+        }
         dataObserve()
     }
 
     override fun initData() {
+        errorView?.setOnClickListener {
+            it?.let {
+                reLoad()
+            }
+        }
     }
 
     open fun dataObserve() {
-        mViewModel.loadState.observe(this, observer)
+        mViewModel.loadState.observe(this, netWorkErrorObserver)
         mViewModel.emptyState.observe(this,emptyObserver)
+        mViewModel.errorState.observe(this,errorObserver)
     }
 
     open fun showLoading() {
@@ -55,8 +65,13 @@ abstract class BaseLifeCycleFragment<VM : BaseViewModel> : BaseFragment() {
     open fun showSuccess() {
     }
 
-    open fun showError(msg: String) {
+    open fun showError(errorRes:Int,msg: String,showErrorView:Boolean) {
         dismissLoading()
+        if (showErrorView) {
+            errorView?.visibility = View.VISIBLE
+            val errorIv:ImageView? = errorView?.findViewById(R.id.error_resource)
+            errorIv?.setImageResource(errorRes)
+        }
         if (msg.isNotEmpty()) {
             Toast.makeText(requireContext(), msg, Toast.LENGTH_SHORT).show()
         }
@@ -76,11 +91,20 @@ abstract class BaseLifeCycleFragment<VM : BaseViewModel> : BaseFragment() {
     }
 
     open fun hideEmpty() {
-        emptyView?.visibility = View.GONE
+        if (emptyView?.visibility == View.VISIBLE) {
+            emptyView?.visibility = View.GONE
+        }
+    }
+    open fun hideError() {
+        if (errorView?.visibility == View.VISIBLE) {
+            errorView?.visibility = View.GONE
+        }
     }
 
     override fun reLoad() {
-        showLoading()
+        Log.e("JG","--->reload")
+//        showLoading()
+        hideError()
         initData()
         dataObserve()
         super.reLoad()
@@ -90,15 +114,13 @@ abstract class BaseLifeCycleFragment<VM : BaseViewModel> : BaseFragment() {
         mViewModel = ViewModelProvider(this).get(getClass(this))
     }
 
-    private val observer by lazy {
+    private val netWorkErrorObserver by lazy {
         Observer<State> {
             it?.let {
                 when (it.code) {
                     StateType.SUCCESS -> showSuccess()
                     StateType.LOADING -> showLoading()
                     StateType.DISMISSING -> dismissLoading()
-                    StateType.ERROR -> showError("网络异常")
-                    StateType.NETWORK_ERROR -> showError("网络异常")
                     StateType.EMPTY -> showNormalEmpty(it.message)
                 }
             }
@@ -108,6 +130,13 @@ abstract class BaseLifeCycleFragment<VM : BaseViewModel> : BaseFragment() {
         Observer<EmptyState> {
             it?.let {
                 showEmpty(it.resource,it.message)
+            }
+        }
+    }
+    private val errorObserver by lazy {
+        Observer<ErrorState> {
+            it?.let {error->
+                showError(error.resource,error.message,error.showErrorIcon)
             }
         }
     }

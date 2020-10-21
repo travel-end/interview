@@ -6,15 +6,15 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.gson.JsonParseException
 import com.journey.interview.Constant
+import com.journey.interview.R
 import com.journey.interview.imusic.model.Song
 import com.journey.interview.imusic.net.IMusicApiService
 import com.journey.interview.imusic.net.IMusicRetrofitClient
-import com.journey.interview.utils.getClass
-import com.journey.interview.utils.ofMap
-import com.journey.interview.utils.print
+import com.journey.interview.utils.getString
 import com.journey.interview.weatherapp.net.ApiService
 import com.journey.interview.weatherapp.net.RetrofitClient
 import com.journey.interview.weatherapp.state.EmptyState
+import com.journey.interview.weatherapp.state.ErrorState
 import com.journey.interview.weatherapp.state.State
 import com.journey.interview.weatherapp.state.StateType
 import kotlinx.coroutines.*
@@ -34,6 +34,10 @@ open class BaseViewModel : ViewModel() {
 
     val emptyState by lazy {
         MutableLiveData<EmptyState>()
+    }
+
+    val errorState by lazy {
+        MutableLiveData<ErrorState>()
     }
 
     val songUrlResult : MutableLiveData<Map<String, Any>> = MutableLiveData()
@@ -61,7 +65,7 @@ open class BaseViewModel : ViewModel() {
                 Log.d("BaseViewModel", "Success")
             }.onFailure {
                 Log.d("BaseViewModel", "Failed")
-                handlerException(e = it, loadState = loadState)
+                handlerException(e = it, state = ErrorState())
             }
         }
     }
@@ -75,36 +79,42 @@ open class BaseViewModel : ViewModel() {
 
     protected fun ioRequest(block:suspend () ->Unit) {
         viewModelScope.launch {
-            withContext(Dispatchers.IO) {
-                block.invoke()
+            try {
+                withContext(Dispatchers.IO) {
+                    block.invoke()
+                }
+            } catch (e:Exception) {
+                handlerException(e = e, state = ErrorState(message = R.string.request_error.getString()))
             }
+
         }
     }
 
 
-    protected fun handlerException(e: Throwable, loadState: MutableLiveData<State>?) {
-        loadState?.let {
+    protected fun handlerException(e: Throwable, state: ErrorState) {
             when (e) {
                 is HttpException -> {
-                    loadState.value = State(StateType.NETWORK_ERROR)
+                    errorState.value = state
                 }
                 is ConnectException -> {
-                    loadState.value = State(StateType.NETWORK_ERROR)
+                    errorState.value = state
                 }
                 is ConnectTimeoutException -> {
-                    loadState.value = State(StateType.NETWORK_ERROR)
+                    errorState.value = state
                 }
                 is UnknownHostException -> {
-                    loadState.value = State(StateType.NETWORK_ERROR)
+                    errorState.value = state
                 }
                 is JsonParseException -> {
-                    loadState.value = State(StateType.NETWORK_ERROR)
+                    errorState.value = state
                 }
                 is NoClassDefFoundError -> {
-                    loadState.value = State(StateType.NETWORK_ERROR)
+                    errorState.value = state
+                }
+                else->{
+                    errorState.value = ErrorState(message = R.string.error_donot_know.getString())
                 }
             }
-        }
     }
 
     fun getSongUrl(song: Song) {
@@ -144,7 +154,7 @@ open class BaseViewModel : ViewModel() {
                     loadState.value = State(StateType.EMPTY,"${it.code} :获取不到歌曲播放地址")
                 }
             }.onFailure {
-                handlerException(it,loadState)
+                handlerException(it, ErrorState())
             }
         }
     }

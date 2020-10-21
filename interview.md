@@ -271,6 +271,7 @@ MediaPlayer.setOnCompletionListener()，它会在MediaPlayer播放完毕被回�
 6、在asset目录下储存大量音乐路径，分类形成本地歌单
 7、每个诗词详情页推荐一首歌（最好与之关联）
 8、添加诗词分类（类似于歌单）
+9、下载周杰伦的歌（vip歌曲）放在服务器上 免费听取
 
 
 ####优化的点
@@ -284,6 +285,7 @@ MediaPlayer.setOnCompletionListener()，它会在MediaPlayer播放完毕被回�
 7、资源不够 UI来凑  UI 一定要好看！！！！！   添加自定义字体！
 8、item右滑删除功能 见玩安卓recyclerview
 9、首次进入 首页显示等待层 加载当前的推荐音乐
+10、bottomPlay 显示歌词  右滑切歌
 
 ####bug
 1、本地音乐，有些不能播放 但是目录下的文件是好的

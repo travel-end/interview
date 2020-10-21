@@ -8,6 +8,7 @@
     <FrameLayout
         android:id="@+id/rl_search_view_title"
         android:layout_width="match_parent"
+        android:visibility="gone"
         android:layout_height="@dimen/dp_40">
 
         <ImageView
@@ -52,11 +53,20 @@
         android:layout_height="wrap_content"
         android:visibility="gone" />
 
+    <include
+        android:id="@+id/ll_error_view"
+        layout="@layout/imusic_error_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:layout_marginTop="@dimen/dp_20" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_search_song"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:scrollbars="vertical"
+        android:visibility="gone"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
 </LinearLayout>

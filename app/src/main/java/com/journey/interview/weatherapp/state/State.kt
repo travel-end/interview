@@ -13,3 +13,5 @@ import com.journey.interview.utils.getString
 data class State(var code: StateType, var message: String = "", @StringRes var tip: Int = 0)
 
 data class EmptyState(var resource:Int= R.drawable.ic_xigua, var message:String = R.string.empty_common.getString())
+
+data class ErrorState(var resource:Int= R.drawable.ku, var message:String = R.string.try_net_work.getString(),var showErrorIcon:Boolean=false)
