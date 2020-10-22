@@ -10,55 +10,50 @@
     android:paddingStart="@dimen/dp_18"
     android:paddingEnd="@dimen/dp_18"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-
     <ImageView
-        android:id="@+id/iv_item_local_song_laba"
-        android:layout_width="24dp"
+        android:id="@+id/common_item_iv_is_playing"
+        android:layout_width="@dimen/dp_20"
         android:layout_height="24dp"
         android:layout_centerVertical="true"
         android:layout_marginEnd="12dp"
         android:visibility="gone"
         android:src="@drawable/shape_horn" />
-
     <TextView
-        android:id="@+id/tv_item_local_song_name"
+        android:id="@+id/common_item_tv_song_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="演员"
         android:maxLines="1"
-        android:layout_toEndOf="@id/iv_item_local_song_laba"
+        android:layout_toEndOf="@id/common_item_iv_is_playing"
         android:layout_marginTop="@dimen/dp_4"
         android:textSize="16sp"
         android:textColor="@color/colorBlack"
         />
-
     <ImageView
-        android:id="@+id/tv_item_local_ed"
+        android:id="@+id/common_item_iv_is_download"
         android:layout_width="@dimen/dp_16"
         android:layout_height="14dp"
         android:src="@drawable/ic_ok"
-        android:layout_toEndOf="@id/iv_item_local_song_laba"
+        android:layout_toEndOf="@id/common_item_iv_is_playing"
         android:layout_marginBottom="@dimen/dp_4"
+        android:layout_marginEnd="@dimen/dp_4"
+        android:visibility="gone"
         android:layout_alignParentBottom="true" />
-
     <TextView
-        android:id="@+id/tv_item_local_song_singer"
+        android:id="@+id/common_item_tv_song_singer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="@color/colorGrayDark"
-        android:layout_toEndOf="@id/tv_item_local_ed"
+        android:layout_toEndOf="@id/common_item_iv_is_download"
         android:textSize="12sp"
         android:text="薛之谦"
-        android:layout_marginStart="@dimen/dp_4"
         android:layout_marginBottom="@dimen/dp_4"
         android:layout_alignParentBottom="true" />
-
     <ImageView
-        android:id="@+id/iv_item_local_song_more"
+        android:id="@+id/common_item_iv_song_more"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/ic_more"
         android:layout_centerVertical="true"
         android:layout_alignParentEnd="true"/>
-
 </com.journey.interview.customizeview.ripple.MyRippleView>
