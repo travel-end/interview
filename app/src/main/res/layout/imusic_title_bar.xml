@@ -6,9 +6,10 @@
     android:background="@color/colorWhite">
     <ImageView
         android:id="@+id/iv_title_list"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="@dimen/dp_28"
+        android:layout_height="@dimen/dp_28"
         android:layout_gravity="center_vertical"
+        android:layout_marginTop="@dimen/dp_2"
         android:layout_marginStart="@dimen/dp_5"
         android:src="@drawable/list" />
 
@@ -28,8 +29,9 @@
         android:id="@+id/iv_title_search"
         android:layout_width="24dp"
         android:layout_height="24dp"
+        android:layout_marginTop="@dimen/dp_2"
         android:layout_gravity="center_vertical|end"
-        android:layout_marginEnd="@dimen/dp_10"
+        android:layout_marginEnd="@dimen/dp_12"
         android:src="@drawable/search" />
 
 </FrameLayout>

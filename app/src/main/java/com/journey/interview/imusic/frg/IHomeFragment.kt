@@ -16,7 +16,7 @@ import com.google.android.material.shape.ShapeAppearanceModel
 import com.journey.interview.R
 import com.journey.interview.customizeview.pager.FocusLayoutManager
 import com.journey.interview.imusic.model.*
-import com.journey.interview.imusic.vm.IFindViewModel
+import com.journey.interview.imusic.vm.IHomeViewModel
 import com.journey.interview.recyclerview.core.*
 import com.journey.interview.utils.toFloatPx
 import com.journey.interview.utils.toIntPx
@@ -28,13 +28,13 @@ import java.util.*
  * @By Journey 2020/9/25
  * @Description
  */
-class IFindFragment : BaseLifeCycleFragment<IFindViewModel>() {
+class IHomeFragment : BaseLifeCycleFragment<IHomeViewModel>() {
     private val findData: MutableList<Any> = ArrayList()
     private lateinit var findRv:RecyclerView
     private lateinit var focusLayoutManager: FocusLayoutManager
     companion object {
         fun newInstance(): Fragment {
-            return IFindFragment()
+            return IHomeFragment()
         }
     }
 
@@ -388,7 +388,7 @@ class IFindFragment : BaseLifeCycleFragment<IFindViewModel>() {
 //                }
 //                MainActivity.mToast.setText("" + pos)
 //                MainActivity.mToast.show()
-                if (pos == this@IFindFragment.focusLayoutManager.focusdPosition) {
+                if (pos == this@IHomeFragment.focusLayoutManager.focusdPosition) {
 //                    val intent = Intent(this@MainActivity, DetailActivity::class.java)
 //                    intent.putExtra("resId", datas.get(pos).background)
 //                    startActivity(

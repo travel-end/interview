@@ -80,4 +80,7 @@
         <item name="progress_reached_bar_height">1.5dp</item>
         <item name="progress_unreached_bar_height">1.5dp</item>
     </style>
+    <style name="clubToolbar" parent="Widget.AppCompat.Toolbar">
+        <item name="contentInsetStart">0dp</item>
+    </style>
 </resources>

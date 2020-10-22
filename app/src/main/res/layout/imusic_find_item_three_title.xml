@@ -21,15 +21,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="14sp"
-        android:paddingEnd="@dimen/dp_16"
-        android:paddingStart="@dimen/dp_16"
-        android:paddingBottom="2dp"
-        android:paddingTop="2dp"
         android:layout_marginTop="2dp"
+        android:layout_marginEnd="@dimen/dp_16"
         android:textColor="@color/colorGrayDark"
-        android:background="@drawable/bg_text_gray_dark"
         tools:text="换一批"
         android:layout_gravity="center_vertical|end"
-        />
+        android:drawablePadding="@dimen/dp_6"
+        app:drawableStartCompat="@drawable/refresh" />
 
 </FrameLayout>

@@ -272,6 +272,7 @@ MediaPlayer.setOnCompletionListener()，它会在MediaPlayer播放完毕被回�
 7、每个诗词详情页推荐一首歌（最好与之关联）
 8、添加诗词分类（类似于歌单）
 9、下载周杰伦的歌（vip歌曲）放在服务器上 免费听取
+10、利用ieasyloan的服务器生成imageUrl  -->
 
 
 ####优化的点

@@ -308,4 +308,7 @@
             <enum name="right" value="2" />
         </attr>
     </declare-styleable>
+    <declare-styleable name="RoundRectView">
+        <attr name="roundRatio" format="float" />
+    </declare-styleable>
 </resources>

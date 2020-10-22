@@ -18,7 +18,7 @@ class IMainFragment : BaseVpFragment() {
     override val vpFragments: Array<Fragment>
         get() = arrayOf(
             IMeFragment.newInstance(),
-            IFindFragment.newInstance(),
+            IHomeFragment.newInstance(),
             ICloudVillageFragment.newInstance(),
             IVideoFragment.newInstance()
         )
