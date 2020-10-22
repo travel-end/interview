@@ -5,7 +5,7 @@ import androidx.room.PrimaryKey
 import java.io.Serializable
 
 @Entity
- class Song(
+class Song(
     @PrimaryKey(autoGenerate = true)
     val id: Long = 0,
     var songId //歌曲id

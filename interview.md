@@ -287,6 +287,7 @@ MediaPlayer.setOnCompletionListener()，它会在MediaPlayer播放完毕被回�
 8、item右滑删除功能 见玩安卓recyclerview
 9、首次进入 首页显示等待层 加载当前的推荐音乐
 10、bottomPlay 显示歌词  右滑切歌
+11、歌曲的实体类song 抽象出一个open类型的Song，其他的song如localSong都继承这个Song，省去公共字段
 
 ####bug
 1、本地音乐，有些不能播放 但是目录下的文件是好的

@@ -34,4 +34,8 @@ class ISongListFragment:BaseSongListFragment<ISongListViewModel>() {
         super.dataObserve()
     }
 
+    override fun getSongListType(): Int {
+        TODO("Not yet implemented")
+    }
+
 }

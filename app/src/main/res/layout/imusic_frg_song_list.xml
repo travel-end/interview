@@ -17,12 +17,13 @@
             android:fitsSystemWindows="true"
             app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
-            <ImageView
-                android:id="@+id/song_list_iv_cover"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:scaleType="centerCrop"
-                app:layout_collapseMode="parallax" />
+<!--            <ImageView-->
+<!--                android:id="@+id/song_list_iv_cover"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="match_parent"-->
+<!--                android:scaleType="centerCrop"-->
+<!--                android:src="@drawable/icon2"-->
+<!--                app:layout_collapseMode="parallax" />-->
 
             <ImageView
                 android:id="@+id/song_list_iv_background"
@@ -50,7 +51,8 @@
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
-                        app:roundRatio="0.1" />
+                        app:roundRatio="0.1"
+                        android:src="@drawable/icon5"/>
 
                     <TextView
                         android:id="@+id/song_list_tv_name"
@@ -60,8 +62,8 @@
                         android:layout_marginTop="@dimen/dp_20"
                         android:layout_marginEnd="@dimen/dp_16"
                         android:maxLines="2"
-                        android:text="都是sjldjlsdlskdlsd多的塑料袋里几十块岁的老两三点开始"
-                        android:textColor="@color/colorGray2"
+                        android:text="都是里几十块岁的老两三点开始"
+                        android:textColor="@color/colorTextLight2"
                         android:textSize="16sp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintHorizontal_weight="1"
@@ -84,7 +86,7 @@
                             android:id="@+id/song_list_siv_user_avatar"
                             android:layout_width="@dimen/dp_30"
                             android:layout_height="match_parent"
-                            android:src="@drawable/icon2" />
+                            android:src="@drawable/icon3" />
 
                         <TextView
                             android:id="@+id/song_list_tv_user_name"
@@ -95,7 +97,7 @@
                             android:gravity="center_vertical"
                             android:maxLines="1"
                             android:text="远方颠三倒四叫地税局当老师打开速度快"
-                            android:textColor="#e3e4e5"
+                            android:textColor="@color/grey_80"
                             android:textSize="15sp" />
                     </LinearLayout>
 
@@ -205,11 +207,16 @@
                 android:layout_width="match_parent"
                 android:layout_height="55dp"
                 style="@style/clubToolbar"
-                android:layout_marginTop="@dimen/dp_30"
                 android:elevation="0dp"
+                android:background="@color/red"
                 app:layout_collapseMode="pin">
 
-
+                <ImageView
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_marginStart="@dimen/dp_14"
+                    android:tint="@color/colorWhite"
+                    android:src="@drawable/ic_arrow_left" />
 
             </androidx.appcompat.widget.Toolbar>
 
@@ -227,7 +234,6 @@
         android:layout_height="match_parent"
         android:background="@color/colorWhite"
         android:orientation="vertical"
-        android:paddingBottom="@dimen/dp_40"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
         <LinearLayout
             android:layout_width="match_parent"
@@ -249,11 +255,6 @@
                 android:textColor="#333333"
                 android:textSize="17sp" />
         </LinearLayout>
-        <View
-            android:id="@+id/tv_gap"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="#f0f0f0" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/song_list_rv_content"

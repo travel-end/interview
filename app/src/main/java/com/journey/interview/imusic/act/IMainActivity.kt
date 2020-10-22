@@ -71,7 +71,7 @@ class IMainActivity : BaseLifeCycleActivity<IMainViewModel>() {
 
         override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
             mPlayServiceBinder = service as IMusicPlayService.PlayStatusBinder
-            Log.e("JG","mPlayServiceBinder$mPlayServiceBinder")
+//            Log.e("JG","mPlayServiceBinder$mPlayServiceBinder")
             if (isExistService) {
                 startProgressBar()
             }

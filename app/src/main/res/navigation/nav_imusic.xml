@@ -40,6 +40,17 @@
             app:popExitAnim="@anim/slide_out_right" />
 
         <action
+            android:id="@+id/action_homeFragment_to_newLoveSongFragment"
+            app:destination="@id/iNewLoveSongFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+
+        <argument android:name="albumImgUrl"
+            app:argType="string" />
+
+        <action
             android:id="@+id/action_homeFragment_to_downloadFragment"
             app:destination="@id/iDownloadFragment"
             app:enterAnim="@anim/slide_in_right"
@@ -73,6 +84,13 @@
         android:id="@+id/iLoveSongFragment"
         android:name="com.journey.interview.imusic.frg.love.ILoveSongFragment"
         tools:layout="@layout/imusic_act_love_song">
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/iNewLoveSongFragment"
+        android:name="com.journey.interview.imusic.frg.love.INewLoveSongFragment"
+        tools:layout="@layout/imusic_frg_song_list">
 
     </fragment>
 

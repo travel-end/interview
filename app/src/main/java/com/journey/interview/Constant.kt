@@ -128,4 +128,7 @@ object Constant {
 
     const val ADD_TO_LOVE = "add_to_love"
 
+    // song list type
+    const val SONG_LIST_TYPE_LOVE = 1
+
 }
