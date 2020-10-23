@@ -6,173 +6,291 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.imageview.ShapeableImageView
+import com.google.android.material.shape.ShapeAppearanceModel
 import com.journey.interview.R
-import com.journey.interview.customizeview.indicator.IndicatorView
-import com.journey.interview.customizeview.indicator.enums.IndicatorSlideMode
-import com.journey.interview.customizeview.indicator.enums.IndicatorStyle
-import com.journey.interview.imusic.model.*
+import com.journey.interview.imusic.model.peotry.*
 import com.journey.interview.imusic.vm.ICloudVillageViewModel
 import com.journey.interview.recyclerview.core.*
-import com.journey.interview.utils.f_dp
 import com.journey.interview.weatherapp.base.BaseLifeCycleFragment
 import kotlinx.android.synthetic.main.imusic_frg_find_poetry.*
 import java.util.ArrayList
 
 /**
  * @By Journey 2020/9/25
- * @Description
+ * @Description imusic_frg_find_poetry
+ * 1 五个tab 推荐
  */
 class IFindPoetryFragment:BaseLifeCycleFragment<ICloudVillageViewModel>() {
-    private lateinit var rvPoetry:RecyclerView
-    private val findData: MutableList<Any> = ArrayList()
-    private var scrollPosition:Int =0
+    private val homeData: MutableList<Any> = ArrayList()
+    private lateinit var poetryFindRv:RecyclerView
     companion object {
-        fun newInstance() :Fragment {
+        fun newInstance(): Fragment {
             return IFindPoetryFragment()
         }
     }
-
-    override fun layoutResId()= R.layout.imusic_frg_find_poetry
-
+    override fun layoutResId() = R.layout.imusic_frg_find_poetry
     override fun initView() {
         super.initView()
+        poetryFindRv = poetry_rv
         initDataSource()
-        rvPoetry = poetry_rv
-        rvPoetry.setup<Any> {
-            dataSource(findData)
+        poetryFindRv.setup<Any> {
             withLayoutManager {
-                val layoutManager = GridLayoutManager(requireContext(),3)
-                layoutManager.spanSizeLookup = object :GridLayoutManager.SpanSizeLookup() {
+                val lm = GridLayoutManager(requireContext(), 3)
+                lm.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
                     override fun getSpanSize(position: Int): Int {
-                        return when(adapter?.getItem(position)) {
-                            is Poetry->1
-                            else->3
+                        return when (adapter?.getItem(position)) {
+                            is PoetryF2Content -> 1
+                            is PoetryF3Content -> 1
+                            else -> 3
                         }
                     }
                 }
-                return@withLayoutManager layoutManager
+                return@withLayoutManager lm
             }
             adapter {
+                /* title ---> 全部诗人*/
+                addItem(R.layout.imusic_find_item_title) {
+                    isForViewType { data, _ -> data is PoetryF1Title }
+                    bindViewHolder { data, pos, _ ->
+                        val title = data as PoetryF1Title
+                        setText(R.id.find_tv_title_main, title.title)
+                        setText(R.id.find_mb_second, title.more)
+                        clicked(R.id.find_mb_second,View.OnClickListener {
+                            Log.e("JG","--->查看更多诗人")
+                        })
+                    }
+                }
+                /*content 全部诗人（）*/
+                addItem(R.layout.imusic_find_rv_song_list) {
+                    isForViewType { data, _ -> data is PoetryF1ContentList }
+                    bindViewHolder { data, _, _ ->
+                        val dataAll = data as PoetryF1ContentList
+                        val dataRv = itemView?.findViewById<RecyclerView>(R.id.find_rv_song_list)
+                        dataRv?.onFlingListener=null
+                        val snapHelper = PagerSnapHelper()
+                        snapHelper.attachToRecyclerView(dataRv)
+                        dataRv?.setup<PoetryF1Content> {
+                            dataSource(dataAll.contentList)
+                            adapter {
+                                addItem(R.layout.imusic_find_item_ho_list) {
+                                    bindViewHolder { data: PoetryF1Content?, position: Int, holder: ViewHolderCreator<PoetryF1Content> ->
+                                        val item = data as PoetryF1Content
+                                        setImageResource(R.id.find_iv_menu_icon,item.cover?:0)
+                                        setText(R.id.find_tv_volume,item.contentDesc)
+                                        setText(R.id.find_tv_desc,item.contentDesc)
+                                        itemClicked(View.OnClickListener {
+                                            Log.e("JG","${item.contentDesc}")
+                                        })
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
+                /* title 朝代*/
+                addItem(R.layout.imusic_find_item_three_title) {
+                    isForViewType { data, _ -> data is PoetryF2Title }
+                    bindViewHolder { data, _, _ ->
+                        val title = data as PoetryF2Title
+                        setText(R.id.find_tv_title_three, title.title)
+                    }
+                }
+                /* content 朝代*/
+                addItem(R.layout.imusic_find_item_ho_list) {
+                    isForViewType { data, _ -> data is PoetryF2Content }
+                    bindViewHolder { data, _, _ ->
+                        val item = data as PoetryF2Content
+                        setImageResource(R.id.find_iv_menu_icon,item.cover?:0)
+                        setText(R.id.find_tv_volume,item.contentDesc)
+                        setText(R.id.find_tv_desc,item.contentDesc)
+                    }
+                }
+                /* title 经典名句*/
+                addItem(R.layout.imusic_find_item_title) {
+                    isForViewType { data, _ -> data is PoetryF3title }
+                    bindViewHolder { data, pos, _ ->
+                        val title = data as PoetryF3title
+                        setText(R.id.find_tv_title_main, title.title)
+                    }
+                }
+                /* content 经典名句*/
+                addItem(R.layout.imusic_find_item_ho_list) {
+                    isForViewType { data, _ -> data is PoetryF3Content }
+                    bindViewHolder { data, _, _ ->
+                        val item = data as PoetryF3Content
+                        setImageResource(R.id.find_iv_menu_icon,item.cover?:0)
+                        setText(R.id.find_tv_volume,item.contentDesc)
+                        setText(R.id.find_tv_desc,item.contentDesc)
+                    }
+                }
+
+                /* title 名篇*/
+                addItem(R.layout.imusic_find_item_title) {
+                    isForViewType { data, _ -> data is PoetryF4title }
+                    bindViewHolder { data, pos, _ ->
+                        val title = data as PoetryF4title
+                        setText(R.id.find_tv_title_main, title.title)
+                        setText(R.id.find_mb_second, title.more)
+                        clicked(R.id.find_mb_second,View.OnClickListener {
+                            Log.e("JG","--->查看更多名篇")
+                        })
+                    }
+                }
+                /* content 名篇*/
+                addItem(R.layout.imusic_find_rv_song_list) {
+                    isForViewType { data, _ -> data is PoetryF4ContentList }
+                    bindViewHolder { data, _, _ ->
+                        val dataAll = data as PoetryF4ContentList
+                        val dataRv = itemView?.findViewById<RecyclerView>(R.id.find_rv_song_list)
+                        dataRv?.onFlingListener=null
+                        val snapHelper = PagerSnapHelper()
+                        snapHelper.attachToRecyclerView(dataRv)
+                        dataRv?.setup<PoetryF4Content> {
+                            dataSource(dataAll.contentList)
+                            adapter {
+                                addItem(R.layout.imusic_find_item_ho_list) {
+                                    bindViewHolder { data: PoetryF4Content?, position: Int, holder: ViewHolderCreator<PoetryF4Content> ->
+                                        val item = data as PoetryF4Content
+                                        setImageResource(R.id.find_iv_menu_icon,item.cover?:0)
+                                        setText(R.id.find_tv_volume,item.contentDesc)
+                                        setText(R.id.find_tv_desc,item.contentDesc)
+                                        itemClicked(View.OnClickListener {
+                                            Log.e("JG","${item.contentDesc}")
+                                        })
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                /* title 每日推荐*/
+                addItem(R.layout.imusic_find_item_title) {
+                    isForViewType { data, _ -> data is PoetryF5title }
+                    bindViewHolder { data, pos, _ ->
+                        val title = data as PoetryF5title
+                        setText(R.id.find_tv_title_main, title.title)
+                    }
+                }
+                /* content 每日推荐*/
                 addItem(R.layout.imusic_item_poetry_f_a) {
-                    isForViewType { data, position -> data is FindTop }
+                    isForViewType { data, position -> data is PoetryF5ContentList }
                     bindViewHolder { data, position, holder ->
                         data?.let {
-                            val item = it as FindTop
-                            val datas = item.banners
+                            val item = it as PoetryF5ContentList
+                            val datas = item.contentList
                             itemView?.let {view->
                                 val rvf1:RecyclerView = view.findViewById(R.id.poetry_fa_rv)
-                                val indicatorView :IndicatorView = view.findViewById(R.id.poetry_fa_indicatorview)
-                                indicatorView
-                                    .setSliderColor(
-                                        ContextCompat.getColor(requireContext(),R.color.grey_10),
-                                        ContextCompat.getColor(requireContext(),R.color.material_blue))
-                                    .setSliderWidth(6.f_dp)
-                                    .setSliderHeight(6.f_dp)
-                                    .setSlideMode(IndicatorSlideMode.NORMAL)
-                                    .setIndicatorStyle(IndicatorStyle.CIRCLE)
-                                    .setupWithPosition(datas.size)
-                                val f1LayoutManager = LinearLayoutManager(requireContext(),LinearLayoutManager.HORIZONTAL,false)
+                                val f1LayoutManager = LinearLayoutManager(requireContext(),
+                                    LinearLayoutManager.HORIZONTAL,false)
                                 rvf1.layoutManager = f1LayoutManager
                                 rvf1.onFlingListener=null
                                 val pagerSnapHelper = PagerSnapHelper()
                                 pagerSnapHelper.attachToRecyclerView(rvf1)
-                                rvf1.adapter = object :RecyclerView.Adapter<PoetryF1ViewHolder>() {
+                                rvf1.adapter = object :RecyclerView.Adapter<IFindPoetryFragment.PoetryF1ViewHolder>() {
                                     override fun onCreateViewHolder(
                                         parent: ViewGroup,
                                         viewType: Int
-                                    ): PoetryF1ViewHolder {
+                                    ): IFindPoetryFragment.PoetryF1ViewHolder {
                                         return PoetryF1ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.imusic_item_poetry_f_a_item,parent,false))
                                     }
                                     override fun getItemCount()=Integer.MAX_VALUE
                                     override fun onBindViewHolder(
-                                        holder: PoetryF1ViewHolder,
+                                        holder: IFindPoetryFragment.PoetryF1ViewHolder,
                                         position: Int
                                     ) {
                                         val pos = position % datas.size
                                         val res = datas[pos]
-                                        holder.cover.setImageResource(res.cover)
-                                        holder.desc.text = res.desc
+                                        holder.cover.setImageResource(res.cover?:0)
+                                        holder.desc.text = res.contentDesc
                                     }
                                 }
-//                                rvf1.scrollToPosition(2)
-//                                indicatorView.initSliderPosition(0,0f)
-                                var index = 0
-                                rvf1.addOnScrollListener(object :RecyclerView.OnScrollListener(){
-                                    override fun onScrolled(
-                                        recyclerView: RecyclerView,
-                                        dx: Int,
-                                        dy: Int
-                                    ) {
-                                        super.onScrolled(recyclerView, dx, dy)
-//                                        val visiblePos = f1LayoutManager.findFirstVisibleItemPosition()
-//                                        indicatorView.setOnSelectedListener(scrollPosition)
-//                                        index++
-//                                        scrollPosition = index%5
-                                        Log.e("JG","index=$index")
-                                        Log.e("JG","scrollPosition=$scrollPosition")
-//                                        if (initPosition != visiblePos) {
-//                                            initPosition= f1LayoutManager.findFirstVisibleItemPosition()
-//                                            Log.e("JG","initPosition=$initPosition")
-//                                            Log.e("JG","dx=$dx")
-//                                            indicatorView.setOnSelectedListener(initPosition)
-//                                        }
-                                    }
-
-                                    override fun onScrollStateChanged(
-                                        recyclerView: RecyclerView,
-                                        newState: Int
-                                    ) {
-                                        super.onScrollStateChanged(recyclerView, newState)
-
-                                    }
-                                })
                             }
                         }
-
                     }
                 }
-                addItem(R.layout.imusic_find_item_title) {
-                    isForViewType { data, _ -> data is FindTitle }
+
+                /*title 趣闻轶事*/
+                addItem(R.layout.imusic_find_item_three_title) {
+                    isForViewType { data, _ -> data is PoetryF6title }
                     bindViewHolder { data, pos, _ ->
-                        val title = data as FindTitle
-                        setText(R.id.find_tv_title_main, title.titleMain)
-                        setText(R.id.find_mb_second, title.titleSecond)
-                        clicked(R.id.find_mb_second,View.OnClickListener {
-                            Log.e("JG","--->查看更多")
+                        val title = data as PoetryF6title
+                        setText(R.id.find_tv_title_three, title.title)
+                        setText(R.id.find_change_second_three, title.more)
+                        clicked(R.id.find_change_second_three,View.OnClickListener {
                         })
                     }
                 }
 
+                /*content 趣闻轶事*/
+                addItem(R.layout.imusic_find_song_poetry) {
+                    isForViewType { data, _ -> data is PoetryF6Content }
+                    bindViewHolder { data, position, holder ->
+                        val item =data as PoetryF6Content
+                        val leftIv = itemView?.findViewById<ShapeableImageView>(R.id.find_sp_iv_icon)
+                        leftIv?.shapeAppearanceModel = ShapeAppearanceModel.Builder()
+                            .setAllCornerSizes(ShapeAppearanceModel.PILL).build()
+                        setImageResource(R.id.find_sp_iv_icon,item.leftCover?:0)
+                        setText(R.id.find_sp_tv_title,item.poetryTitle)
+                        setText(R.id.find_tv_sp_author,item.poetryAuthor)
+                    }
+                }
             }
-
         }
+        poetryFindRv.submitList(homeData)
     }
-
     private fun initDataSource() {
-        // 1楼
-        val topItem = mutableListOf<FindTopItem>()
-        topItem.add(FindTopItem(R.drawable.cover5, "1ST"))
-        topItem.add(FindTopItem(R.drawable.cover9, "2ND"))
-        topItem.add(FindTopItem(R.drawable.cover5, "3RD"))
-        topItem.add(FindTopItem(R.drawable.cover9, "4TH"))
-        topItem.add(FindTopItem(R.drawable.cover5, "5FI"))
-        findData.add(FindTop(banners = topItem))
-        //2楼
-        findData.add(FindTitle("二楼", "查看更多"))
-        // 3楼
-//        findData.add(Poetry(R.drawable.icon2,"唐诗","zuoye"))
-//        // 4楼
-//        findData.add(Poetry(R.drawable.icon2,"宋词","方法"))
-//        // 5楼
-//        findData.add(Poetry(R.drawable.icon4,"其他","刚刚"))
-    }
+        homeData.add(PoetryF1Title("全部诗人","查看全部"))
+        val contentList = mutableListOf<PoetryF1Content>()
+        contentList.add(PoetryF1Content(R.drawable.icon2,"对对对","李白"))
+        contentList.add(PoetryF1Content(R.drawable.icon2,"擦擦擦","杜甫"))
+        contentList.add(PoetryF1Content(R.drawable.icon1,"啧啧啧","王维"))
+        contentList.add(PoetryF1Content(R.drawable.icon2,"滚滚滚","白居易"))
+        contentList.add(PoetryF1Content(R.drawable.icon2,"急急急","李商隐"))
+        contentList.add(PoetryF1Content(R.drawable.icon1,"哦哦哦","杜牧"))
+        homeData.add(PoetryF1ContentList(contentList))
 
+        homeData.add(PoetryF2Title(title = "朝代"))
+        homeData.add(PoetryF2Content(R.drawable.pic8, "担惊受恐","唐诗"))
+        homeData.add(PoetryF2Content(R.drawable.pic11, "担惊受恐","宋词"))
+        homeData.add(PoetryF2Content(R.drawable.pic8, "担惊受恐","其他朝代"))
+
+        homeData.add(PoetryF3title(title = "经典名句"))
+        homeData.add(PoetryF3Content(R.drawable.pic8, "担惊受恐","不限"))
+        homeData.add(PoetryF3Content(R.drawable.pic11, "担惊受恐","抒情"))
+        homeData.add(PoetryF3Content(R.drawable.pic8, "担惊受恐","山水"))
+
+        homeData.add(PoetryF4title("名篇","查看全部"))
+        val mpList = mutableListOf<PoetryF4Content>()
+        mpList.add(PoetryF4Content(R.drawable.icon2,"对对对","岳阳楼记"))
+        mpList.add(PoetryF4Content(R.drawable.icon2,"擦擦擦","滕王阁序"))
+        mpList.add(PoetryF4Content(R.drawable.icon1,"啧啧啧","蜀道难"))
+        mpList.add(PoetryF4Content(R.drawable.icon2,"滚滚滚","小石潭记"))
+        mpList.add(PoetryF4Content(R.drawable.icon2,"急急急","桃花源记"))
+        homeData.add(PoetryF4ContentList(mpList))
+
+        homeData.add(PoetryF5title("每日推荐"))
+        val recommendList = mutableListOf<PoetryF5Content>()
+        recommendList.add(PoetryF5Content(R.drawable.icon2,"对对对","推荐1"))
+        recommendList.add(PoetryF5Content(R.drawable.icon2,"擦擦擦","推荐2"))
+        recommendList.add(PoetryF5Content(R.drawable.icon2,"擦擦擦","推荐3"))
+        homeData.add(PoetryF5ContentList(recommendList))
+
+        homeData.add(PoetryF6title("每日拾得","换一批"))
+        homeData.add(PoetryF6Content(leftCover = R.drawable.icon1,poetryTitle = "都说你眼中开倾世桃花却如何一夕桃花雨下",poetryAuthor = "上邪"))
+        homeData.add(PoetryF6Content(leftCover = R.drawable.icon2,poetryTitle = "都说你眼中开倾世桃花却如何一夕桃花雨下",poetryAuthor = "上邪"))
+        homeData.add(PoetryF6Content(leftCover = R.drawable.icon1,poetryTitle = "江湖夜雨",poetryAuthor = "黄庭坚"))
+        homeData.add(PoetryF6Content(leftCover = R.drawable.icon2,poetryTitle = "都说你眼中开倾世桃花却如何一夕桃花雨下",poetryAuthor = "上邪"))
+        homeData.add(PoetryF6Content(leftCover = R.drawable.icon1,poetryTitle = "一蓑烟雨任平生",poetryAuthor = "苏轼"))
+        homeData.add(PoetryF6Content(leftCover = R.drawable.icon2,poetryTitle = "都说你眼中开倾世桃花却如何一夕桃花雨下",poetryAuthor = "上邪"))
+        homeData.add(PoetryF6Content(leftCover = R.drawable.icon1,poetryTitle = "谁画中与你天涯",poetryAuthor = "雨露深谷"))
+    }
     inner class PoetryF1ViewHolder(itemView:View):RecyclerView.ViewHolder(itemView) {
         val cover:ImageView = itemView.findViewById(R.id.poetry_item_f_a_iv)
         val desc: TextView = itemView.findViewById(R.id.poetry_item_f_a_tv)

@@ -9,6 +9,7 @@ import android.widget.TextView
 import androidx.annotation.NonNull
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.imageview.ShapeableImageView
@@ -18,8 +19,6 @@ import com.journey.interview.customizeview.pager.FocusLayoutManager
 import com.journey.interview.imusic.model.*
 import com.journey.interview.imusic.vm.IHomeViewModel
 import com.journey.interview.recyclerview.core.*
-import com.journey.interview.utils.toFloatPx
-import com.journey.interview.utils.toIntPx
 import com.journey.interview.weatherapp.base.BaseLifeCycleFragment
 import kotlinx.android.synthetic.main.imusic_frg_find.*
 import java.util.*
@@ -30,7 +29,7 @@ import java.util.*
  */
 class IHomeFragment : BaseLifeCycleFragment<IHomeViewModel>() {
     private val homeData: MutableList<Any> = ArrayList()
-    private lateinit var findRv:RecyclerView
+    private lateinit var homeRv:RecyclerView
     private lateinit var focusLayoutManager: FocusLayoutManager
     companion object {
         fun newInstance(): Fragment {
@@ -41,9 +40,9 @@ class IHomeFragment : BaseLifeCycleFragment<IHomeViewModel>() {
     override fun layoutResId() = R.layout.imusic_frg_find
     override fun initView() {
         super.initView()
-        findRv = find_rv
+        homeRv = find_rv
         initDataSource()
-        findRv.setup<Any> {
+        homeRv.setup<Any> {
             withLayoutManager {
                 val lm = GridLayoutManager(requireContext(), 5)
                 lm.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
@@ -58,82 +57,156 @@ class IHomeFragment : BaseLifeCycleFragment<IHomeViewModel>() {
                 return@withLayoutManager lm
             }
             // 首页顶部banner
+            /*、、、、、、、、、、、自定义LayoutManager 折叠效果、、、、、、、、、、、、、*/
             adapter {
-                addItem(R.layout.imusic_find_item_top) {
-                    isForViewType { data, _ -> data is FindTop }
-                    bindViewHolder { data, _, _ ->
-                        val findTop = data as FindTop
-                        val datas = findTop.banners
-                        val rv = itemView?.findViewById<RecyclerView>(R.id.stack_find_rv_top)
-//                        val emptyView = itemView?.findViewById<TextView>(R.id.empty)
-                        var index = 0
-//                        Log.e("JG","rv:$rv")
-                        focusLayoutManager = FocusLayoutManager.Builder()
-                            .layerPadding(80f.toFloatPx())
-                            .normalViewGap(12f.toFloatPx())
-                            .focusOrientation(FocusLayoutManager.FOCUS_LEFT)
-                            .isAutoSelect(true)
-                            .maxLayerCount(2)
-                            .setOnFocusChangeListener { focusdPosition, lastFocusedPosition ->
-                                if (focusdPosition == datas.size - 1
-                                    && (focusLayoutManager.focusOrientation == FocusLayoutManager.FOCUS_LEFT)) {
-//                                    emptyView?.visibility = View.VISIBLE
-                                } else {
-//                                    emptyView?.visibility = View.GONE
-                                }
-                            }
-                            .build()
-                        rv?.let {
-                            it.adapter = object :RecyclerView.Adapter<TopViewHolder>() {
-                                override fun onCreateViewHolder(
-                                    parent: ViewGroup,
-                                    viewType: Int
-                                ): TopViewHolder {
-                                    val view = LayoutInflater.from(parent.context).inflate(R.layout.item_card,parent,false)
-                                    if (focusLayoutManager.focusOrientation == FocusLayoutManager.FOCUS_LEFT || focusLayoutManager.focusOrientation == FocusLayoutManager.FOCUS_RIGHT) {
-                                        val p = view?.layoutParams as ViewGroup.MarginLayoutParams
-                                        p.apply {
-                                            topMargin = 20f.toIntPx(view.context)
-                                            bottomMargin = 20f.toIntPx(view.context)
-                                            leftMargin = 0f.toIntPx(view.context)
-                                            rightMargin = 0f.toIntPx(view.context)
-                                            width = 180f.toIntPx(view.context)
-                                            height = 110f.toIntPx(view.context)
-                                        }
-                                    } else {
-                                        val p = view?.layoutParams as ViewGroup.MarginLayoutParams
-                                        p.apply {
-                                            topMargin = 0f.toIntPx(view.context)
-                                            bottomMargin = 0f.toIntPx(view.context)
-                                            leftMargin = 20f.toIntPx(view.context)
-                                            rightMargin = 20f.toIntPx(view.context)
-                                            width = 180f.toIntPx(view.context)
-                                            height = 110f.toIntPx(view.context)
-                                        }
+//                addItem(R.layout.imusic_find_item_top) {
+//                    isForViewType { data, _ -> data is FindTop }
+//                    bindViewHolder { data, _, _ ->
+//                        val findTop = data as FindTop
+//                        val datas = findTop.banners
+//                        val rv = itemView?.findViewById<RecyclerView>(R.id.stack_find_rv_top)
+////                        val emptyView = itemView?.findViewById<TextView>(R.id.empty)
+//                        var index = 0
+////                        Log.e("JG","rv:$rv")
+//                        focusLayoutManager = FocusLayoutManager.Builder()
+//                            .layerPadding(80f.toFloatPx())
+//                            .normalViewGap(12f.toFloatPx())
+//                            .focusOrientation(FocusLayoutManager.FOCUS_LEFT)
+//                            .isAutoSelect(true)
+//                            .maxLayerCount(2)
+//                            .setOnFocusChangeListener { focusdPosition, lastFocusedPosition ->
+//                                if (focusdPosition == datas.size - 1
+//                                    && (focusLayoutManager.focusOrientation == FocusLayoutManager.FOCUS_LEFT)) {
+////                                    emptyView?.visibility = View.VISIBLE
+//                                } else {
+////                                    emptyView?.visibility = View.GONE
+//                                }
+//                            }
+//                            .build()
+//                        rv?.let {
+//                            it.adapter = object :RecyclerView.Adapter<TopViewHolder>() {
+//                                override fun onCreateViewHolder(
+//                                    parent: ViewGroup,
+//                                    viewType: Int
+//                                ): TopViewHolder {
+//                                    val view = LayoutInflater.from(parent.context).inflate(R.layout.item_card,parent,false)
+//                                    if (focusLayoutManager.focusOrientation == FocusLayoutManager.FOCUS_LEFT || focusLayoutManager.focusOrientation == FocusLayoutManager.FOCUS_RIGHT) {
+//                                        val p = view?.layoutParams as ViewGroup.MarginLayoutParams
+//                                        p.apply {
+//                                            topMargin = 20f.toIntPx(view.context)
+//                                            bottomMargin = 20f.toIntPx(view.context)
+//                                            leftMargin = 0f.toIntPx(view.context)
+//                                            rightMargin = 0f.toIntPx(view.context)
+//                                            width = 180f.toIntPx(view.context)
+//                                            height = 110f.toIntPx(view.context)
+//                                        }
+//                                    } else {
+//                                        val p = view?.layoutParams as ViewGroup.MarginLayoutParams
+//                                        p.apply {
+//                                            topMargin = 0f.toIntPx(view.context)
+//                                            bottomMargin = 0f.toIntPx(view.context)
+//                                            leftMargin = 20f.toIntPx(view.context)
+//                                            rightMargin = 20f.toIntPx(view.context)
+//                                            width = 180f.toIntPx(view.context)
+//                                            height = 110f.toIntPx(view.context)
+//                                        }
+//                                    }
+//                                    view.tag = ++index
+//                                    return TopViewHolder(view)
+//                                }
+//
+//                                override fun getItemCount()=Integer.MAX_VALUE
+//
+//                                override fun onBindViewHolder(
+//                                    holder: TopViewHolder,
+//                                    position: Int
+//                                ) {
+//                                    val realPosition = position % datas.size
+//                                    val item = datas[realPosition]
+//                                    holder.iv.setImageResource(item.cover)
+//                                    holder.tv.text = item.desc
+//                                }
+//
+//                            }
+//                            it.layoutManager = focusLayoutManager
+//                        }
+//
+//
+//                    }
+//                }
+                /*、、、、、、、、、、、自定义LayoutManager 折叠效果、、、、、、、、、、、、、*/
+
+                /* 、、、、、、、、、、、、、、、普通滑动RecyclerView 、、、、、、、、、、、、、、*/
+                addItem(R.layout.imusic_item_poetry_f_a) {
+                    isForViewType { data, position -> data is FindTop }
+                    bindViewHolder { data, position, holder ->
+                        data?.let {
+                            val item = it as FindTop
+                            val datas = item.banners
+                            itemView?.let {view->
+                                val rvf1:RecyclerView = view.findViewById(R.id.poetry_fa_rv)
+//                                val indicatorView :IndicatorView = view.findViewById(R.id.poetry_fa_indicatorview)
+//                                indicatorView
+//                                    .setSliderColor(
+//                                        ContextCompat.getColor(requireContext(),R.color.grey_10),
+//                                        ContextCompat.getColor(requireContext(),R.color.material_blue))
+//                                    .setSliderWidth(6.f_dp)
+//                                    .setSliderHeight(6.f_dp)
+//                                    .setSlideMode(IndicatorSlideMode.NORMAL)
+//                                    .setIndicatorStyle(IndicatorStyle.CIRCLE)
+//                                    .setupWithPosition(datas.size)
+                                val f1LayoutManager = LinearLayoutManager(requireContext(),
+                                    LinearLayoutManager.HORIZONTAL,false)
+                                rvf1.layoutManager = f1LayoutManager
+                                rvf1.onFlingListener=null
+                                val pagerSnapHelper = PagerSnapHelper()
+                                pagerSnapHelper.attachToRecyclerView(rvf1)
+                                rvf1.adapter = object :RecyclerView.Adapter<IHomeFragment.HomeF1ViewHolder>() {
+                                    override fun onCreateViewHolder(
+                                        parent: ViewGroup,
+                                        viewType: Int
+                                    ): IHomeFragment.HomeF1ViewHolder {
+                                        return HomeF1ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.imusic_item_poetry_f_a_item,parent,false))
                                     }
-                                    view.tag = ++index
-                                    return TopViewHolder(view)
+                                    override fun getItemCount()=Integer.MAX_VALUE
+                                    override fun onBindViewHolder(
+                                        holder: IHomeFragment.HomeF1ViewHolder,
+                                        position: Int
+                                    ) {
+                                        val pos = position % datas.size
+                                        val res = datas[pos]
+                                        holder.cover.setImageResource(res.cover)
+                                        holder.desc.text = res.desc
+                                    }
                                 }
-
-                                override fun getItemCount()=Integer.MAX_VALUE
-
-                                override fun onBindViewHolder(
-                                    holder: TopViewHolder,
-                                    position: Int
-                                ) {
-                                    val realPosition = position % datas.size
-                                    val item = datas[realPosition]
-                                    holder.iv.setImageResource(item.cover)
-                                    holder.tv.text = item.desc
-                                }
-
+//                                indicatorView.initSliderPosition(0,0f)
+                                /**
+                                 * 初始  1    2   3
+                                 * 0    0   1
+                                 */
+//                                rvf1.addOnScrollListener(object :RecyclerView.OnScrollListener(){
+//                                    override fun onScrolled(
+//                                        recyclerView: RecyclerView,
+//                                        dx: Int,
+//                                        dy: Int
+//                                    ) {
+//                                        super.onScrolled(recyclerView, dx, dy)
+//                                        val visiblePos = f1LayoutManager.findFirstVisibleItemPosition()
+//                                        if (scrollPosition != visiblePos) {
+//                                            scrollPosition= f1LayoutManager.findFirstVisibleItemPosition()
+//                                            Log.e("JG","scrollPosition=$scrollPosition")
+//                                            indicatorView.setOnSelectedListener(scrollPosition)
+//                                            scrollPosition = visiblePos + 1
+//                                        }
+//                                    }
+//                                })
                             }
-                            it.layoutManager = focusLayoutManager
                         }
-
 
                     }
                 }
+                /* 、、、、、、、、、、、、、、、普通滑动RecyclerView 、、、、、、、、、、、、、、*/
+
 
 //                addItem(R.layout.imusic_find_rv_menu) {
 //                    isForViewType { data, _ -> data is FindMenuList }
@@ -262,9 +335,9 @@ class IHomeFragment : BaseLifeCycleFragment<IHomeViewModel>() {
                         setText(R.id.find_change_second_three,title.titleSecond)
                         clicked(R.id.find_change_second_three,View.OnClickListener {
                             Log.e("JG","--->换一批")
-                            findRv.updateData(9,HomeReSong(R.drawable.icon6,"dd","dd","dd"),false)
-                            findRv.updateData(10,HomeReSong(R.drawable.icon6,"aaaaa","bbb","nnn"),false)
-                            findRv.updateData(11,HomeReSong(R.drawable.icon6,"fff","dd","ffff"),false)
+                            homeRv.updateData(9,HomeReSong(R.drawable.icon6,"dd","dd","dd"),false)
+                            homeRv.updateData(10,HomeReSong(R.drawable.icon6,"aaaaa","bbb","nnn"),false)
+                            homeRv.updateData(11,HomeReSong(R.drawable.icon6,"fff","dd","ffff"),false)
                         })
                     }
                 }
@@ -308,17 +381,13 @@ class IHomeFragment : BaseLifeCycleFragment<IHomeViewModel>() {
 
     private fun initDataSource() {
         val topItem = mutableListOf<FindTopItem>()
-        topItem.add(FindTopItem(R.drawable.cover5, "1zz"))
-        topItem.add(FindTopItem(R.drawable.cover9, "2d"))
-        topItem.add(FindTopItem(R.drawable.cover5, "3g"))
-        topItem.add(FindTopItem(R.drawable.cover9, "4gfd"))
-        topItem.add(FindTopItem(R.drawable.cover5, "5jjj"))
-//        topItem.add(FindTopItem(R.drawable.ic_wel_bg, "g"))
-//        topItem.add(FindTopItem(R.drawable.cover10, "g"))
-//        topItem.add(FindTopItem(R.drawable.ic_wel_bg, "gfd"))
-//        topItem.add(FindTopItem(R.drawable.cover10, "jjj"))
-//        topItem.add(FindTopItem(R.drawable.ic_wel_bg, "g"))
+        topItem.add(FindTopItem(R.drawable.cover5, "1ST"))
+        topItem.add(FindTopItem(R.drawable.cover9, "2ND"))
+        topItem.add(FindTopItem(R.drawable.cover5, "3RD"))
+        topItem.add(FindTopItem(R.drawable.cover9, "4TH"))
+        topItem.add(FindTopItem(R.drawable.cover5, "5FI"))
         homeData.add(FindTop(banners = topItem))
+
 
 //        val menuList = mutableListOf<FindMenu>()
 //        menuList.add(FindMenu(R.drawable.vector_drawable_ic_heavy_snow,"每日推荐"))
@@ -363,7 +432,10 @@ class IHomeFragment : BaseLifeCycleFragment<IHomeViewModel>() {
         homeData.add(SongAndPoetry(leftCover = R.drawable.icon1,poetryTitle = "谁画中与你天涯",poetryAuthor = "雨露深谷"))
     }
 
-
+    inner class HomeF1ViewHolder(itemView:View):RecyclerView.ViewHolder(itemView) {
+        val cover:ImageView = itemView.findViewById(R.id.poetry_item_f_a_iv)
+        val desc: TextView = itemView.findViewById(R.id.poetry_item_f_a_tv)
+    }
     inner class TopViewHolder(@NonNull itemView: View) :
         RecyclerView.ViewHolder(itemView) {
         var tv: TextView

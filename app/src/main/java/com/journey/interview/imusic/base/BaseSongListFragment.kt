@@ -171,8 +171,8 @@ abstract class BaseSongListFragment<VM : BaseViewModel> : BaseLifeCycleFragment<
         )
         /*缩小图片*/
         val scaleBitmap = Bitmap.createScaledBitmap(
-            cropBitmap, bitmap.width / 30, bitmap
-                .height / 30, false
+            cropBitmap, bitmap.width / 50, bitmap
+                .height / 50, false
         )
         /*模糊化*/
         val blurBitmap = FastBlurUtil.doBlur(scaleBitmap, 8, true)

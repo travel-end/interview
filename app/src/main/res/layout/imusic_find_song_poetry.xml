@@ -15,12 +15,6 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:src="@drawable/icon2" />
-        <ImageView
-            android:id="@+id/find_sp_iv_play"
-            android:layout_width="@dimen/dp_28"
-            android:layout_height="@dimen/dp_28"
-            android:src="@drawable/play"
-            android:layout_gravity="center"/>
     </FrameLayout>
 
     <LinearLayout
