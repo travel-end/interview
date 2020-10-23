@@ -29,7 +29,7 @@ import java.util.*
  * @Description
  */
 class IHomeFragment : BaseLifeCycleFragment<IHomeViewModel>() {
-    private val findData: MutableList<Any> = ArrayList()
+    private val homeData: MutableList<Any> = ArrayList()
     private lateinit var findRv:RecyclerView
     private lateinit var focusLayoutManager: FocusLayoutManager
     companion object {
@@ -303,7 +303,7 @@ class IHomeFragment : BaseLifeCycleFragment<IHomeViewModel>() {
                 }
             }
         }
-        find_rv.submitList(findData)
+        find_rv.submitList(homeData)
     }
 
     private fun initDataSource() {
@@ -318,7 +318,7 @@ class IHomeFragment : BaseLifeCycleFragment<IHomeViewModel>() {
 //        topItem.add(FindTopItem(R.drawable.ic_wel_bg, "gfd"))
 //        topItem.add(FindTopItem(R.drawable.cover10, "jjj"))
 //        topItem.add(FindTopItem(R.drawable.ic_wel_bg, "g"))
-        findData.add(FindTop(banners = topItem))
+        homeData.add(FindTop(banners = topItem))
 
 //        val menuList = mutableListOf<FindMenu>()
 //        menuList.add(FindMenu(R.drawable.vector_drawable_ic_heavy_snow,"每日推荐"))
@@ -329,13 +329,13 @@ class IHomeFragment : BaseLifeCycleFragment<IHomeViewModel>() {
 //        menuList.add(FindMenu(R.drawable.vector_drawable_ic_heavy_snow,"电台"))
 //        findData.add(FindMenuList(menuList))
 
-        findData.add(FindMenu(R.drawable.vector_drawable_ic_heavy_snow, "每日推荐"))
-        findData.add(FindMenu(R.drawable.vector_drawable_ic_light_snow, "私人FM"))
-        findData.add(FindMenu(R.drawable.vector_drawable_ic_heavy_snow, "歌单"))
-        findData.add(FindMenu(R.drawable.vector_drawable_ic_heavy_snow, "排行榜"))
-        findData.add(FindMenu(R.drawable.vector_drawable_ic_light_snow, "小雨"))
+        homeData.add(FindMenu(R.drawable.vector_drawable_ic_heavy_snow, "每日推荐"))
+        homeData.add(FindMenu(R.drawable.vector_drawable_ic_light_snow, "私人FM"))
+        homeData.add(FindMenu(R.drawable.vector_drawable_ic_heavy_snow, "歌单"))
+        homeData.add(FindMenu(R.drawable.vector_drawable_ic_heavy_snow, "排行榜"))
+        homeData.add(FindMenu(R.drawable.vector_drawable_ic_light_snow, "小雨"))
 
-        findData.add(FindTitle("你的歌单精选站", "查看更多"))
+        homeData.add(FindTitle("你的歌单精选站", "查看更多"))
 
         val songList = mutableListOf<SongList>()
         songList.add(SongList(R.drawable.icon2,"温柔英文歌-睡觉专用","1988万"))
@@ -344,29 +344,23 @@ class IHomeFragment : BaseLifeCycleFragment<IHomeViewModel>() {
         songList.add(SongList(R.drawable.icon2,"写作业专用 清华自习室音乐 集中注意力写作业","1255万"))
         songList.add(SongList(R.drawable.icon2,"民谣不止安河桥","185万"))
         songList.add(SongList(R.drawable.icon1,"民谣不止安河桥","185万"))
-        findData.add(SongListAll(songList))
+        homeData.add(SongListAll(songList))
 
-        findData.add(ThreeFindTitle("节奏空 嘻哈说唱", "换一批"))
-        findData.add(HomeReSong(R.drawable.icon5, "小雨","作业","星辰大海"))
-        findData.add(HomeReSong(R.drawable.icon2, "五行五杀","星晨","星辰大海"))
-        findData.add(HomeReSong(R.drawable.icon5, "小雨","作业","星辰大海"))
+        homeData.add(ThreeFindTitle("节奏空 嘻哈说唱", "换一批"))
+        homeData.add(HomeReSong(R.drawable.icon5, "小雨","作业","星辰大海"))
+        homeData.add(HomeReSong(R.drawable.icon2, "五行五杀","星晨","星辰大海"))
+        homeData.add(HomeReSong(R.drawable.icon5, "小雨","作业","星辰大海"))
 
-
-
-        findData.add(SpTitle("诗＆歌"))
+        homeData.add(SpTitle("诗＆歌"))
 
 
-
-        findData.add(SongAndPoetry(leftCover = R.drawable.icon1,poetryTitle = "都说你眼中开倾世桃花却如何一夕桃花雨下",poetryAuthor = "上邪"))
-        findData.add(SongAndPoetry(leftCover = R.drawable.icon2,poetryTitle = "都说你眼中开倾世桃花却如何一夕桃花雨下",poetryAuthor = "上邪"))
-        findData.add(SongAndPoetry(leftCover = R.drawable.icon1,poetryTitle = "江湖夜雨",poetryAuthor = "黄庭坚"))
-        findData.add(SongAndPoetry(leftCover = R.drawable.icon2,poetryTitle = "都说你眼中开倾世桃花却如何一夕桃花雨下",poetryAuthor = "上邪"))
-        findData.add(SongAndPoetry(leftCover = R.drawable.icon1,poetryTitle = "一蓑烟雨任平生",poetryAuthor = "苏轼"))
-        findData.add(SongAndPoetry(leftCover = R.drawable.icon2,poetryTitle = "都说你眼中开倾世桃花却如何一夕桃花雨下",poetryAuthor = "上邪"))
-        findData.add(SongAndPoetry(leftCover = R.drawable.icon1,poetryTitle = "谁画中与你天涯",poetryAuthor = "雨露深谷"))
-
-
-
+        homeData.add(SongAndPoetry(leftCover = R.drawable.icon1,poetryTitle = "都说你眼中开倾世桃花却如何一夕桃花雨下",poetryAuthor = "上邪"))
+        homeData.add(SongAndPoetry(leftCover = R.drawable.icon2,poetryTitle = "都说你眼中开倾世桃花却如何一夕桃花雨下",poetryAuthor = "上邪"))
+        homeData.add(SongAndPoetry(leftCover = R.drawable.icon1,poetryTitle = "江湖夜雨",poetryAuthor = "黄庭坚"))
+        homeData.add(SongAndPoetry(leftCover = R.drawable.icon2,poetryTitle = "都说你眼中开倾世桃花却如何一夕桃花雨下",poetryAuthor = "上邪"))
+        homeData.add(SongAndPoetry(leftCover = R.drawable.icon1,poetryTitle = "一蓑烟雨任平生",poetryAuthor = "苏轼"))
+        homeData.add(SongAndPoetry(leftCover = R.drawable.icon2,poetryTitle = "都说你眼中开倾世桃花却如何一夕桃花雨下",poetryAuthor = "上邪"))
+        homeData.add(SongAndPoetry(leftCover = R.drawable.icon1,poetryTitle = "谁画中与你天涯",poetryAuthor = "雨露深谷"))
     }
 
 

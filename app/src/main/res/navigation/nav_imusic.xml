@@ -7,7 +7,8 @@
     <fragment
         android:id="@+id/iMainFragment"
         android:name="com.journey.interview.imusic.frg.IMainFragment"
-        android:label="HomeFragment">
+        android:label="HomeFragment"
+        app:startDestination="@id/action_homeFragment_to_newLoveSongFragment">
         <action
             android:id="@+id/action_homeFragment_to_searchFragment"
             app:destination="@id/iSearchFragment"
@@ -47,8 +48,7 @@
             app:popEnterAnim="@anim/slide_in_left"
             app:popExitAnim="@anim/slide_out_right" />
 
-        <argument android:name="albumImgUrl"
-            app:argType="string" />
+
 
         <action
             android:id="@+id/action_homeFragment_to_downloadFragment"
@@ -91,7 +91,10 @@
         android:id="@+id/iNewLoveSongFragment"
         android:name="com.journey.interview.imusic.frg.love.INewLoveSongFragment"
         tools:layout="@layout/imusic_frg_song_list">
-
+        <!--todo 添加一个默认的图片路径-->
+        <argument android:name="coverImgUrl"
+            android:defaultValue=""
+            app:argType="string" />
     </fragment>
 
     <fragment

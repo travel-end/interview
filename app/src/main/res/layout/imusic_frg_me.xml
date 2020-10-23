@@ -33,14 +33,14 @@
                 android:layout_gravity="center_vertical"
                 android:layout_marginStart="@dimen/dp_20"
                 android:text="@string/login_now"
-                android:textColor="@color/colorTextLight"
+                android:textColor="@color/colorGrayDark"
                 android:textSize="18sp" />
 
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
-                android:layout_marginStart="@dimen/dp_10"
+                android:layout_marginStart="@dimen/dp_6"
                 android:src="@drawable/ic_arrow_right" />
 
         </LinearLayout>

@@ -24,6 +24,7 @@ class IMeFragment:BaseLifeCycleFragment<IMeViewModel>() {
         super.initView()
         mRootView.findViewById<FrameLayout>(R.id.fl_my_love_song).setOnClickListener {
 //            Navigation.findNavController(it).navigate(R.id.action_homeFragment_to_loveSongFragment)
+
             Navigation.findNavController(it).navigate(R.id.action_homeFragment_to_newLoveSongFragment)
         }
         mRootView.findViewById<TextView>(R.id.me_tv_local).setOnClickListener {

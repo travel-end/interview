@@ -82,5 +82,17 @@ abstract class BaseVpFragment:BaseFragment() {
             super.onPageSelected(position)
             mTabLayout.currentTab = position
         }
+
+        override fun onPageScrolled(
+            position: Int,
+            positionOffset: Float,
+            positionOffsetPixels: Int
+        ) {
+            super.onPageScrolled(position, positionOffset, positionOffsetPixels)
+        }
+
+        override fun onPageScrollStateChanged(state: Int) {
+            super.onPageScrollStateChanged(state)
+        }
     }
 }

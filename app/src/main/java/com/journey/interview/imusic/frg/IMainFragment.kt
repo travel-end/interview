@@ -19,7 +19,7 @@ class IMainFragment : BaseVpFragment() {
         get() = arrayOf(
             IMeFragment.newInstance(),
             IHomeFragment.newInstance(),
-            ICloudVillageFragment.newInstance(),
+            IFindPoetryFragment.newInstance(),
             IVideoFragment.newInstance()
         )
     override val vpTitles = ArrayList<CustomTab>().apply {

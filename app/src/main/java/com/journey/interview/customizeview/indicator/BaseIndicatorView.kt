@@ -2,6 +2,7 @@ package com.journey.interview.customizeview.indicator
 
 import android.content.Context
 import android.util.AttributeSet
+import android.util.Log
 import android.view.View
 
 import androidx.annotation.ColorInt
@@ -27,15 +28,18 @@ open class BaseIndicatorView @JvmOverloads constructor(context: Context, attrs: 
 
     private val mOnPageChangeCallback = object : ViewPager2.OnPageChangeCallback() {
         override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
+//            Log.e("JG","--->onPageScrolled positionOffset=$positionOffset")
             pageScrolled(position, positionOffset, positionOffsetPixels)
         }
 
         override fun onPageSelected(position: Int) {
+//            Log.e("JG","--->onPageSelected position=$position")
             pageSelected(position)
         }
 
         override fun onPageScrollStateChanged(state: Int) {
-            pageScrollStateChanged(state)
+//            Log.e("JG","--->onPageScrollStateChanged state=$state")
+//            pageScrollStateChanged(state)
         }
     }
 
@@ -80,6 +84,7 @@ open class BaseIndicatorView @JvmOverloads constructor(context: Context, attrs: 
     }
 
     override fun onPageSelected(position: Int) {
+        Log.e("JG","--->onPageSelected position=$position")
         pageSelected(position)
     }
 
@@ -90,8 +95,20 @@ open class BaseIndicatorView @JvmOverloads constructor(context: Context, attrs: 
             invalidate()
         }
     }
+    fun setOnSelectedListener(position:Int) {
+        pageSelected(position)
+    }
+
+    fun initSliderPosition(position: Int,positionOffset:Float) {
+        scrollSlider(position, positionOffset)
+        invalidate()
+    }
+    fun setOnScrolledListener(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
+
+    }
 
     override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
+        Log.e("JG","--->onPageScrolled position=$position, positionOffset=$positionOffset")
         pageScrolled(position, positionOffset, positionOffsetPixels);
     }
 
@@ -133,8 +150,10 @@ open class BaseIndicatorView @JvmOverloads constructor(context: Context, attrs: 
         if (mViewPager != null) {
             mViewPager!!.removeOnPageChangeListener(this)
             mViewPager!!.addOnPageChangeListener(this)
-            if (mViewPager!!.adapter != null)
+            if (mViewPager!!.adapter != null) {
                 pageSize = mViewPager!!.adapter!!.count
+                Log.e("JG","pageSize=$pageSize")
+            }
         } else if (mViewPager2 != null) {
             mViewPager2!!.unregisterOnPageChangeCallback(mOnPageChangeCallback)
             mViewPager2!!.registerOnPageChangeCallback(mOnPageChangeCallback)
@@ -180,6 +199,11 @@ open class BaseIndicatorView @JvmOverloads constructor(context: Context, attrs: 
 
     fun setupWithViewPager(viewPager: ViewPager) {
         mViewPager = viewPager
+        notifyDataChanged()
+    }
+
+    fun setupWithPosition(position:Int) {
+        pageSize = position
         notifyDataChanged()
     }
 
