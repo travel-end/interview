@@ -1,6 +1,9 @@
 package com.journey.interview.imusic.util;
 
 import android.content.Context;
+import android.util.Log;
+import android.util.TypedValue;
+
 
 /**
  * @By Journey 2020/9/28
@@ -27,6 +30,28 @@ public class ImUtils {
             return 0;
         }
         return context.getResources().getDisplayMetrics().heightPixels;
+    }
+
+    public static float dp2px(Context context, float dp) {
+        return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp,
+                context.getResources().getDisplayMetrics());
+    }
+
+    /**
+     * 获取状态栏高度
+     */
+    public static int getStatusBarHeight(Context context) {
+        // 一般是25dp
+        int height =(int) dp2px(context,20f);
+        Log.i("JG","common statusBar height:" + height);
+        //获取status_bar_height资源的ID
+        int resourceId = context.getResources().getIdentifier("status_bar_height", "dimen", "android");
+        if (resourceId > 0) {
+            height = context.getResources().getDimensionPixelSize(resourceId);
+            Log.i("JG","real statusBar height:" + height);
+        }
+        Log.i("JG","finally statusBar height:" + height);
+        return height;
     }
 
 

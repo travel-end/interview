@@ -18,8 +18,11 @@ import com.journey.interview.R
 import com.journey.interview.customizeview.pager.FocusLayoutManager
 import com.journey.interview.imusic.model.*
 import com.journey.interview.imusic.vm.IHomeViewModel
+import com.journey.interview.imusic.widget.refresh.IRefreshHeader
 import com.journey.interview.recyclerview.core.*
 import com.journey.interview.weatherapp.base.BaseLifeCycleFragment
+import com.scwang.smart.refresh.header.BezierRadarHeader
+import com.scwang.smart.refresh.layout.SmartRefreshLayout
 import kotlinx.android.synthetic.main.imusic_frg_find.*
 import java.util.*
 
@@ -31,6 +34,7 @@ class IHomeFragment : BaseLifeCycleFragment<IHomeViewModel>() {
     private val homeData: MutableList<Any> = ArrayList()
     private lateinit var homeRv:RecyclerView
     private lateinit var focusLayoutManager: FocusLayoutManager
+    private lateinit var refreshLayout:SmartRefreshLayout
     companion object {
         fun newInstance(): Fragment {
             return IHomeFragment()
@@ -41,6 +45,10 @@ class IHomeFragment : BaseLifeCycleFragment<IHomeViewModel>() {
     override fun initView() {
         super.initView()
         homeRv = find_rv
+        refreshLayout = home_refresh_layout
+        refreshLayout.setRefreshHeader(BezierRadarHeader(requireContext()).setEnableHorizontalDrag(true))
+        refreshLayout.setEnableOverScrollBounce(true)
+        refreshLayout.setEnableOverScrollDrag(true)
         initDataSource()
         homeRv.setup<Any> {
             withLayoutManager {
@@ -379,6 +387,13 @@ class IHomeFragment : BaseLifeCycleFragment<IHomeViewModel>() {
         find_rv.submitList(homeData)
     }
 
+    override fun initData() {
+        super.initData()
+        refreshLayout.setOnRefreshListener {
+
+        }
+    }
+
     private fun initDataSource() {
         val topItem = mutableListOf<FindTopItem>()
         topItem.add(FindTopItem(R.drawable.cover5, "1ST"))
@@ -470,5 +485,10 @@ class IHomeFragment : BaseLifeCycleFragment<IHomeViewModel>() {
                 }
             }
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+
     }
 }

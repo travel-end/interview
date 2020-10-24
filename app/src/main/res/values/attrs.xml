@@ -311,4 +311,7 @@
     <declare-styleable name="RoundRectView">
         <attr name="roundRatio" format="float" />
     </declare-styleable>
+    <declare-styleable name="FrameAnimView">
+        <attr name="animSrc" format="reference" />
+    </declare-styleable>
 </resources>

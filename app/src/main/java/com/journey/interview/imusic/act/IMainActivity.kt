@@ -187,7 +187,7 @@ class IMainActivity : BaseLifeCycleActivity<IMainViewModel>() {
                             }
                         } else {
                             isGoPlay =false
-                            mViewModel.getSongUrl(mFirstSong!!)
+//                            mViewModel.getSongUrl(mFirstSong!!)
                         }
                     // todo 这里有个bug  playOnline后会reset mediaPlayer对象  seekTo方法应该是不生效的
 //                    mMediaPlayer = mPlayServiceBinder?.mediaPlayer// 这个mediaPlayer对象需要重新获取  之前的由于程序退出后已经被销毁
@@ -231,7 +231,7 @@ class IMainActivity : BaseLifeCycleActivity<IMainViewModel>() {
                 }
             } else {
                 isGoPlay =true
-                mViewModel.getSongUrl(mFirstSong!!)
+//                mViewModel.getSongUrl(mFirstSong!!)
             }
         }
     }
@@ -347,6 +347,8 @@ class IMainActivity : BaseLifeCycleActivity<IMainViewModel>() {
             repeatMode = ValueAnimator.RESTART
         }
     }
+
+
 
     private fun startProgressBar() {
         progressBarHandler.removeMessages(1)

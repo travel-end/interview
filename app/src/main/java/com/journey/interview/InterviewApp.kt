@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModelStore
 import androidx.lifecycle.ViewModelStoreOwner
 import androidx.multidex.MultiDexApplication
 import com.journey.interview.imusic.room.IMusicRoomHelper
+import com.journey.interview.imusic.util.AssetsUtil
 import com.journey.interview.utils.PhoneUtil
 import com.journey.interview.utils.SpUtil
 import com.journey.interview.weatherapp.state.EmptyCallback
@@ -38,15 +39,23 @@ class InterviewApp : MultiDexApplication(), ViewModelStoreOwner {
 //        val intent = Intent(this,LockScreenService::class.java)
 //        startService(intent)
 
+        initData()
     }
 
-    private fun initLoadSir() {
-        LoadSir.beginBuilder()
-            .addCallback(ErrorCallback())
-            .addCallback(EmptyCallback())
-            .addCallback(LoadingCallback())
-            .commit()
+    private fun initData() {
+        if (SpUtil.getString(Constant.FIRST_LAUNCH).isEmpty()) {
+            GlobalScope.launch {
+                withContext(Dispatchers.IO) {
+                    val recomSongs = AssetsUtil.loadRecommendSongs()
+                    if (!recomSongs.isNullOrEmpty()) {
+                        IMusicRoomHelper.addRecomSongs(recomSongs)
+                        SpUtil.saveValue(Constant.FIRST_LAUNCH,"has_launch")
+                    }
+                }
+            }
+        }
     }
+
 
     private fun getGlobalViewModelProvider(): ViewModelProvider {
         if (factory == null) {

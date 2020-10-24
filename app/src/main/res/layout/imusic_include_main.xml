@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <View
+        android:id="@+id/top_view"
+        android:layout_width="match_parent"
+        android:layout_height="0dp" />
+
+    <fragment
+        android:id="@+id/include_fragment"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:name="com.journey.interview.weatherapp.nav.NavHostFragment"
+        app:defaultNavHost="true"
+        app:navGraph="@navigation/nav_imusic"/>
+<!--    <include-->
+<!--        android:id="@+id/include_bottom_player"-->
+<!--        layout="@layout/imusic_main_player" />-->
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/include_bottom_play_view"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_52"
+        android:background="@color/grayLight">
+        <com.journey.interview.customizeview.progressbar.DigistProgressBar
+            android:id="@+id/include_play_progress_bar"
+            style="@style/bar_style"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/include_player_song_icon"
+            android:layout_width="@dimen/dp_40"
+            android:layout_height="@dimen/dp_40"
+            android:layout_marginTop="@dimen/dp_2"
+            android:layout_marginStart="@dimen/dp_10"
+            android:src="@drawable/default_disc"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+        <TextView
+            android:id="@+id/include_player_song_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp_10"
+            android:layout_marginTop="6dp"
+            android:text="遥不可及的你"
+            android:textSize="12sp"
+            android:textColor="@color/colorBlack"
+            app:layout_constraintStart_toEndOf="@id/include_player_song_icon"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+        <TextView
+            android:id="@+id/include_player_song_author"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp_10"
+            android:layout_marginBottom="@dimen/dp_10"
+            android:text="花粥"
+            android:textSize="11sp"
+            android:textColor="@color/colorGrayDark"
+            app:layout_constraintStart_toEndOf="@id/include_player_song_icon"
+            app:layout_constraintBottom_toBottomOf="parent" />
+
+
+        <com.journey.interview.customizeview.ripple.MyRippleView
+            android:id="@+id/include_main_rv_play"
+            android:layout_width="@dimen/dp_68"
+            android:layout_height="match_parent"
+            android:layout_marginEnd="@dimen/dp_10"
+            app:rv_centered="true"
+            app:rv_color="@color/colorPrimaryLight"
+            app:rv_rippleDuration="240"
+            app:layout_constraintEnd_toStartOf="@id/include_player_song_list"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent">
+            <ImageView
+                android:id="@+id/include_btn_player"
+                android:layout_width="@dimen/dp_32"
+                android:layout_height="@dimen/dp_32"
+                android:layout_centerInParent="true"
+                android:src="@drawable/selector_player" />
+
+        </com.journey.interview.customizeview.ripple.MyRippleView>
+
+
+        <ImageView
+            android:id="@+id/include_player_song_list"
+            android:layout_width="@dimen/dp_26"
+            android:layout_height="@dimen/dp_26"
+            android:src="@drawable/list_right"
+            android:layout_marginEnd="@dimen/dp_10"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</LinearLayout>

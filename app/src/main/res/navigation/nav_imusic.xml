@@ -7,8 +7,8 @@
     <fragment
         android:id="@+id/iMainFragment"
         android:name="com.journey.interview.imusic.frg.IMainFragment"
-        android:label="HomeFragment"
-        app:startDestination="@id/action_homeFragment_to_newLoveSongFragment">
+        android:label="MainFragment">
+
         <action
             android:id="@+id/action_homeFragment_to_searchFragment"
             app:destination="@id/iSearchFragment"

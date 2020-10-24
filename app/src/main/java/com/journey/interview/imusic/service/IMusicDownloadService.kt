@@ -12,13 +12,13 @@ import android.widget.Toast
 import androidx.core.app.NotificationCompat
 import com.journey.interview.Constant
 import com.journey.interview.R
-import com.journey.interview.imusic.act.IMainActivity
 import com.journey.interview.imusic.download.IMusicDownloadListener
 import com.journey.interview.imusic.download.IMusicDownloadTask
 import com.journey.interview.imusic.global.Bus
 import com.journey.interview.imusic.global.IMusicBus
 import com.journey.interview.imusic.model.DownloadEvent
 import com.journey.interview.imusic.model.DownloadSong
+import com.journey.interview.imusic.news.INewMainActivity
 import com.journey.interview.imusic.room.IMusicRoomHelper
 import kotlinx.coroutines.*
 import java.util.*
@@ -404,7 +404,7 @@ class IMusicDownloadService : Service() {
     }
 
     private fun getNotification(title: String, progress: Int): Notification {
-        val intent = Intent(this, IMainActivity::class.java)
+        val intent = Intent(this, INewMainActivity::class.java)
         val pi = PendingIntent.getActivity(this, 0, intent, 0)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val id = "channel_01"

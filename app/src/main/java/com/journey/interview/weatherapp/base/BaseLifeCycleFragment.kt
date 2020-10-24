@@ -23,8 +23,8 @@ import com.journey.interview.weatherapp.state.StateType
 abstract class BaseLifeCycleFragment<VM : BaseViewModel> : BaseFragment() {
     protected lateinit var mViewModel: VM
     private var loadingView: LinearLayout? = null
-    private var emptyView:LinearLayout?=null
-    private var errorView:LinearLayout?=null
+    private var emptyView: LinearLayout? = null
+    private var errorView: LinearLayout? = null
     override fun initView() {
         if (emptyView == null) {
             emptyView = mRootView.findViewById(R.id.include_local_empty_view)
@@ -48,8 +48,8 @@ abstract class BaseLifeCycleFragment<VM : BaseViewModel> : BaseFragment() {
 
     open fun dataObserve() {
         mViewModel.loadState.observe(this, netWorkErrorObserver)
-        mViewModel.emptyState.observe(this,emptyObserver)
-        mViewModel.errorState.observe(this,errorObserver)
+        mViewModel.emptyState.observe(this, emptyObserver)
+        mViewModel.errorState.observe(this, errorObserver)
     }
 
     open fun showLoading() {
@@ -65,27 +65,31 @@ abstract class BaseLifeCycleFragment<VM : BaseViewModel> : BaseFragment() {
     open fun showSuccess() {
     }
 
-    open fun showError(errorRes:Int,msg: String,showErrorView:Boolean) {
+    open fun showError(errorRes: Int, msg: String, showErrorView: Boolean) {
         dismissLoading()
         if (showErrorView) {
             errorView?.visibility = View.VISIBLE
-            val errorIv:ImageView? = errorView?.findViewById(R.id.error_resource)
+            val errorIv: ImageView? = errorView?.findViewById(R.id.error_resource)
             errorIv?.setImageResource(errorRes)
         }
         if (msg.isNotEmpty()) {
             Toast.makeText(requireContext(), msg, Toast.LENGTH_SHORT).show()
         }
     }
+
     open fun showNormalEmpty(msg: String) {
         if (msg.isNotBlank()) {
-            Toast.makeText(requireContext(),msg,Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), msg, Toast.LENGTH_SHORT).show()
         }
     }
 
-    open fun showEmpty(resource:Int=R.drawable.ic_xigua,msg:String=R.string.empty_common.getString()) {
+    open fun showEmpty(
+        resource: Int = R.drawable.ic_xigua,
+        msg: String = R.string.empty_common.getString()
+    ) {
         emptyView?.visibility = View.VISIBLE
         val emptyLogo = emptyView?.findViewById<ImageView>(R.id.empty_resource)
-        val emptyDesc =  emptyView?.findViewById<TextView>(R.id.empty_description)
+        val emptyDesc = emptyView?.findViewById<TextView>(R.id.empty_description)
         emptyLogo?.setImageResource(resource)
         emptyDesc?.text = msg
     }
@@ -95,6 +99,7 @@ abstract class BaseLifeCycleFragment<VM : BaseViewModel> : BaseFragment() {
             emptyView?.visibility = View.GONE
         }
     }
+
     open fun hideError() {
         if (errorView?.visibility == View.VISIBLE) {
             errorView?.visibility = View.GONE
@@ -102,8 +107,6 @@ abstract class BaseLifeCycleFragment<VM : BaseViewModel> : BaseFragment() {
     }
 
     override fun reLoad() {
-        Log.e("JG","--->reload")
-//        showLoading()
         hideError()
         initData()
         dataObserve()
@@ -129,14 +132,14 @@ abstract class BaseLifeCycleFragment<VM : BaseViewModel> : BaseFragment() {
     private val emptyObserver by lazy {
         Observer<EmptyState> {
             it?.let {
-                showEmpty(it.resource,it.message)
+                showEmpty(it.resource, it.message)
             }
         }
     }
     private val errorObserver by lazy {
         Observer<ErrorState> {
-            it?.let {error->
-                showError(error.resource,error.message,error.showErrorIcon)
+            it?.let { error ->
+                showError(error.resource, error.message, error.showErrorIcon)
             }
         }
     }

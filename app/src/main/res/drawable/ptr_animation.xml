@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<animation-list xmlns:android="http://schemas.android.com/apk/res/android"
+    android:oneshot="false">
+    <item android:drawable="@drawable/ptr_img_1" android:duration="50"/>
+    <item android:drawable="@drawable/ptr_img_2" android:duration="50"/>
+    <item android:drawable="@drawable/ptr_img_3" android:duration="50"/>
+    <item android:drawable="@drawable/ptr_img_4" android:duration="50"/>
+    <item android:drawable="@drawable/ptr_img_5" android:duration="50"/>
+    <item android:drawable="@drawable/ptr_img_6" android:duration="50"/>
+    <item android:drawable="@drawable/ptr_img_7" android:duration="50"/>
+    <item android:drawable="@drawable/ptr_img_8" android:duration="50"/>
+    <item android:drawable="@drawable/ptr_img_9" android:duration="50"/>
+    <item android:drawable="@drawable/ptr_img_10" android:duration="50"/>
+    <item android:drawable="@drawable/ptr_img_11" android:duration="50"/>
+    <item android:drawable="@drawable/ptr_img_12" android:duration="50"/>
+    <item android:drawable="@drawable/ptr_img_13" android:duration="200"/>
+    <item android:drawable="@drawable/ptr_img_14" android:duration="200"/>
+    <item android:drawable="@drawable/ptr_img_15" android:duration="200"/>
+    <item android:drawable="@drawable/ptr_img_16" android:duration="50"/>
+    <item android:drawable="@drawable/ptr_img_17" android:duration="50"/>
+    <item android:drawable="@drawable/ptr_img_18" android:duration="50"/>
+    <item android:drawable="@drawable/ptr_img_19" android:duration="50"/>
+    <item android:drawable="@drawable/ptr_img_20" android:duration="50"/>
+    <item android:drawable="@drawable/ptr_img_21" android:duration="50"/>
+    <item android:drawable="@drawable/ptr_img_22" android:duration="50"/>
+    <item android:drawable="@drawable/ptr_img_23" android:duration="50"/>
+    <item android:drawable="@drawable/ptr_img_24" android:duration="50"/>
+    <item android:drawable="@drawable/ptr_img_25" android:duration="50"/>
+    <!--<item android:drawable="@drawable/ptr_img_28" android:duration="50"/>-->
+    <!--<item android:drawable="@drawable/ptr_img_29" android:duration="50"/>-->
+    <!--<item android:drawable="@drawable/ptr_img_30" android:duration="50"/>-->
+    <!--<item android:drawable="@drawable/ptr_img_31" android:duration="50"/>-->
+    <!--<item android:drawable="@drawable/ptr_img_32" android:duration="50"/>-->
+    <!--<item android:drawable="@drawable/ptr_img_33" android:duration="50"/>-->
+    <!--<item android:drawable="@drawable/ptr_img_34" android:duration="50"/>-->
+    <!--<item android:drawable="@drawable/ptr_img_35" android:duration="50"/>-->
+    <!--<item android:drawable="@drawable/ptr_img_36" android:duration="50"/>-->
+    <!--<item android:drawable="@drawable/ptr_img_37" android:duration="50"/>-->
+    <!--<item android:drawable="@drawable/ptr_img_38" android:duration="50"/>-->
+    <!--<item android:drawable="@drawable/ptr_img_39" android:duration="50"/>-->
+    <!--<item android:drawable="@drawable/ptr_img_40" android:duration="50"/>-->
+    <!--<item android:drawable="@drawable/ptr_img_41" android:duration="50"/>-->
+    <!--<item android:drawable="@drawable/ptr_img_42" android:duration="50"/>-->
+    <!--<item android:drawable="@drawable/ptr_img_43" android:duration="50"/>-->
+    <!--<item android:drawable="@drawable/ptr_img_44" android:duration="50"/>-->
+    <!--<item android:drawable="@drawable/ptr_img_45" android:duration="50"/>-->
+
+    <!--<item android:drawable="@drawable/ptr_img_46" android:duration="50"/>-->
+    <!--<item android:drawable="@drawable/ptr_img_47" android:duration="50"/>-->
+    <!--<item android:drawable="@drawable/ptr_img_48" android:duration="50"/>-->
+    <!--<item android:drawable="@drawable/ptr_img_49" android:duration="50"/>-->
+    <!--<item android:drawable="@drawable/ptr_img_50" android:duration="50"/>-->
+    <!--<item android:drawable="@drawable/ptr_img_51" android:duration="50"/>-->
+    <!--<item android:drawable="@drawable/ptr_img_52" android:duration="50"/>-->
+    <!--<item android:drawable="@drawable/ptr_img_53" android:duration="50"/>-->
+    <!--<item android:drawable="@drawable/ptr_img_54" android:duration="50"/>-->
+    <!--<item android:drawable="@drawable/ptr_img_55" android:duration="50"/>-->
+    <!--<item android:drawable="@drawable/ptr_img_56" android:duration="50"/>-->
+
+    <!--<item android:drawable="@drawable/ptr_img_57" android:duration="50"/>-->
+    <!--<item android:drawable="@drawable/ptr_img_58" android:duration="50"/>-->
+    <!--<item android:drawable="@drawable/ptr_img_59" android:duration="50"/>-->
+    <!--<item android:drawable="@drawable/ptr_img_60" android:duration="50"/>-->
+</animation-list>

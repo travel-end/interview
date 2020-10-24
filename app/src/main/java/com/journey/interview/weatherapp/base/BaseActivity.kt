@@ -1,32 +1,35 @@
 package com.journey.interview.weatherapp.base
 
-import android.os.Build
 import android.os.Bundle
-import android.view.View
+import android.os.Handler
+import android.os.Looper
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.gyf.immersionbar.ImmersionBar
-import com.journey.interview.InterviewApp
 import com.journey.interview.R
-import com.journey.interview.utils.decorView
 import com.journey.interview.utils.getClass
 
 /**
  * @By Journey 2020/9/15
  * @Description
  */
-abstract class BaseActivity<VM:BaseViewModel>:AppCompatActivity() {
-    protected lateinit var mViewModel:VM
+abstract class BaseActivity<VM : BaseViewModel> : AppCompatActivity() {
+    protected var handler: Handler? = null
+
+    protected lateinit var mViewModel: VM
     open fun initView() {
 
     }
-    open fun initData() {
 
+    open fun initData() {
+        handler = Handler(Looper.getMainLooper())
     }
+
     open fun reLoad() {
 
     }
-    abstract fun layoutResId():Int
+
+    abstract fun layoutResId(): Int
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(layoutResId())
@@ -35,6 +38,7 @@ abstract class BaseActivity<VM:BaseViewModel>:AppCompatActivity() {
         initView()
         initData()
     }
+
     private fun initViewModel() {
         mViewModel = ViewModelProvider(this).get(getClass(this))
     }
@@ -44,21 +48,8 @@ abstract class BaseActivity<VM:BaseViewModel>:AppCompatActivity() {
             .with(this)
             .statusBarView(R.id.top_view)
             .statusBarColor(R.color.colorWhite)
+            .transparentStatusBar()
             .statusBarDarkFont(true)
             .init()
-    }
-
-    protected fun hideStatusBar(isHide:Boolean) {
-        if (isHide) {
-            if (Build.VERSION.SDK_INT >= 22) {
-                decorView?.systemUiVisibility =
-                    View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-            }
-        } else {
-            decorView?.systemUiVisibility = View.SYSTEM_UI_FLAG_VISIBLE
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                window?.statusBarColor = InterviewApp.instance.resources.getColor(R.color.actionBarColor)
-            }
-        }
     }
 }

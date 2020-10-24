@@ -3,6 +3,7 @@ package com.journey.interview.imusic.room
 import android.util.Log
 import com.journey.interview.InterviewApp
 import com.journey.interview.imusic.model.*
+import com.journey.interview.imusic.model.recommend.RecomSong
 
 /**
  * @By Journey 2020/9/30
@@ -187,5 +188,21 @@ object IMusicRoomHelper {
     }
     suspend fun deleteDownloadSong(downloadSong: DownloadSong):Int? {
         return downloadSongDao.deleteDownloadSong(downloadSong)
+    }
+
+
+    private val recommendSongDatabase by lazy {
+        RecommendSongDatabase.getInstance(InterviewApp.instance)
+    }
+
+    private val recommendSongDao by lazy {
+        recommendSongDatabase.recommendSongDao()
+    }
+
+    suspend fun addRecomSongs(recomSong: List<RecomSong>){
+        recommendSongDao.addRecommendSongs(recomSong)
+    }
+    suspend fun findAllRecomSongs() :MutableList<RecomSong>? {
+        return recommendSongDao.queryAllRecommendSong()
     }
 }

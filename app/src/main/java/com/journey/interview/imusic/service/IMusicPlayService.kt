@@ -17,6 +17,7 @@ import com.journey.interview.imusic.act.IMainActivity
 import com.journey.interview.imusic.download.IMusicDownloadUtil
 import com.journey.interview.imusic.global.Bus
 import com.journey.interview.imusic.model.*
+import com.journey.interview.imusic.news.INewMainActivity
 import com.journey.interview.imusic.room.IMusicRoomHelper
 import com.journey.interview.utils.SongUtil
 import com.journey.interview.utils.getString
@@ -576,7 +577,7 @@ class IMusicPlayService : Service() {
     private val notificationManager get() = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
     private fun getNotification(title: String): Notification {
-        val pi = PendingIntent.getActivity(this, 0, Intent(this, IMainActivity::class.java), 0)
+        val pi = PendingIntent.getActivity(this, 0, Intent(this, INewMainActivity::class.java), 0)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val id = "play"
             val name = "播放歌曲"

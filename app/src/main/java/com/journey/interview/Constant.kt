@@ -122,6 +122,8 @@ object Constant {
     const val EVENT_REFRESH_LOCAL_SONG = 0
     const val EVENT_APP = "event_app"
     const val FIRST_LAUNCH = "first_launch"
+    const val EVENT_OPEN_DRAWER = 0
+    const val EVENT_REFRESH_HOME_DATA= 1
 
     const val PLAY_SUCCESS = 1
     const val PLAY_FAILED = 2
