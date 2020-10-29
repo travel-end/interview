@@ -52,6 +52,7 @@
                     android:ellipsize="end"
                     android:singleLine="true"
                     android:text="无音乐"
+                    android:textStyle="bold"
                     android:textColor="@color/colorWhite"
                     android:textSize="16sp" />
 

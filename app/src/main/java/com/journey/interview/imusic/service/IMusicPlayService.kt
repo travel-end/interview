@@ -505,7 +505,7 @@ class IMusicPlayService : Service() {
             }
         }
         mLoveSongs = orderLoveList(mLoveSongs)
-        Log.e("JG","saveLoveSong---> lovesongs:$mLocalSongs")
+        Log.e("JG","saveLoveSong---> lovesongs:$mLoveSongs")
         val loveSong = mLoveSongs?.let { it[current] }
         loveSong?.let {
             val song = Song().apply {
