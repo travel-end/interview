@@ -84,5 +84,10 @@
         android:layout_height="30dp"
         android:text="测试自定义LayoutManager" />
 
+    <TextView
+        android:id="@+id/testSignature"
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:text="测试手势签名并生成图片" />
 
 </LinearLayout>

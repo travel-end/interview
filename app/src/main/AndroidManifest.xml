@@ -112,6 +112,8 @@
             android:launchMode="singleTask"
             android:theme="@style/material_style"
             android:windowSoftInputMode="adjustPan|stateHidden"/>
+        <activity android:name=".customizeview.gesturesignature.ToSignaActivity" />
+        <activity android:name=".customizeview.gesturesignature.SignatureActivity" />
         <!--        <activity android:name=".imusic.frg.me.ILoveSongActivity"-->
 <!--            android:theme="@style/material_style"/>-->
 <!--        <activity android:name=".imusic.frg.me.ILocalSongActivity" />-->

@@ -9,6 +9,7 @@ import com.journey.interview.customizeview.backgroundlib.MaterialComponentsActiv
 import com.journey.interview.customizeview.cornergif.CornersGifActivity
 import com.journey.interview.customizeview.cropimageview.demo.CropImageViewActivity2
 import com.journey.interview.customizeview.datetimer.demo.DateTimerPickerActivity
+import com.journey.interview.customizeview.gesturesignature.ToSignaActivity
 import com.journey.interview.customizeview.heartview.HeartActivity
 import com.journey.interview.customizeview.levelselectview.LevelSelectActivity
 import com.journey.interview.customizeview.pager.FocusLayoutManagerActivity
@@ -71,6 +72,9 @@ class CustomizeViewActivity:AppCompatActivity() {
         }
         testStackLayoutManager.setOnClickListener {
             startActivity(Intent(this, FocusLayoutManagerActivity::class.java))
+        }
+        testSignature.setOnClickListener {
+            startActivity(Intent(this, ToSignaActivity::class.java))
         }
     }
 }
