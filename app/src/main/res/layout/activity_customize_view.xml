@@ -89,5 +89,9 @@
         android:layout_width="wrap_content"
         android:layout_height="30dp"
         android:text="测试手势签名并生成图片" />
-
+    <TextView
+        android:id="@+id/testMotionLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:text="MotionLayout测试" />
 </LinearLayout>

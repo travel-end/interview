@@ -12,6 +12,7 @@ import com.journey.interview.customizeview.datetimer.demo.DateTimerPickerActivit
 import com.journey.interview.customizeview.gesturesignature.ToSignaActivity
 import com.journey.interview.customizeview.heartview.HeartActivity
 import com.journey.interview.customizeview.levelselectview.LevelSelectActivity
+import com.journey.interview.customizeview.motionlayout.MotionLayoutDemo
 import com.journey.interview.customizeview.pager.FocusLayoutManagerActivity
 import com.journey.interview.customizeview.pager.StackLayoutManagerActivity
 import com.journey.interview.customizeview.popupwindow.PopupWindowActivity
@@ -75,6 +76,9 @@ class CustomizeViewActivity:AppCompatActivity() {
         }
         testSignature.setOnClickListener {
             startActivity(Intent(this, ToSignaActivity::class.java))
+        }
+        testMotionLayout.setOnClickListener {
+            startActivity(Intent(this, MotionLayoutDemo::class.java))
         }
     }
 }

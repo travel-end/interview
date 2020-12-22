@@ -3,6 +3,7 @@ package com.journey.interview.utils
 import android.app.Activity
 import android.app.ActivityManager
 import android.content.Context
+import android.content.Intent
 import android.content.res.Resources
 import android.graphics.Rect
 import android.os.Build
@@ -26,6 +27,10 @@ import kotlin.reflect.KProperty
 fun <T> getClass(t: Any): Class<T> {
     // 通过反射获取父类泛型（T） 对应Class类
     return (t.javaClass.genericSuperclass as ParameterizedType).actualTypeArguments[0] as Class<T>
+}
+
+inline fun <reified T :Activity> Activity.openActivity() {
+    startActivity(Intent(this,T::class.java))
 }
 
 /**

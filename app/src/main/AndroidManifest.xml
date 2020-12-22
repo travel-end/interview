@@ -114,6 +114,8 @@
             android:windowSoftInputMode="adjustPan|stateHidden"/>
         <activity android:name=".customizeview.gesturesignature.ToSignaActivity" />
         <activity android:name=".customizeview.gesturesignature.SignatureActivity" />
+        <activity android:name=".customizeview.motionlayout.MotionLayoutDemo" />
+        <activity android:name=".customizeview.motionlayout.HuaweiTelActivity" />
         <!--        <activity android:name=".imusic.frg.me.ILoveSongActivity"-->
 <!--            android:theme="@style/material_style"/>-->
 <!--        <activity android:name=".imusic.frg.me.ILocalSongActivity" />-->

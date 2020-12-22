@@ -86,7 +86,9 @@
         <attr name="heartEnableScale" format="boolean" />
     </declare-styleable>
 
-
+    <declare-styleable name="CrossFadeImageView">
+        <attr name="altSrc" format="reference" />
+    </declare-styleable>
     <!--
     CommonTabLayout
     -->
